@@ -26,12 +26,12 @@ void tcp_handler::handle_read() {
     } else if (n == 0) {
         // ❌不准单纯用 n == 0来表示客户端断开了连接❌
         // 方法一
-        int save_errno = errno;
+        /*int save_errno = errno;
         if (save_errno != EINTR) {
             i_am_dead = true;
-        }
+        }*/
         // 方法二
-        // i_am_dead = socket_utils::tcp_disconn(observe_fd);
+         i_am_dead = socket_utils::tcp_disconn(observe_fd);
     } else {
         i_am_dead = true;
     }

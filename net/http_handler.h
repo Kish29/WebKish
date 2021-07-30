@@ -19,6 +19,12 @@ namespace kish {
 
         void handle_read() override;
 
+        bool keep_alive() const;
+
+        void set_dead();
+
+    private:
+        bool kp_alv{false};
     };
 }
 

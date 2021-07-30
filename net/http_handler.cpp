@@ -21,12 +21,6 @@ void http_handler::handle_read() {
                 "HTTP/1.1 400 Bad Request\r\nContent-Length: %lu\r\nContent-Type: text/plain\r\n\r\n%s",
                 bodylen,
                 body);
-        // todo: 弄懂shutdown和close的区别
-        // shutdown()函数可以选择关闭全双工连接的读通道或者写通道，如果两个通道同时关闭，则这个连接不能再继续通信。
-        // close()函数会同时关闭全双工连接的读写通道，除了关闭连接外，
-        // !!!!还会释放套接字占用的文件描述符。!!!!
-        // 而shutdown()只会关闭连接，但是不会释放占用的文件描述符。
-        // 所以即使使用了SHUT_RDWR类型调用shutdown()关闭连接，也仍然要调用close()来释放连接占用的文件描述符。
         send(observe_fd, send_buf, strlen(send_buf), MSG_NOSIGNAL);
 
         // todo: 应当根据http版本号选择是否关闭连接
@@ -34,9 +28,24 @@ void http_handler::handle_read() {
         const char *cnn_type = "Keep-Alive";
         const char *cnn_ver = "http/1.1";
         if (strcmp("Keep-Alive", cnn_type) != 0 || strcmp("HTTP/1.0", cnn_ver) == 0) {
-            // shutdownwrite后，浏览器重复请求并刷新数据会出现pending的状态
-            socket_utils::shutdown_write(observe_fd);
+            // shutdown()函数可以选择关闭全双工连接的读通道或者写通道，如果两个通道同时关闭，则这个连接不能再继续通信。
+            // close()函数会同时关闭全双工连接的读写通道，除了关闭连接外，
+            // !!!!还会释放套接字占用的文件描述符。!!!!
+            // 而shutdown()只会关闭连接，但是不会释放占用的文件描述符。
+            // 所以即使使用了SHUT_RDWR类型调用shutdown()关闭连接，也仍然要调用close()来释放连接占用的文件描述符。
+            // shutdownwrite后，浏览器重复请求并刷新数据会出现pending的状态，即服务端无法再发送数据
+            socket_utils::shutdown_rdwr(observe_fd);
             i_am_dead = true;
+        } else {
+            kp_alv = true;
         }
     }
+}
+
+bool http_handler::keep_alive() const {
+    return kp_alv;
+}
+
+void http_handler::set_dead() {
+    i_am_dead = true;
 }

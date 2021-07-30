@@ -76,7 +76,11 @@ namespace kish {
 
         static void tcp_nodelay(int sockfd, bool on);
 
+        static void shutdown_read(int sockfd);
+
         static void shutdown_write(int sockfd);
+
+        static void shutdown_rdwr(int sockfd);
 
         static bool tcp_disconn(int sockfd);
     };

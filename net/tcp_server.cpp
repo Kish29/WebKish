@@ -34,7 +34,7 @@ kish::tcp_server::tcp_server(uint16_t port, const string &host)
 void tcp_server::on_acceptnew(int fd, const inet_address &peer_addr) {
     // todo: delete this print
     printf("new connection from %s\n", peer_addr.ip_port().c_str());
-    looper.submit([=]() -> void {
+    looper.submit([&]() -> void {
         // ❌️这样写是不会有计数的！！！！
         // ❌️智能指针教科书式的错误用法
         // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(accep.get()));
