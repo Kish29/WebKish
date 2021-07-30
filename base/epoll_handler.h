@@ -11,6 +11,9 @@
 
 namespace kish {
 
+    constexpr int KREAD_BUFSIZ = 2 * 1024;
+    constexpr int KSEND_BUFSIZ = 8 * 1024;
+
     // 核心类，代表可被poller进行观察和事件处理的对象
     class epoll_handler : fdholder, event_handler {
     public:
@@ -21,8 +24,9 @@ namespace kish {
 
         /* ⚠️警告Warning⚠️️原则上禁止子类调用close将fd关闭掉，close只能在基类的析构函数中进行 ⚠️*/
         ~epoll_handler() override {
-            if (!clsd) {
+            if (!i_am_closed) {
                 // todo: verify what will happen when fd is -1 to be closed
+                printf("~epoll_handler() close fd: %d\n", observe_fd);
                 ::close(observe_fd);
             }
         }
@@ -47,12 +51,10 @@ namespace kish {
 
         // 判断是否供给poller使用，以便从save_map中移除
         bool dead() const override {
-            return dd;
+            return i_am_dead;
         };
 
-        bool closed() const override {
-            return clsd;
-        }
+        virtual ssize_t readin() final;
 
     protected:
         int observe_fd;
@@ -60,9 +62,12 @@ namespace kish {
         uint32_t observe_events;
         // latest_events将会被poller更新，以便handler自己在
         // handle_event中进行事件判断
-        uint32_t latest_events{KNOMAL_EVENT};
-        bool clsd{false};
-        bool dd{false};
+        uint32_t latest_events{KNONE_EVENT};
+        bool i_am_closed{false};
+        bool i_am_dead{false};
+        // 由于IO事件到来后必须从缓冲区读取数据
+        // 否则epoll_wait始终有事件
+        char read_buf[KREAD_BUFSIZ]{};
     };
 }
 

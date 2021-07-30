@@ -17,7 +17,7 @@ int main() {
     pthread_setname_np(pthread_self(), "main-thread");
     kish::tcp_server ts(5555);
     ts.startup();
-    while (true);
+    SLEEP_ADAY;
 }
 
 void wakeup_test() {

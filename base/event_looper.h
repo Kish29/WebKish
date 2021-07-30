@@ -34,7 +34,7 @@ namespace kish {
 
     private:
         epoller poller;
-        wakeup_handler wakeuper;
+        std::shared_ptr<wakeup_handler> wakeuper;
         funcs pending_funcs;
         mutex_lock locker;
 

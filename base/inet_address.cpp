@@ -5,6 +5,7 @@
 //
 
 #include "inet_address.h"
+#include "netio_utils.h"
 #include "cstring"
 
 #define SIZ 64

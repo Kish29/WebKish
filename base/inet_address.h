@@ -7,9 +7,9 @@
 #ifndef WEBKISH_INET_ADDRESS_H
 #define WEBKISH_INET_ADDRESS_H
 
-#include "base.h"
 #include "arpa/inet.h"
 #include "string"
+#include "base.h"
 
 using std::string;
 

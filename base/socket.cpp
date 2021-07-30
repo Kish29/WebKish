@@ -119,7 +119,26 @@ void kish::socket_utils::tcp_nodelay(int sockfd, bool on) {
 }
 
 void kish::socket_utils::shutdown_write(int sockfd) {
+    /* Shut down all or part of the connection open on socket FD.
+         HOW determines what to shut down:
+            // 不再接受消息/数据
+            SHUT_RD   = No more receptions;
+            // 不再发送消息/数据
+            SHUT_WR   = No more transmissions;
+            // 不再接受和发送数据
+            SHUT_RDWR = No more receptions or transmissions.
+        Returns 0 on success, -1 for errors.  */
     if (::shutdown(sockfd, SHUT_WR) == -1) {
         // todo: log error
     }
+}
+
+bool kish::socket_utils::tcp_disconn(int sockfd) {
+    struct tcp_info info{};
+    int len = sizeof info;
+    if (::getsockopt(sockfd, IPPROTO_TCP, TCP_INFO, &info, (socklen_t *) &len) != -1) {
+        return info.tcpi_state == TCP_ESTABLISHED;
+    }
+    // 出错认为断开了连接
+    return true;
 }

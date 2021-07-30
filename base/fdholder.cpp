@@ -11,10 +11,6 @@ kish::fdholder::~fdholder() {
     printf("~fdholder() invoked\n");
 }
 
-bool kish::fdholder::closed() const {
-    return false;
-}
-
 bool kish::fdholder::dead() const {
     return false;
 };

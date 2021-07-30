@@ -8,7 +8,7 @@
 #define WEBKISH_SERVER_H
 
 #include "base.h"
-#include "acceptor.h"
+#include "accept_handler.h"
 
 namespace kish {
 
@@ -18,7 +18,7 @@ namespace kish {
 
         virtual void stop() = 0;
 
-        virtual void on_acceptnew(int, const inet_address &) = 0;
+        virtual void on_acceptnew(int fd, const inet_address &peer_addr) = 0;
     };
 
 }

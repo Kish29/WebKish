@@ -5,6 +5,7 @@
 //
 
 #include "tcp_server.h"
+#include "tcp_handler.h"
 
 using namespace std::placeholders;
 // placeholer的工作原理相当于此
@@ -17,7 +18,7 @@ kish::tcp_server::tcp_server(uint16_t port) : tcp_server(port, "0.0.0.0") {}
 kish::tcp_server::tcp_server(uint16_t port, const string &host)
         : server_sock(true, false),
           server_addr(port, host),
-          accep(std::make_shared<acceptor>(server_sock.fd(), server_sock)) {
+          accep(std::make_shared<accept_handler>(server_sock.fd(), server_sock)) {
     server_sock.reuse_addr(true);
     if (!server_sock.workon(server_addr)) {
         // todo: log error
@@ -30,40 +31,34 @@ kish::tcp_server::tcp_server(uint16_t port, const string &host)
     accep->on_acceptnew(std::bind(&tcp_server::on_acceptnew, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-#include "cstring"
-
 void tcp_server::on_acceptnew(int fd, const inet_address &peer_addr) {
+    // todo: delete this print
     printf("new connection from %s\n", peer_addr.ip_port().c_str());
-    const char *body = "<h>this is what i send to you</h>";
-    size_t bodylen = strlen(body);
-    char header[1024];
-    sprintf(header, "HTTP/1.1 200 OK\r\nContent-length: %lu\r\n\r\n%s", bodylen, body);
-    send(fd, header, strlen(header), MSG_NOSIGNAL);
-    // todo: 弄懂shutdown和close的区别
-    // todo：模糊：shutdownwrite后，浏览器保持连接，可以刷新，close不可以
-    socket_utils::shutdown_write(fd);
-    /*looper.submit([=]() -> void {
-        // todo: 问题出在这里，tcp连接后仍然会发送消息，一定要读完数据
-        shared_ptr<epoll_handler> eh = std::make_shared<epoll_handler>(fd);
-        if (eh) {
-            looper.add_observe(eh);
+    looper.submit([=]() -> void {
+        // ❌️这样写是不会有计数的！！！！
+        // ❌️智能指针教科书式的错误用法
+        // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(accep.get()));
+        // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(tcp_obs.get()));
+        std::shared_ptr<epoll_handler> tcp_obs(new tcp_handler(fd));
+        if (tcp_obs) {
+            looper.add_observe(tcp_obs);
         }
-    });*/
+    });
 }
 
-#include "thread"
-
 void tcp_server::startup() {
-    /* ⚠️警告！！！️禁止进行局部构造event_looper ⚠️*/
+    /* ❌禁止进行局部构造event_looper ❌️*/
     // event_looper looper;
     // todo: delete this printf
     printf("start looper\n");
     looper.start();
 //    std::this_thread::sleep_for(std::chrono::seconds(1));
     looper.submit([&]() -> void {
-        shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(accep.get()));
-        if (eh) {
-            looper.add_observe(eh);
+        // ❌这样写是不会有计数的！！！！
+        // ❌️智能指针教科书式的错误用法
+        // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(accep.get()));
+        if (accep) {
+            looper.add_observe(accep);
         } else {
             // todo: delete this printf
             printf("dynamic_cast failed!\n");

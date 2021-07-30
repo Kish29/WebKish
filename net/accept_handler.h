@@ -4,8 +4,8 @@
 // $desc
 //
 
-#ifndef WEBKISH_ACCEPTOR_H
-#define WEBKISH_ACCEPTOR_H
+#ifndef WEBKISH_ACCEPT_HANDLER_H
+#define WEBKISH_ACCEPT_HANDLER_H
 
 #include "base.h"
 #include "socket.h"
@@ -15,10 +15,10 @@ namespace kish {
 
     typedef std::function<void(int, const inet_address &)> accept_callback;
 
-    class acceptor : public epoll_handler, noncopyable {
+    class accept_handler : public epoll_handler, noncopyable {
     public:
 
-        acceptor(int fd, socket &sk);
+        accept_handler(int fd, socket &sk);
 
         void on_acceptnew(const accept_callback &cb);
 
@@ -37,4 +37,4 @@ namespace kish {
 }
 
 
-#endif //WEBKISH_ACCEPTOR_H
+#endif //WEBKISH_ACCEPT_HANDLER_H

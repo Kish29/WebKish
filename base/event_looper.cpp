@@ -29,7 +29,7 @@ void event_looper::wakeup() const {
     pthread_getname_np(pthread_self(), buf, 64);
     // todo: delete this printf
     printf("poller.wakeup in %s\n", buf);
-    wakeuper.wakeup();
+    wakeuper->wakeup();
 }
 
 event_looper::event_looper()
@@ -44,13 +44,13 @@ void event_looper::loop() {
         // todo: delete this printf
         printf("event_looper do poll\n");
         handler_list list = poller.poll();
-        for (std::shared_ptr <epoll_handler> &h: list) {
+        for (std::shared_ptr<epoll_handler> &h: list) {
             // poller会将handler的latest_event进行更新
             h->handle_event(h->events());
         }
         // todo: doing pending functors
         printf("do pending functors\n");
-        std::vector <thread_func> functors;
+        std::vector<thread_func> functors;
         functors.swap(pending_funcs);
         for (thread_func &f:functors) {
             f();
@@ -58,19 +58,20 @@ void event_looper::loop() {
     }
 }
 
-void event_looper::add_observe(const shared_ptr <epoll_handler> &eh) {
+void event_looper::add_observe(const shared_ptr<epoll_handler> &eh) {
     poller.epoll_add(eh);
 }
 
 event_looper::event_looper(thread_func func, std::string name)
         : thread(std::move(func), std::move(name)),
-          wakeuper(eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC)) {
-    if (wakeuper.fd() == -1) {
+          wakeuper(new wakeup_handler(eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC))) {
+    if (wakeuper->fd() == -1) {
         // todo log error
     } else {
-        std::shared_ptr <epoll_handler> eh(dynamic_cast<epoll_handler *>(&wakeuper));
-//        add_observe(eh);
-        poller.epoll_add(eh);
+        // ❌️这样写是不会有计数的！！！！
+        // ❌️智能指针教科书式的错误用法
+//        std::shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(wakeuper.get()));
+        poller.epoll_add(wakeuper);
     }
 }
 

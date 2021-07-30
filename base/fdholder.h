@@ -23,8 +23,6 @@ namespace kish {
 
         virtual int fd() const = 0;
 
-        virtual bool closed() const;
-
         virtual bool dead() const;
 
     };

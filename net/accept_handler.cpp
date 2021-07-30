@@ -4,17 +4,17 @@
 // $desc
 //
 
-#include "acceptor.h"
+#include "accept_handler.h"
 
 namespace kish {
 
-    acceptor::acceptor(int fd, socket &sk) : epoll_handler(fd), server_sock(sk) {}
+    accept_handler::accept_handler(int fd, socket &sk) : epoll_handler(fd), server_sock(sk) {}
 
-    void acceptor::on_acceptnew(const accept_callback &cb) {
+    void accept_handler::on_acceptnew(const accept_callback &cb) {
         onaccept = cb;
     }
 
-    void acceptor::handle_event(uint32_t events) {
+    void accept_handler::handle_event(uint32_t events) {
         if (events & KREAD_EVENT) {
             struct sockaddr_in client_addr{};
             socklen_t claddr_len = sizeof client_addr;
@@ -33,7 +33,7 @@ namespace kish {
         }
     }
 
-    uint32_t acceptor::events() const {
+    uint32_t accept_handler::events() const {
         return KREAD_EVENT | KERROR_EVENT;
     }
 }

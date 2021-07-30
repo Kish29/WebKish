@@ -48,11 +48,17 @@ public:
     }
 };
 
-int main() {
+void ss() {
     std::shared_ptr<atomic_clock> t1(new atomic_clock(1));
-    std::shared_ptr<time_keeper> t2(dynamic_cast<time_keeper *>(t1.get()));
-    t1->show();
-    t2->show();
-    atomic_clock t3;
+//    std::shared_ptr<time_keeper> t2(dynamic_cast<time_keeper *>(t1.get()));
+    std::shared_ptr<time_keeper> t2(t1);
+    printf("count %ld\n", t1.use_count());
+}
+
+#include "unistd.h"
+
+int main() {
+    ss();
+    sleep(1);
     return 0;
 }

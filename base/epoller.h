@@ -30,10 +30,11 @@ typedef std::map<int, shared_ptr<epoll_handler>> handler_map;
 
 namespace kish {
 
-    const int KNOMAL_EVENT = 0;
-    const int KREAD_EVENT = EPOLLIN | EPOLLPRI;
-    const int KWRITE_EVENT = EPOLLOUT;
-    const int KERROR_EVENT = EPOLLHUP | EPOLLERR;
+    const int KNONE_EVENT = 0;
+    // 均为边缘触发
+    const int KREAD_EVENT = EPOLLIN | EPOLLPRI | EPOLLET;
+    const int KWRITE_EVENT = EPOLLOUT | EPOLLET;
+    const int KERROR_EVENT = EPOLLHUP | EPOLLERR | EPOLLET;
     const int KEPOLL_WAITTIME = 10000;  // 10s
     const int KINIT_EVENT_SIZE = 16;  // 10s
 
@@ -44,32 +45,33 @@ namespace kish {
         epoller();
 
         ~epoller() override {
-            char buf[64];
-            pthread_getname_np(pthread_self(), buf, 64);
             // todo: delete this printf
-            printf("~epoller() in %s\n", buf);
+            printf("~epoller() close fd: %d\n", epoll_fd);
             close(epoll_fd);
         }
 
         handler_list &poll(int timeout = KEPOLL_WAITTIME);
 
-        void epoll_add(const shared_ptr<epoll_handler> &eh);
+        // obs = observable
+        void epoll_add(const shared_ptr<epoll_handler> &obs);
 
-        void epoll_del(shared_ptr<fdholder> h);
+        void epoll_del(const shared_ptr<epoll_handler> &obs);
 
-        void epoll_mod(shared_ptr<fdholder> h);
+        void epoll_mod(const shared_ptr<epoll_handler> &obs);
 
         int fd() const override {
             return epoll_fd;
         }
 
-        virtual void update_savemap() final;
-
-    protected:
+    private:
         int epoll_fd;
-        event_list epoll_evlst;
+        event_list query_list;
         handler_map save_map{};
-        handler_list retlist;
+        handler_list ret_list;
+
+    private:
+        void update_savemap();
+
     };
 
 }

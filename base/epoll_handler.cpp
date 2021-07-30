@@ -5,6 +5,7 @@
 //
 
 #include "epoll_handler.h"
+#include "sysio_utils.h"
 
 namespace kish {
 
@@ -24,17 +25,20 @@ namespace kish {
         }
     }
 
-// todo: always call this function
+    // 基本实现，只负责对该文件描述符做数据读取
     void epoll_handler::handle_read() {
-        // todo: delete this print
-        char buf[BUFSIZ];
-        // todo: 设置nonblocking，否则会一直zuse
-        ssize_t n = read(observe_fd, buf, BUFSIZ);
-        printf("new read event! and n is %lu\n", n);
-        if (n == 0) {   // 说明客户端已经关闭了
-            // 不要调用::close(fd)!!!，close只能在析构函数中调用
-            dd = true;
+        ssize_t n = readin();
+        if (n < 0) {
+            i_am_dead = true;
         }
+//        if (rdn < 0) {
+        // todo: log error
+//            perror("void epoll_handler::handle_read() read n <=0 ");
+        // todo: 待商榷 ⚠️基类不应该设置i_am_dead，应当交给网络协议tcp/http
+//            i_am_dead = true;
+//        }
+        // todo: 如何判断一个文件描述符的错误
+//        i_am_dead = JUDGE_DEAD(n);
     }
 
     void epoll_handler::handle_write() {
@@ -43,5 +47,10 @@ namespace kish {
 
     void epoll_handler::handle_error() {
 
+    }
+
+    ssize_t epoll_handler::readin() {
+        bzero(read_buf, KREAD_BUFSIZ);
+        return read(observe_fd, read_buf, KREAD_BUFSIZ);
     }
 }

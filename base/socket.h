@@ -51,10 +51,6 @@ namespace kish {
 
         void shutdown_write() const;
 
-        bool closed() const override {
-            return clsd;
-        }
-
     protected:
         int sockfd{-1};
         bool clsd{false};
@@ -81,6 +77,8 @@ namespace kish {
         static void tcp_nodelay(int sockfd, bool on);
 
         static void shutdown_write(int sockfd);
+
+        static bool tcp_disconn(int sockfd);
     };
 
 }

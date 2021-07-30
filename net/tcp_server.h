@@ -26,11 +26,11 @@ namespace kish {
 
         void on_acceptnew(int, const inet_address &) override;
 
-    private:
+    protected:
         event_looper looper;
         socket server_sock;
         inet_address server_addr;
-        shared_ptr<acceptor> accep;
+        shared_ptr<accept_handler> accep;
         bool started{};
         bool stopped{};
     };
