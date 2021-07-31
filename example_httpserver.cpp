@@ -6,7 +6,6 @@
 
 #include "http_server.h"
 
-
 int main() {
     kish::http_server hs(5555);
     hs.startup();

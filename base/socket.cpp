@@ -11,7 +11,7 @@
 kish::socket::socket(bool tcp, bool ipv6) : sockfd(socket_utils::create(tcp, ipv6)) {}
 
 void kish::socket::reuse_addr(bool on) const {
-    kish::socket_utils::reuse_addr(sockfd, on);
+    kish::socket_utils::reuseaddr(sockfd, on);
 }
 
 void kish::socket::reuse_port(bool on) const {
@@ -73,7 +73,7 @@ bool kish::socket_utils::listen(int sockfd, const kish::inet_address &addr) {
     return true;
 }
 
-bool kish::socket_utils::workon(int sockfd, const kish::inet_address &addr) {
+bool kish::socket_utils::work_on(int sockfd, const kish::inet_address &addr) {
     return socket_utils::bind(sockfd, addr) && socket_utils::listen(sockfd, addr);
 }
 
@@ -82,7 +82,7 @@ void kish::socket_utils::close(int sockfd) {
     ::close(sockfd);
 }
 
-void kish::socket_utils::reuse_addr(int sockfd, bool on) {
+void kish::socket_utils::reuseaddr(int sockfd, bool on) {
 #ifdef SO_REUSEADDR
     int optval = on ? 1 : 0;
     if (::setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval) == -1) {
@@ -148,7 +148,7 @@ void kish::socket_utils::shutdown_rdwr(int sockfd) {
 }
 
 
-bool kish::socket_utils::tcp_disconn(int sockfd) {
+bool kish::socket_utils::tcp_isdead(int sockfd) {
     struct tcp_info info{};
     int len = sizeof info;
     if (::getsockopt(sockfd, IPPROTO_TCP, TCP_INFO, &info, (socklen_t *) &len) != -1) {

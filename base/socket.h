@@ -64,11 +64,11 @@ namespace kish {
 
         static bool listen(int sockfd, const inet_address &addr);
 
-        static bool workon(int sockfd, const inet_address &addr);
+        static bool work_on(int sockfd, const inet_address &addr);
 
         static void close(int sockfd);
 
-        static void reuse_addr(int sockfd, bool on);
+        static void reuseaddr(int sockfd, bool on);
 
         static void reuse_port(int sockfd, bool on);
 
@@ -82,7 +82,7 @@ namespace kish {
 
         static void shutdown_rdwr(int sockfd);
 
-        static bool tcp_disconn(int sockfd);
+        static bool tcp_isdead(int sockfd);
     };
 
 }

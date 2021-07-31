@@ -31,7 +31,7 @@ void tcp_handler::handle_read() {
             i_am_dead = true;
         }*/
         // 方法二
-         i_am_dead = socket_utils::tcp_disconn(observe_fd);
+         i_am_dead = socket_utils::tcp_isdead(observe_fd);
     } else {
         i_am_dead = true;
     }

@@ -8,8 +8,11 @@
 #define WEBKISH_BASE_H
 
 #include "functional"
+#include "pthread.h"
 #include "memory"
 #include "unistd.h"
+#include "cstdio"
+#include "string"
 
 // 86400 = 60 * 60 * 24
 #define SLEEP_ADAY sleep(86400)
@@ -42,6 +45,36 @@ namespace kish {
 
     };
 
+    class printable {
+    public:
+        virtual std::string tostring() const = 0;
+    };
+
+    template<class T>
+    class singleton : noncopyable {
+    public:
+
+        singleton() = delete;
+
+        ~singleton() = delete;
+
+        static T &instance() {
+            // 由于指令的乱序执行，double check locking靠不住
+            pthread_once(&ponce, [&]() -> void {
+                inst = new T;
+                ::atexit([&]() -> void {
+                    delete inst;
+                    inst = nullptr;
+                });
+            });
+            assert(inst != nullptr);
+            return *inst;
+        }
+
+    private:
+        static pthread_once_t ponce;
+        static T *inst;
+    };
 }
 
 #endif //WEBKISH_BASE_H

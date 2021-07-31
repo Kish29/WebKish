@@ -14,7 +14,7 @@ bool enable_nonblock_and_cloexec(int fd) {
     if (res == -1) {
 #ifdef __DEBUG__
         // todo: delete this print
-        printf("set non-block for %d success!\n",fd);
+        perror("set O_NONBLOCK failed!");
 #endif
         return false;
     }
@@ -24,7 +24,7 @@ bool enable_nonblock_and_cloexec(int fd) {
     if (res == -1) {
 #ifdef __DEBUG__
         // todo: delete this print
-        printf("set non-block for %d success!\n",fd);
+        printf("set O_CLOEXEC failed!");
 #endif
         return false;
     }
@@ -32,6 +32,5 @@ bool enable_nonblock_and_cloexec(int fd) {
     // todo: delete this print
     printf("set non-block for %d success!\n", fd);
 #endif
-    printf("set non-block for %d success!\n", fd);
     return true;
 }

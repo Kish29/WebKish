@@ -13,8 +13,10 @@
 #include "cstdint"
 #include "pthread.h"
 
+
 // 核心类，同步用
 namespace kish {
+
     class mutex_lock;
 
     class mutex_cond;

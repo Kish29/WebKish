@@ -6,9 +6,6 @@
 
 #include "thread.h"
 
-#include <utility>
-#include "unistd.h"
-
 using namespace kish;
 
 __thread thread_cache *cache_data = nullptr;
@@ -26,7 +23,7 @@ namespace kish {
         printf("set current thread name : thread-looper\n");
         cache_data = new thread_cache;
         cache_data->tid = gettid();
-        instance->thread_id = cache_data->tid;
+        instance->t_tid = cache_data->tid;
         cache_data->thread_name = instance->name;
         // todo: delete this printf
         printf("run in thread %s\n", cache_data->thread_name.c_str());
@@ -53,7 +50,7 @@ namespace kish {
             cache_data->tid = gettid();
             cache_data->thread_name = name;
         }
-        return thread_id == cache_data->tid;
+        return t_tid == cache_data->tid;
     }
 
     void kish::thread::stop() {
@@ -62,7 +59,7 @@ namespace kish {
     }
 
     void kish::thread::start() {
-        if (pthread_create(&ptt, nullptr, thread_exe, this)) {
+        if (pthread_create(&pt_id, nullptr, thread_exe, this)) {
             started = true;
         } else {
             // todo: ???

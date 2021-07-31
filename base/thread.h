@@ -38,8 +38,8 @@ namespace kish {
         std::string name;
         // todo: 注意，pid_t和thread_t是完全不同的两个东西
         // pid_t 用于gettid判断，pthread_t表示某个posix线程
-        pid_t thread_id{};  // atomic
-        pthread_t ptt{};
+        pid_t t_tid{};  // atomic
+        pthread_t pt_id{};
         volatile bool started{false};
         volatile bool finished{false};
         volatile bool joined{false};

@@ -8,6 +8,8 @@
 #include "cstring"
 #include "socket.h"
 
+std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLOBAL_HTTP_REQUEST_RESOLVERS;
+
 void http_handler::handle_read() {
     base::handle_read();
     if (!i_am_dead) {
@@ -49,3 +51,4 @@ bool http_handler::keep_alive() const {
 void http_handler::set_dead() {
     i_am_dead = true;
 }
+

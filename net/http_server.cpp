@@ -7,7 +7,6 @@
 #include "http_server.h"
 #include "http_handler.h"
 
-
 void http_server::on_acceptnew(int fd, const inet_address &peer_addr) {
     // todo: delete this print
     printf("new connection from %s\n", peer_addr.ip_port().c_str());
