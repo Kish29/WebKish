@@ -7,7 +7,7 @@ public:
     virtual void show() const = 0;
 };
 
-class time_keeper : keeper {
+class time_keeper : public keeper {
 public:
     time_keeper() {
         printf("time_keeper constructor\n");
@@ -111,24 +111,38 @@ using namespace kish;
 
 class test_mapper : public kish::http_interface {
 public:
-    string observe_url() const override {
-        return "index.html";
+    infc_type observe_url() const override {
+        return infc_type{"index.html", GET};
     }
 
-    string on_request(const request_param &params) override {
+    lit_resp on_request(const request_param &params) override {
         printf("test_mapper received request!\n");
         for (auto &param: params) {
             printf("{%s :%s}\n", param.first.c_str(), param.second.c_str());
         }
-        return "success";
+        return lit_resp{200, "success"};
     }
 };
 
-int main() {
+void test() {
     if (!reg_http_resolver(std::shared_ptr<http_interface>(new test_mapper))) {
         printf("reg false");
         exit(EXIT_FAILURE);
     }
     http_handler::test_mappers();
+}
+
+#include "logger.h"
+
+int main() {
+    std::vector<int> ss;
+    ss.reserve(10);
+    ss.push_back(1);
+    ss.push_back(2);
+    ss.push_back(3);
+    ss.push_back(4);
+    std::cout << ss.size() << std::endl;
+    ss.erase(ss.begin() + 2, ss.end());
+    std::cout << ss.size() << std::endl;
     exit(EXIT_SUCCESS);
 }

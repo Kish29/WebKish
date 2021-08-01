@@ -16,7 +16,7 @@ namespace kish {
     typedef std::vector<thread_func> funcs;
 
     // event_looper是整个服务器的核心，
-    // 拥有一个wakeup_epoller，负责不断地向系统询问是否有新的IO事件到来
+    // 拥有一个wakeup_epoller，负责唤起由于epoll_wait而阻塞的poller
     class event_looper : copyable, public thread {
     public:
 
@@ -30,10 +30,10 @@ namespace kish {
 
         void wakeup() const;
 
-        void add_observe(const shared_ptr<epoll_handler> &eh);
+        void add_observe(const handler_ptr &eh);
 
     private:
-        epoller poller;
+        epoll_poller poller;
         std::shared_ptr<wakeup_handler> wakeuper;
         funcs pending_funcs;
         mutex_lock locker;

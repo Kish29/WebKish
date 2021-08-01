@@ -40,6 +40,10 @@ namespace kish {
 
         self &operator<<(bool);
 
+        self &operator<<(float);
+
+        self &operator<<(double);
+
         self &operator<<(const char *);
 
         self &operator<<(const std::string &);

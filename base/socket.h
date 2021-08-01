@@ -18,7 +18,7 @@ namespace kish {
     class socket_utils;
 
     // 核心类，对系统调用socket的部分封装
-    class socket : fdholder {
+    class socket : public fdholder {
     public:
         explicit socket(bool tcp = true, bool ipv6 = false);
 

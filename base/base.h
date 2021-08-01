@@ -11,6 +11,7 @@
 #include "pthread.h"
 #include "memory"
 #include "unistd.h"
+#include "cassert"
 #include "cstdio"
 #include "string"
 
@@ -22,7 +23,7 @@ namespace kish {
     using std::function;
     using std::shared_ptr;
 
-    typedef function<void(void *)> callback;
+    typedef function<void *(void *)> callback;
     typedef shared_ptr<callback> callback_ptr;
 
     class noncopyable {
@@ -60,13 +61,7 @@ namespace kish {
 
         static T &instance() {
             // 由于指令的乱序执行，double check locking靠不住
-            pthread_once(&ponce, [&]() -> void {
-                inst = new T;
-                ::atexit([&]() -> void {
-                    delete inst;
-                    inst = nullptr;
-                });
-            });
+            pthread_once(&ponce, init);
             assert(inst != nullptr);
             return *inst;
         }
@@ -74,7 +69,27 @@ namespace kish {
     private:
         static pthread_once_t ponce;
         static T *inst;
+
+    private:
+        static void init() {
+            inst = new T;
+            ::atexit(when_exit);
+        }
+
+        static void when_exit() {
+            delete inst;
+            inst = nullptr;
+        }
     };
+
+    template<class T>
+    pthread_once_t singleton<T>::ponce = PTHREAD_ONCE_INIT;
+    template<class T>
+    T *singleton<T>::inst = nullptr;
+
+    // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
+    // tid会取保存的tid
+    extern pid_t tid();
 }
 
 #endif //WEBKISH_BASE_H

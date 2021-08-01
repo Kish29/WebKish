@@ -5,12 +5,25 @@
 //
 
 #include "thread.h"
+#include "cassert"
+#include "logger.h"
 
 using namespace kish;
 
 __thread thread_cache *cache_data = nullptr;
+__thread pid_t t_tid = -1;
 
 namespace kish {
+
+    // 原函数在base.h中声明
+    // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
+    // tid会取保存的tid
+    pid_t tid() {
+        if (t_tid == -1) {
+            t_tid = ::gettid();
+        }
+        return t_tid;
+    }
 
     void *thread_exe(void *args) {
         auto *instance = (thread *) args;
@@ -18,56 +31,60 @@ namespace kish {
             // todo: log thread start error
             pthread_exit(nullptr);
         }
-        // todo: delete this printf
-        pthread_setname_np(pthread_self(), "thread-looper");
-        printf("set current thread name : thread-looper\n");
         cache_data = new thread_cache;
-        cache_data->tid = gettid();
+        cache_data->tid = kish::tid();
         instance->t_tid = cache_data->tid;
         cache_data->thread_name = instance->name;
-        // todo: delete this printf
-        printf("run in thread %s\n", cache_data->thread_name.c_str());
+        LOG_TRACE << "new thread [" << cache_data->thread_name << "] created and started";
         try {
             instance->exe();
-            // todo: log thread finish
-            // todo: delete this printf
-            printf("thread %s exit\n", cache_data->thread_name.c_str());
+            LOG_TRACE << "thread [" << cache_data->thread_name << "] exit";
         } catch (const std::exception &exc) {
             // todo: log error
         } catch (...) {
             // todo: log error
             throw;
         }
+        // todo: check
+        delete cache_data;
         pthread_exit(nullptr);
     }
 
-    kish::thread::thread(kish::thread_func func, std::string n) : exe(std::move(func)), name(std::move(n)) {}
+    kish::thread::thread(thread_func func, std::string n, bool setaffinity) : exe(std::move(func)), name(std::move(n)) {}
 
     bool kish::thread::judge_in_thread() const {
-        // todo: should not new thread_cache and assignment
-        if (cache_data == nullptr) {
-            cache_data = new thread_cache;
-            cache_data->tid = gettid();
-            cache_data->thread_name = name;
-        }
+        if (cache_data == nullptr) return false;
         return t_tid == cache_data->tid;
-    }
-
-    void kish::thread::stop() {
-        // todo: check
-        delete cache_data;
     }
 
     void kish::thread::start() {
         if (pthread_create(&pt_id, nullptr, thread_exe, this)) {
             started = true;
         } else {
-            // todo: ???
+            // todo: log error
+            started = false;
         }
     }
 
-    void thread::join() {
+    int thread::join() {
+        assert(!joined);
+        joined = true;
+        return pthread_join(pt_id, nullptr);
+    }
 
+    const std::string &thread::t_name() const {
+        return name;
+    }
+
+    thread::~thread() {
+        finished = true;
+        if (started && !joined) {
+            detach();
+        }
+    }
+
+    int thread::detach() {
+        return pthread_detach(pt_id);
     }
 
 }

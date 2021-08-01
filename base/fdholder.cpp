@@ -5,6 +5,7 @@
 //
 
 #include "fdholder.h"
+#include "cstdio"
 
 kish::fdholder::~fdholder() {
     // todo: delete this print

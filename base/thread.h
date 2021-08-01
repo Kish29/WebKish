@@ -20,18 +20,23 @@ namespace kish {
     };
 
     // 核心类，pthread的封装
+    // todo: 获取CPU_SET集，设置CPU亲和性
     class thread {
     public:
 
-        thread(thread_func func, std::string n);
+        thread(thread_func func, std::string n, bool setaffinity = true);
+
+        ~thread();
 
         virtual void start();
 
         bool judge_in_thread() const;
 
-        virtual void stop();
+        virtual int join() final;
 
-        void join();
+        virtual int detach() final;
+
+        const std::string &t_name() const;
 
     protected:
         thread_func exe;
@@ -40,6 +45,7 @@ namespace kish {
         // pid_t 用于gettid判断，pthread_t表示某个posix线程
         pid_t t_tid{};  // atomic
         pthread_t pt_id{};
+        // todo: volatile is safe?
         volatile bool started{false};
         volatile bool finished{false};
         volatile bool joined{false};

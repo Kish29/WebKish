@@ -16,7 +16,7 @@ void event_looper::submit(thread_func exe) {
         exe();
     } else {
         mutex_lockguard lck(locker);
-        pending_funcs.push_back(std::move(exe));
+        pending_funcs.emplace_back(std::move(exe));
         // 唤醒looper
         wakeup();
     }
@@ -43,8 +43,8 @@ void event_looper::loop() {
     while (!finished) {
         // todo: delete this printf
         printf("event_looper do poll\n");
-        handler_list list = poller.poll();
-        for (std::shared_ptr<epoll_handler> &h: list) {
+        handler_list list = poller.poll(KEPOLL_WAITTIME);
+        for (handler_ptr &h: list) {
             // poller会将handler的latest_event进行更新
             h->handle_event(h->events());
         }
@@ -58,12 +58,12 @@ void event_looper::loop() {
     }
 }
 
-void event_looper::add_observe(const shared_ptr<epoll_handler> &eh) {
-    poller.epoll_add(eh);
+void event_looper::add_observe(const handler_ptr &eh) {
+    poller.addev(eh);
 }
 
 event_looper::event_looper(thread_func func, std::string name)
-        : thread(std::move(func), std::move(name)),
+        : thread(std::move(func), std::move(name), true),
           wakeuper(new wakeup_handler(eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC))) {
     if (wakeuper->fd() == -1) {
         // todo log error
@@ -71,7 +71,7 @@ event_looper::event_looper(thread_func func, std::string name)
         // ❌️这样写是不会有计数的！！！！
         // ❌️智能指针教科书式的错误用法
 //        std::shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(wakeuper.get()));
-        poller.epoll_add(wakeuper);
+        poller.addev(wakeuper);
     }
 }
 

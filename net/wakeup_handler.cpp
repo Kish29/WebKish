@@ -6,7 +6,7 @@
 
 #include "wakeup_handler.h"
 
-void wakeup_handler::wakeup() const {
+void kish::wakeup_handler::wakeup() const {
     if (observe_fd == -1) {
         return;
     }
@@ -19,7 +19,7 @@ void wakeup_handler::wakeup() const {
     }
 }
 
-void wakeup_handler::handle_read() {
+void kish::wakeup_handler::handle_read() {
     if (observe_fd != -1) {
         uint64_t one = 1;
         if (::read(observe_fd, &one, sizeof one) == -1) {

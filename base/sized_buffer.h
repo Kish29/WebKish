@@ -28,7 +28,7 @@ namespace kish {
 
         void append(const char *data, size_t size) {
             size_t av = avail();
-            if (av >= size) {   // >=不行，因为memcpy还有一个'\0'
+            if (av >= size) {
                 memcpy(indexer, data, size);
                 indexer += size;
             } else {
@@ -50,13 +50,21 @@ namespace kish {
             return indexer;
         }
 
+        void offset(size_t n) {
+            indexer += n;
+        }
+
         void clear() {
-            zero_buffer();
+            // zero_buffer();   // no need to do this
             indexer = buffer;
         }
 
         int length() const {
             return static_cast<int>(indexer - buffer);
+        }
+
+        const char *data() {
+            return buffer;
         }
 
     private:

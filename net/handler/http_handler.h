@@ -28,7 +28,7 @@ namespace kish {
 #ifdef __DEBUG__
 
         static void test_mappers() {
-            for (auto &m:GLOBAL_HTTP_REQUEST_RESOLVERS) {
+            for (auto &m:GLO_GET_MAPPERS) {
                 request_param rp{};
                 rp.insert(std::make_pair("name", "jar"));
                 rp.insert(std::make_pair("birthday", "2021-8-1"));
@@ -42,14 +42,23 @@ namespace kish {
     private:
         bool kp_alv{false};
 
-        typedef std::string url;
+        typedef string url;
         typedef shared_ptr<http_interface> resolver_ptr;
 
-        // 保存全局注册的方法，解析请求后，调用
-        static std::map<url, resolver_ptr> GLOBAL_HTTP_REQUEST_RESOLVERS;
     private:
 
         friend bool reg_http_resolver(const http_infc_ptr &);
+
+        // 保存全局注册的方法，解析请求后，调用
+        static std::map<url, resolver_ptr> GLO_GET_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_HEAD_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_POST_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_PUT_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_DELETE_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_CONNECT_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_OPTIONS_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_TRACE_MAPPERS;
+        static std::map<url, resolver_ptr> GLO_PATCH_MAPPERS;
     };
 
 }

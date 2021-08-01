@@ -82,6 +82,19 @@ kish::log_stream::self &kish::log_stream::operator<<(bool val) {
     return *this;
 }
 
+kish::log_stream::self &kish::log_stream::operator<<(float val) {
+    return *this << static_cast<double >(val);
+}
+
+kish::log_stream::self &kish::log_stream::operator<<(double val) {
+    if (log_buf->avail() >= KMAX_NUMERIC_SIZE) {
+        int len = snprintf(log_buf->current(), KMAX_NUMERIC_SIZE, "%.12g", val);
+        log_buf->offset(len);
+    }
+    return *this;
+}
+
+
 kish::log_stream::self &kish::log_stream::operator<<(const char *val) {
     if (val) {
         log_buf->append(val, strlen(val));

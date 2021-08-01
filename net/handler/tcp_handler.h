@@ -11,7 +11,6 @@
 
 namespace kish {
 
-
     class tcp_handler : public epoll_handler {
     public:
         explicit tcp_handler(int fd);

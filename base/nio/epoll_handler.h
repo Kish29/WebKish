@@ -7,7 +7,8 @@
 #ifndef WEBKISH_EPOLL_HANDLER_H
 #define WEBKISH_EPOLL_HANDLER_H
 
-#include "epoller.h"
+#include "epoll_poller.h"
+#include "event_handler.h"
 
 namespace kish {
 
@@ -15,7 +16,7 @@ namespace kish {
     constexpr int KSEND_BUFSIZ = 8 * 1024;
 
     // 核心类，代表可被poller进行观察和事件处理的对象
-    class epoll_handler : fdholder, event_handler {
+    class epoll_handler : public event_handler {
     public:
 
         explicit epoll_handler(int fd)
@@ -26,7 +27,7 @@ namespace kish {
         ~epoll_handler() override {
             if (!i_am_closed) {
                 // todo: verify what will happen when fd is -1 to be closed
-                printf("~epoll_handler() close fd: %d\n", observe_fd);
+                printf("epoll_handler) close fd: %d\n", observe_fd);
                 ::close(observe_fd);
             }
         }
@@ -35,11 +36,11 @@ namespace kish {
             return observe_fd;
         }
 
-        virtual uint32_t events() const {
+        uint32_t events() const override {
             return observe_events;
         }
 
-        void update_latest_events(uint32_t levents);
+        void update_latest_events(uint32_t levents) override;
 
         void handle_event(uint32_t events) override;
 
