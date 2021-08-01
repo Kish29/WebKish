@@ -141,6 +141,11 @@ void async_stream_writer::fwrite_routine() {
                 condit.wait_for(flush_interval);
             }
             if (stop) break;    // stop should firstly check
+            if (buffers.empty() && work_buf->length() == 0) {
+                writer.flush();
+                continue;
+            }
+            // 上面的if条件限制了此时buffers中buffer指针数量一定会有大于等于2
             // ⚠️注意，还要压一个当前未满的缓冲区
             buffers.emplace_back(work_buf);
             work_buf.reset();
@@ -162,7 +167,6 @@ void async_stream_writer::fwrite_routine() {
         for (const async_buf_ptr &ptr: bufs_inthread) {
             if (ptr->length() > 0) {
                 writer.append(ptr->data(), ptr->length());
-                ptr->clear();
             }
         }
 
@@ -171,12 +175,15 @@ void async_stream_writer::fwrite_routine() {
             assert(!bufs_inthread.empty());
             feedback_for_work = bufs_inthread.back();
             bufs_inthread.pop_back();
+            feedback_for_work->clear();
         }
 
-        // 注意第二个要多加一个条件判断，因为append方法中，emplace_back一个就会唤起本线程
-        if (!feedback_for_aid && !bufs_inthread.empty()) {
+        // 这里可以两次断言的原因：wait之后，buffers中一定有两个指针，一个数据满而另一个可能未满
+        if (!feedback_for_aid) {
+            assert(!bufs_inthread.empty());
             feedback_for_aid = bufs_inthread.back();
             bufs_inthread.pop_back();
+            feedback_for_aid->clear();
         }
 
         bufs_inthread.clear();

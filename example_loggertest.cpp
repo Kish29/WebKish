@@ -36,18 +36,18 @@ void stress_test1() {
 void *thread_func(void *arg) {
     int no = *((int *) arg);
     LOG_INFO << "thread-" << no << " started";
-    for (int j = 0; j < 100000; ++j) {
+    for (int j = 0; j < 10000; ++j) {
         LOG_RECOR << "thread-" << no << " write j " << j;
     }
     pthread_exit(nullptr);
 }
 
-// 80W lines
+// 48W lines
 void stress_test2() {
     LOG_INFO << "------- multi thread test -------";
-    pthread_t pt_t[8];
-    int *no = new int[8];
-    for (int i = 0; i < 8; ++i) {
+    pthread_t pt_t[48];
+    int *no = new int[48];
+    for (int i = 0; i < 48; ++i) {
         no[i] = i + 1;
         // ⚠️最后一个参数，不能是栈空间变量，必须堆外存储
         pthread_create(&pt_t[i], nullptr, thread_func, no + i);
@@ -55,7 +55,7 @@ void stress_test2() {
     }
 }
 
-// 一共90W15行 线程日志那儿有2行 thread.cpp:38 thread.cpp:41，但日志线程已经结束了，所以无法打印
+// 一共58W15行 线程日志那儿有2行 thread.cpp:38 thread.cpp:41，但日志线程已经结束了，所以无法打印
 int main() {
     type_test();
     sleep(5);
