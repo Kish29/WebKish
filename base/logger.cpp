@@ -38,7 +38,7 @@ void log_stderr(const char *data, size_t len);
 
 void log_file(const char *data, size_t len);
 
-// fixme: 该类偶发数据越界问题 vector
+// 核心类，实现单个线程的日志向文件输出
 class async_stream_writer : kish::noncopyable {
 public:
 
@@ -50,7 +50,7 @@ public:
             : filename(std::move(fln)),
               buf_num(bufn),
               flush_interval(interval),
-              fwrite_thread(std::bind(&async_stream_writer::fwrite_routine, this), "thread-fwrite", true),
+              fwrite_thread(std::bind(&async_stream_writer::fwrite_routine, this), "thread-log-writer", true),
               writer(filename.c_str()),
               work_buf(new async_buffer),
               aid_buf(new async_buffer) {
@@ -105,7 +105,7 @@ private:
 size_t async_stream_writer::append(const char *data, size_t len) {
     // ⚠️!!!检查线程是否已经退出!!⚠️
     // ⚠️重要，有可能log线程退出了，仍然有其他线程调用logger⚠️
-//    if (stop) return 0;
+    if (stop) return 0;
     kish::mutex_lockguard lck(locker);
     if (work_buf->avail() >= len) {
         work_buf->append(data, len);
@@ -123,7 +123,7 @@ size_t async_stream_writer::append(const char *data, size_t len) {
         work_buf->append(data, len);
         condit.notify_one();
     }
-    // fixme: check really written len bytes?
+    // fixme: check really written len bytes? may be len is too large
     return len;
 }
 
@@ -208,12 +208,12 @@ kish::logger::logger(const char *filename, int line, kish::log_level level)
 }
 
 kish::logger::~logger() {
-    // 添加文件位置
+    // 添加文件位置，注意，优先输出文件
     append_logpos();
     switch (lv) {
         case LL_TRACE:
-            log_stdout(strm.buffer()->data(), strm.buffer()->length());
             log_file(strm.buffer()->data(), strm.buffer()->length());
+            log_stdout(strm.buffer()->data(), strm.buffer()->length());
             break;
         case LL_DEBUG:
         case LL_INFO:
@@ -221,8 +221,8 @@ kish::logger::~logger() {
             break;
         case LL_WARN:
         case LL_FATAL:
-            log_stderr(strm.buffer()->data(), strm.buffer()->length());
             log_file(strm.buffer()->data(), strm.buffer()->length());
+            log_stderr(strm.buffer()->data(), strm.buffer()->length());
             break;
         case LL_RECOR:
             log_file(strm.buffer()->data(), strm.buffer()->length());

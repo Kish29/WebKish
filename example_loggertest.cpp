@@ -57,15 +57,15 @@ void stress_test2() {
 
 // 一共90W15行 线程日志那儿有2行 thread.cpp:38 thread.cpp:41，但日志线程已经结束了，所以无法打印
 int main() {
-//    type_test();
-    /*sleep(5);
+    type_test();
+    sleep(5);
     stress_test1();
     sleep(5);
     stress_test2();
-    sleep(5);*/
+    sleep(5);
 //    SLEEP_ADAY;
 //    int i = 1 / 0;
-    char buf[50];
+    /*char buf[50];
     int res = read(-1, buf, 50);
     int se{};
     if (res == -1) {
@@ -76,5 +76,5 @@ int main() {
         char *out = strerror_r(se, buf, sizeof buf);
         printf("%s\n", out);
     }
-    LOG_INFO << "read fd:-1 for errno test";
+    LOG_INFO << "read fd:-1 for errno test";*/
 }
