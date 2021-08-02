@@ -24,7 +24,7 @@ namespace kish {
     using std::shared_ptr;
 
     typedef function<void *(void *)> callback;
-    typedef shared_ptr<callback> callback_ptr;
+    typedef function<void()> callable;
 
     class noncopyable {
     public:
@@ -61,31 +61,32 @@ namespace kish {
 
         static T &instance() {
             // 由于指令的乱序执行，double check locking靠不住
-            pthread_once(&ponce, init);
-            assert(inst != nullptr);
-            return *inst;
+            pthread_once(&m_ponce, init);
+            assert(m_inst != nullptr);
+            return *m_inst;
         }
 
     private:
-        static pthread_once_t ponce;
-        static T *inst;
-
-    private:
         static void init() {
-            inst = new T;
+            m_inst = new T;
             ::atexit(when_exit);
         }
 
         static void when_exit() {
-            delete inst;
-            inst = nullptr;
+            delete m_inst;
+            m_inst = nullptr;
         }
+
+    private:
+        static pthread_once_t m_ponce;
+        static T *m_inst;
+
     };
 
     template<class T>
-    pthread_once_t singleton<T>::ponce = PTHREAD_ONCE_INIT;
+    pthread_once_t singleton<T>::m_ponce = PTHREAD_ONCE_INIT;
     template<class T>
-    T *singleton<T>::inst = nullptr;
+    T *singleton<T>::m_inst = nullptr;
 
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
     // tid会取保存的tid

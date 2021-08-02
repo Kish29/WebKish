@@ -33,10 +33,10 @@ namespace kish {
         void add_observe(const handler_ptr &eh);
 
     private:
-        epoll_poller poller;
-        std::shared_ptr<wakeup_handler> wakeuper;
-        funcs pending_funcs;
-        mutex_lock locker;
+        epoll_poller m_poller;
+        std::shared_ptr<wakeup_handler> m_wakeuper;
+        funcs m_pending_funcs;
+        mutex_lock m_locker;
 
     private:
         void loop();

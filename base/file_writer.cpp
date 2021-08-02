@@ -9,23 +9,23 @@
 // modes为"ae"表示append，O_CLOEXE (close-on-exec)
 // 具体见 man 2 open
 // O_CLOEXE条目
-kish::file_writer::file_writer(const char *filename) : fptr(::fopen(filename, "ae")) {}
+kish::file_writer::file_writer(const char *filename) : m_fptr(::fopen(filename, "ae")) {}
 
 kish::file_writer::~file_writer() {
-    ::fclose(fptr);
+    ::fclose(m_fptr);
 }
 
 void kish::file_writer::flush() {
-    ::fflush(fptr);
+    ::fflush(m_fptr);
 }
 
 size_t kish::file_writer::append(const char *line, size_t len) {
-    size_t written = ::fwrite_unlocked(line, 1, len, fptr);
+    size_t written = ::fwrite_unlocked(line, 1, len, m_fptr);
     size_t remain = len - written;
     while (remain > 0) {
-        size_t rewrite = ::fwrite_unlocked(line + written, 1, remain, fptr);
+        size_t rewrite = ::fwrite_unlocked(line + written, 1, remain, m_fptr);
         if (rewrite == 0) {
-            int err = ferror(fptr);
+            int err = ferror(m_fptr);
             if (err) {
                 // todo: delete this print
                 printf("file_writer::append failed!\n");

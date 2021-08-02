@@ -20,57 +20,57 @@ namespace kish {
     class sized_buffer : noncopyable {
     public:
 
-        sized_buffer() : buffer(new char[SIZE]), indexer(buffer) {}
+        sized_buffer() : m_buffer(new char[SIZE]), m_indexer(m_buffer) {}
 
         ~sized_buffer() {
-            delete[] buffer;
+            delete[] m_buffer;
         }
 
         void append(const char *data, size_t size) {
             size_t av = avail();
             if (av >= size) {
-                memcpy(indexer, data, size);
-                indexer += size;
+                memcpy(m_indexer, data, size);
+                m_indexer += size;
             } else {
-                memcpy(indexer, data, av);
-                indexer += av;
+                memcpy(m_indexer, data, av);
+                m_indexer += av;
             }
         }
 
         int avail() const {
-            return static_cast<int>((buffer + SIZE) - indexer);
+            return static_cast<int>((m_buffer + SIZE) - m_indexer);
         }
 
         void zero_buffer() {
-            // memset(buffer, '\0', SIZE);
-            bzero(buffer, SIZE);
+            // memset(m_buffer, '\0', SIZE);
+            bzero(m_buffer, SIZE);
         }
 
         char *current() {
-            return indexer;
+            return m_indexer;
         }
 
         void offset(size_t n) {
-            indexer += n;
+            m_indexer += n;
         }
 
         void clear() {
             // zero_buffer();   // no need to do this
-            indexer = buffer;
+            m_indexer = m_buffer;
         }
 
         int length() const {
-            return static_cast<int>(indexer - buffer);
+            return static_cast<int>(m_indexer - m_buffer);
         }
 
         const char *data() {
-            return buffer;
+            return m_buffer;
         }
 
     private:
-        char *buffer;
+        char *m_buffer;
         // 指向目前buffer
-        char *indexer;
+        char *m_indexer;
     };
 
 }

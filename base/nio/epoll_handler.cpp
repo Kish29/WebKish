@@ -10,7 +10,7 @@
 namespace kish {
 
     void epoll_handler::update_latest_events(uint32_t levents) {
-        latest_events = levents;
+        m_latest_events = levents;
     }
 
     void epoll_handler::handle_event(uint32_t events) {
@@ -29,16 +29,16 @@ namespace kish {
     void epoll_handler::handle_read() {
         ssize_t n = readin();
         if (n < 0) {
-            i_am_dead = true;
+            m_dead = true;
         }
 //        if (rdn < 0) {
         // todo: log error
 //            perror("void epoll_handler::handle_read() read n <=0 ");
         // todo: 待商榷 ⚠️基类不应该设置i_am_dead，应当交给网络协议tcp/http
-//            i_am_dead = true;
+//            m_dead = true;
 //        }
         // todo: 如何判断一个文件描述符的错误
-//        i_am_dead = JUDGE_DEAD(n);
+//        m_dead = JUDGE_DEAD(n);
     }
 
     void epoll_handler::handle_write() {
@@ -50,7 +50,7 @@ namespace kish {
     }
 
     ssize_t epoll_handler::readin() {
-        bzero(read_buf, KREAD_BUFSIZ);
-        return read(observe_fd, read_buf, KREAD_BUFSIZ);
+        bzero(m_read_buf, KREAD_BUFSIZ);
+        return read(m_observe_fd, m_read_buf, KREAD_BUFSIZ);
     }
 }

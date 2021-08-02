@@ -22,7 +22,7 @@ namespace kish {
         void flush();
 
     private:
-        FILE *fptr;
+        FILE *m_fptr;
 
     };
 }

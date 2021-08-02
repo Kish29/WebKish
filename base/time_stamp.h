@@ -28,7 +28,7 @@ namespace kish {
 
     private:
         // 从1900年过去的时间
-        timeval tm_epoch{};
+        timeval m_tm_epoch{};
     };
 }
 
