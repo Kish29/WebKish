@@ -28,6 +28,7 @@ set(
         base/log/logger.cpp
         base/fdholder.cpp
         base/timer.cpp
+        base/utils/util.h
         net/tcp/wakeup_handler.cpp
         net/tcp/accept_handler.cpp
         net/server.h
@@ -44,6 +45,7 @@ include_directories(base/nio)
 include_directories(base/log)
 include_directories(base/socket)
 include_directories(base/concurr)
+include_directories(base/utils)
 include_directories(net)
 include_directories(net/tcp)
 include_directories(net/http)
@@ -68,6 +70,7 @@ endmacro()
 add_test_target(other)
 add_test_target(tcpserver)
 add_test_target(httpserver)
+add_test_target(threadpool)
 add_test_target(logger)
 add_test_target(timer)
 add_test_target(thread)

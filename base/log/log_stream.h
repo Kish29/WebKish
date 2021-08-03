@@ -68,7 +68,7 @@ namespace kish {
 
     private:
         // 格式化数字的最大位数
-        static const int KMAX_NUMERIC_SIZE = 48;
+        static const int KMAX_NUMERIC_SIZE;
     };
 
 }

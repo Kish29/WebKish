@@ -9,7 +9,6 @@
 
 #include "tcp_handler.h"
 #include "http_interface.h"
-#include "map"
 
 namespace kish {
 
@@ -28,12 +27,31 @@ namespace kish {
 #ifdef __DEBUG__
 
         static void test_mappers() {
-            for (auto &m:GLO_GET_MAPPERS) {
-                parameters rp{};
-                rp.insert(std::make_pair("m_name", "jar"));
-                rp.insert(std::make_pair("birthday", "2021-8-1"));
-                rp.insert(std::make_pair("fruit", "apple"));
-                m.second->on_request(rp);
+            // todo: 这个算法好垃圾。。。。
+            parameters param;
+            param.insert(std::make_pair("fruit", "apple"));
+            param.insert(std::make_pair("name", "jar"));
+            param.insert(std::make_pair("password", "123456"));
+            // todo: 如何查找更快？？？
+            // 队头队尾
+            size_t len = GLO_RESOLR_MAPPERS.size();
+            for (size_t i = 0, j = len - 1; i <= j; i++, j--) {
+                if (i == j) {
+                    if (GLO_RESOLR_MAPPERS.at(i)->can_resolve("index.html")) {
+                        GLO_RESOLR_MAPPERS.at(i)->on_request("index.html", param);
+                        break;
+                    }
+                } else {
+                    if (GLO_RESOLR_MAPPERS.at(i)->can_resolve("index.html")) {
+                        GLO_RESOLR_MAPPERS.at(i)->on_request("index.html", param);
+                        break;
+                    }
+                    if (GLO_RESOLR_MAPPERS.at(j)->can_resolve("index.html")) {
+                        GLO_RESOLR_MAPPERS.at(j)->on_request("index.html", param);
+                        break;
+                    }
+                }
+
             }
         }
 
@@ -42,23 +60,14 @@ namespace kish {
     private:
         bool m_keep_alive{false};
 
-        typedef string url;
-        typedef shared_ptr<http_interface> resolver_ptr;
-
     private:
+        friend bool reg_http_interfc(const http_infc_ptr &);
 
-        friend bool reg_http_resolver(const http_infc_ptr &);
+        static const int KDEFAULT_RESOLVER_SIZE = 2048;
 
+        typedef shared_ptr<http_interface> resolver_ptr;
         // 保存全局注册的方法，解析请求后，调用
-        static std::map<url, resolver_ptr> GLO_GET_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_HEAD_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_POST_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_PUT_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_DELETE_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_CONNECT_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_OPTIONS_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_TRACE_MAPPERS;
-        static std::map<url, resolver_ptr> GLO_PATCH_MAPPERS;
+        static std::vector<resolver_ptr> GLO_RESOLR_MAPPERS;
     };
 
 }

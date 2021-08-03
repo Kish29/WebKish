@@ -5,6 +5,7 @@
 //
 
 #include "epoll_poller.h"
+#include "logger.h"
 
 // EPOLL_CLOEXEC
 // 在进程执行exec系统调用时关闭此打开的文件描述符。防止父进程泄露打开的文件给子进程，即便子进程没有相应权限。
@@ -18,7 +19,9 @@ void epoll_poller::addev(const handler_ptr &obs) {
         ev.data.fd = obs->fd();
         ev.events = obs->events();
         if (epoll_ctl(m_epoll_fd, EPOLL_CTL_ADD, obs->fd(), &ev) == -1) {
-            // todo: log error
+            LOG_INFO << "epoll add fd: " << obs->fd() << " failed";
+        } else {
+            LOG_INFO << "epoll add fd: " << obs->fd() << " success";
         }
     }
 }

@@ -26,6 +26,15 @@ namespace kish {
     }
 
     void *thread_exe(void *args) {
+
+        // todo:
+
+        // 设置cpu亲和性
+        // CPU_ZERO(&m_mask);
+        // 将（i % CPU_CORE）号CPU加入集合中
+        // CPU_SET(i % CPU_CORE, &m_mask);
+
+
         auto *instance = (thread *) args;
         if (instance == nullptr) {
             LOG_TRACE << "thread_exe -> instance is null";

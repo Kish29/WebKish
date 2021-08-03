@@ -6,6 +6,8 @@
 
 #include "log_stream.h"
 
+const int kish::log_stream::KMAX_NUMERIC_SIZE = 48;
+
 kish::log_stream::self &kish::log_stream::operator<<(char val) {
     m_log_buf->append(&val, 1);
     return *this;

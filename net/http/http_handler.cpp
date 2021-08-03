@@ -8,20 +8,12 @@
 #include "cstring"
 #include "socket.h"
 
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_GET_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_HEAD_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_POST_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_PUT_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_DELETE_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_CONNECT_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_OPTIONS_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_TRACE_MAPPERS;
-std::map<std::string, shared_ptr<kish::http_interface>> kish::http_handler::GLO_PATCH_MAPPERS;
+std::vector<shared_ptr<kish::http_interface>> kish::http_handler::GLO_RESOLR_MAPPERS;
 
 void http_handler::handle_read() {
     base::handle_read();
     if (!m_dead) {
-        // build-body
+        // build-content
         const char *body = "<h>this is what i send to you</h>";
         size_t bodylen = strlen(body);
 

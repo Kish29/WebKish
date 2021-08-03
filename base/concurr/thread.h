@@ -10,6 +10,18 @@
 #include "sync.h"
 #include "string"
 
+#ifdef _GNU_SOURCE
+
+#include "sys/sysinfo.h"
+
+const static int CPU_CORE = get_nprocs_conf();
+#else
+
+#include "thread"
+
+const static int CPU_CORE = std::thread::hardware_concurrency();
+#endif
+
 namespace kish {
 
     typedef std::function<void()> thread_func;
@@ -45,14 +57,14 @@ namespace kish {
     protected:
         thread_func m_exe;
         std::string m_name;
-        // todo: 注意，pid_t和thread_t是完全不同的两个东西
         // pid_t 用于gettid判断，pthread_t表示某个posix线程
         pid_t m_tid{};  // atomic
         pthread_t m_ptid{};
-        // todo: volatile is safe?
-        volatile bool m_started{false};
-        volatile bool m_finished{false};
-        volatile bool m_joined{false};
+        // volatile 从某种层面上来说，仅仅是读安全
+//        volatile bool m_started{false};
+        std::atomic_bool m_started{false};
+        std::atomic_bool m_finished{false};
+        std::atomic_bool m_joined{false};
 
     private:
         friend void *thread_exe(void *);

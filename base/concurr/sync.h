@@ -58,15 +58,25 @@ namespace kish {
         }
 
         ~mutex_lockguard() {
-            m_locker.unlock();
+            unlock_internal();
         }
 
-        void unlock() const {
-            m_locker.unlock();
+        void unlock() {
+            unlock_internal();
         }
 
     private:
         mutex_lock &m_locker;
+        std::atomic_bool m_unlocked{false};
+
+    private:
+        void unlock_internal() {
+            // 主要是防止外部调用者声明了生命周期（花括号包裹）后，又重复调用unlock函数
+            if (!m_unlocked) {
+                m_unlocked = true;
+                m_locker.unlock();
+            }
+        }
     };
 
     class mutex_cond : noncopyable {
@@ -102,9 +112,10 @@ namespace kish {
             clock_gettime(CLOCK_REALTIME, &time);
             // 设定超时时间点
             // 注意计算方法
-            int64_t nsecs = ms * (KNANO_PER_SEC / KMILS_PER_SEC);
-            time.tv_sec += nsecs / KNANO_PER_SEC;
-            time.tv_nsec += (nsecs % KNANO_PER_SEC);
+            int64_t sec_add = ms / KMILS_PER_SEC;
+            int64_t nsec_add = (ms % KMILS_PER_SEC) * (KNANO_PER_SEC / KMILS_PER_SEC);
+            time.tv_sec += sec_add;
+            time.tv_nsec += nsec_add;
             // 返回值为true表示超时了获取了锁
             return ETIMEDOUT == pthread_cond_timedwait(&m_cond, &(m_locker.m_mutex), &time);
         }

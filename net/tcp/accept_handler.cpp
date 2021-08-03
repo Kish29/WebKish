@@ -21,6 +21,8 @@ namespace kish {
             int client_fd = ::accept(m_observe_fd, (sockaddr *) &client_addr, &claddr_len);
             // todo: 限制连接数量
             if (client_fd > 0 && m_acc_cb) {
+                // todo: delete this print
+                printf("client fd is %d\n", client_fd);
                 inet_address a(client_addr.sin_port, client_addr.sin_addr.s_addr, true);
                 m_acc_cb(client_fd, a);
             } else {

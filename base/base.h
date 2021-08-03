@@ -14,6 +14,7 @@
 #include "cassert"
 #include "cstdio"
 #include "string"
+#include "atomic"
 
 // 86400 = 60 * 60 * 24
 #define SLEEP_ADAY sleep(86400)
@@ -51,6 +52,18 @@ namespace kish {
         virtual std::string tostring() const = 0;
     };
 
+    class jsonable {
+    public:
+        virtual std::string tojson() const = 0;
+    };
+
+
+    // 返回报文结构
+    class message_type {
+    public:
+        virtual std::string tomessage() const = 0;
+    };
+
     template<class T>
     class singleton : noncopyable {
     public:
@@ -62,31 +75,31 @@ namespace kish {
         static T &instance() {
             // 由于指令的乱序执行，double check locking靠不住
             pthread_once(&m_ponce, init);
-            assert(m_inst != nullptr);
-            return *m_inst;
+            assert(m_instance != nullptr);
+            return *m_instance;
         }
 
     private:
         static void init() {
-            m_inst = new T;
+            m_instance = new T;
             ::atexit(when_exit);
         }
 
         static void when_exit() {
-            delete m_inst;
-            m_inst = nullptr;
+            delete m_instance;
+            m_instance = nullptr;
         }
 
     private:
         static pthread_once_t m_ponce;
-        static T *m_inst;
+        static T *m_instance;
 
     };
 
     template<class T>
     pthread_once_t singleton<T>::m_ponce = PTHREAD_ONCE_INIT;
     template<class T>
-    T *singleton<T>::m_inst = nullptr;
+    T *singleton<T>::m_instance = nullptr;
 
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
     // tid会取保存的tid

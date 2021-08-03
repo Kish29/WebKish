@@ -33,8 +33,9 @@ void event_looper::wakeup() const {
 }
 
 event_looper::event_looper()
-        : event_looper(std::bind(&event_looper::loop, this), "thread-m_looper") {}
+        : event_looper(std::bind(&event_looper::loop, this), "thread-looper") {}
 
+event_looper::event_looper(std::string name) : event_looper(std::bind(&event_looper::loop, this), std::move(name)) {}
 
 void event_looper::loop() {
     // todo: delete this printf
@@ -79,3 +80,4 @@ event_looper::~event_looper() {
     // todo: thread exit safe
 //    m_finished = true;
 }
+

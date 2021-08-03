@@ -95,12 +95,14 @@ private:
 
 private:
     // 最大堆积buffer数量
-    static const int KMAX_ACC_BUF_NUM = 20;
+    static const int KMAX_ACC_BUF_NUM;
 
 private:
     void fwrite_routine();
 
 };
+
+const int async_stream_writer::KMAX_ACC_BUF_NUM = 20;
 
 size_t async_stream_writer::append(const char *data, size_t len) {
     // ⚠️!!!检查线程是否已经退出!!⚠️

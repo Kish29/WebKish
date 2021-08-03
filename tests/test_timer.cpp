@@ -10,11 +10,11 @@
 int main() {
     kish::timer t("test-timer");
     t.async([]() -> void {
-        printf("3s has passed\n");
+        printf("5s has passed\n");
         printf("hello world\n");
         fflush(stdout);
-    }, 3000);
-    sleep(1);
+    }, 5000);
+    sleep(6);
     t.stop();
     printf("exit!\n");
 }

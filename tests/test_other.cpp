@@ -109,14 +109,17 @@ public:
 
 using namespace kish;
 
+#include "unordered_set"
+
 class test_mapper : public kish::http_interface {
 public:
-    infc_type observe_url() const override {
-        return infc_type{"index.html", GET};
+
+    test_mapper() {
+        resolver_list.insert("index.html");
     }
 
-    simp_resp on_request(const parameters &params) override {
-        printf("test_mapper received request!\n");
+    simp_resp on_request(const string &uri, const parameters &params) override {
+        printf("test_mapper received response!\n");
         for (auto &param: params) {
             printf("{%s :%s}\n", param.first.c_str(), param.second.c_str());
         }
@@ -126,7 +129,7 @@ public:
 };
 
 void test() {
-    if (!reg_http_resolver(std::shared_ptr<http_interface>(new test_mapper))) {
+    if (!reg_http_interfc(std::shared_ptr<http_interface>(new test_mapper))) {
         printf("reg false");
         exit(EXIT_FAILURE);
     }
@@ -179,18 +182,49 @@ void *test4(void *) {
 
 #include "thread_pool.h"
 
+std::atomic_int started_num{0};
+
+void *tf(void *) {
+    for (int i = 0; i < 1000; ++i) {
+        started_num++;
+    }
+    pthread_exit(nullptr);
+}
+
+#include "thread_pool.h"
+
 int main() {
-    thread_pool::instance()->init(8);
+//    EXECUTOR_POOL.init(4, 1024);
+    /*thread_pool::instance()->init(8);
     thread_pool::instance()->submit(nullptr, [](const std::shared_ptr<void> &) -> void {
         printf("hello");
         fflush(stdout);
-    });
+    });*/
 /*
     pthread_t pt{};
     pthread_create(&pt, nullptr, test4, nullptr);
     sleep(5);
     quit = true;
 */
-    sleep(2);
+    /* pthread_t tid[100];
+     for (int i = 0; i < 100; ++i) {
+         pthread_create(&tid[i], nullptr, tf, nullptr);
+     }
+     sleep(1);
+     printf("started_num %d", (int) started_num);*/
+    /*std::vector<callable> vc;
+    vc.emplace_back([]() -> void {
+        printf("????\n");
+        fflush(stdout);
+    });
+    vc.at(0)();
+
+    callable task = std::move(vc.at(0));
+    task();
+
+    printf("vs size is %ld\n", vc.size());*/
+    reg_http_interfc(std::make_shared<test_mapper>());
+    http_handler::test_mappers();
+
     exit(EXIT_SUCCESS);
 }

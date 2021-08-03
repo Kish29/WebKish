@@ -39,7 +39,7 @@ namespace kish {
         std::string m_name;
         mutex_lock m_locker;
         mutex_cond m_cond;
-        volatile bool m_stop{false};
+        std::atomic_bool m_stop{false};
 
     private:
         void schedule(callable &&task, bool async, bool loop, uint32_t ms_t);

@@ -8,6 +8,7 @@
 #define WEBKISH_HTTP_SERVER_H
 
 #include "tcp_server.h"
+#include "timer.h"
 
 namespace kish {
 
@@ -19,6 +20,9 @@ namespace kish {
         http_server(uint16_t port, const string &host) : tcp_server(port, host) {}
 
         void on_acceptnew(int fd, const inet_address &peer_addr) override;
+
+    private:
+        timer m_timer{"http-server timer"};
 
     };
 }

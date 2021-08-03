@@ -22,9 +22,11 @@ namespace kish {
 
         event_looper();
 
-        ~event_looper();
+        explicit event_looper(std::string name);
 
         event_looper(thread_func func, std::string name);
+
+        ~event_looper();
 
         void submit(thread_func exe);
 
