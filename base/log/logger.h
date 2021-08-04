@@ -31,28 +31,28 @@ namespace kish {
     class logger : noncopyable {
     public:
         // 在析构函数中，strm中的数据输入到文件中
-        ~logger();
+        ~logger() override;
 
         logger(const char *filename, int line, log_level level);
 
         log_stream &stream() {
-            return m_stream;
+            return lg_strm;
         }
 
     private:
-        const char *m_filename;
-        int m_line;
-        log_stream m_stream{};
-        time_stamp m_timestamp{};
-        log_level m_level;
-        int m_saved_errno;
+        const char *lgf_name;
+        int lg_line;
+        log_stream lg_strm{};
+        time_stamp lg_ts{};
+        log_level lg_lv;
+        int saved_errno;
 
     private:
         void weedout_filname_slash();
 
         void append_logpos();
 
-        static const char *klevel_str[LL_LEVEL_NUM];
+        static const char *KLEVEL_STR[LL_LEVEL_NUM];
     };
 
 }

@@ -8,23 +8,23 @@
 
 namespace kish {
 
-    accept_handler::accept_handler(int fd, socket &sk) : epoll_handler(fd), m_serv_sock(sk) {}
+    accept_handler::accept_handler(int fd, socket &sk) : epoll_handler(fd), serv_sock(sk) {}
 
     void accept_handler::on_acceptnew(const accept_callback &cb) {
-        m_acc_cb = cb;
+        accept_cb = cb;
     }
 
     void accept_handler::handle_event(uint32_t events) {
         if (events & KREAD_EVENT) {
             struct sockaddr_in client_addr{};
             socklen_t claddr_len = sizeof client_addr;
-            int client_fd = ::accept(m_observe_fd, (sockaddr *) &client_addr, &claddr_len);
+            int client_fd = ::accept(observe_fd, (sockaddr *) &client_addr, &claddr_len);
             // todo: 限制连接数量
-            if (client_fd > 0 && m_acc_cb) {
+            if (client_fd > 0 && accept_cb) {
                 // todo: delete this print
                 printf("client fd is %d\n", client_fd);
                 inet_address a(client_addr.sin_port, client_addr.sin_addr.s_addr, true);
-                m_acc_cb(client_fd, a);
+                accept_cb(client_fd, a);
             } else {
                 ::close(client_fd);
             }

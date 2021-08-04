@@ -46,8 +46,8 @@ namespace kish {
 
         ~epoll_poller() override {
             // todo: delete this printf
-            printf("~epoll_poller() close fd: %d\n", m_epoll_fd);
-            ::close(m_epoll_fd);
+            printf("~epoll_poller() close fd: %d\n", epoll_fd);
+            ::close(epoll_fd);
         }
 
         handler_list &poll(int timeout) override;
@@ -60,14 +60,14 @@ namespace kish {
         void modev(const handler_ptr &obs) override;
 
         int fd() const override {
-            return m_epoll_fd;
+            return epoll_fd;
         }
 
     private:
-        int m_epoll_fd;
-        event_list m_query_list;
-        handler_map m_save_map{};
-        handler_list m_ret_list;
+        int epoll_fd;
+        event_list query_list;
+        handler_map save_map{};
+        handler_list ret_list;
 
     private:
         void update_savemap();

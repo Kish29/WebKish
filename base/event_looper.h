@@ -17,7 +17,7 @@ namespace kish {
 
     // event_looper是整个服务器的核心，
     // 拥有一个wakeup_epoller，负责唤起由于epoll_wait而阻塞的poller
-    class event_looper : copyable, public thread {
+    class event_looper : noncopyable, public thread {
     public:
 
         event_looper();
@@ -26,7 +26,7 @@ namespace kish {
 
         event_looper(thread_func func, std::string name);
 
-        ~event_looper();
+        ~event_looper() override;
 
         void submit(thread_func exe);
 
@@ -35,10 +35,10 @@ namespace kish {
         void add_observe(const handler_ptr &eh);
 
     private:
-        epoll_poller m_poller;
-        std::shared_ptr<wakeup_handler> m_wakeuper;
-        funcs m_pending_funcs;
-        mutex_lock m_locker;
+        epoll_poller poller;
+        std::shared_ptr<wakeup_handler> wakeuper;
+        funcs pending_funcs;
+        mutex_lock locker;
 
     private:
         void loop();

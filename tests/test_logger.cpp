@@ -8,7 +8,7 @@
 
 // 14 lines
 void type_test() {
-    LOG_INFO << "------- type convert test -------";
+    LOG_INFO << "------- psr_type convert test -------";
     LOG_INFO << true;
     LOG_INFO << false;
     LOG_INFO << (short) 100;
@@ -35,7 +35,7 @@ void stress_test1() {
 
 void *thread_func(void *arg) {
     int no = *((int *) arg);
-    LOG_INFO << "thread-" << no << " m_started";
+    LOG_INFO << "thread-" << no << " started";
     for (int j = 0; j < 80000; ++j) {
         LOG_RECOR << "thread-" << no << " write j " << j;
     }

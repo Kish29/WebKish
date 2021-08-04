@@ -54,17 +54,19 @@ namespace kish {
 
         const std::string &name() const;
 
+        virtual pid_t thread_pid() const final;
+
     protected:
-        thread_func m_exe;
-        std::string m_name;
+        thread_func thr_exe;
+        std::string thr_name;
         // pid_t 用于gettid判断，pthread_t表示某个posix线程
-        pid_t m_tid{};  // atomic
-        pthread_t m_ptid{};
+        pid_t thr_tid{};  // atomic
+        pthread_t pthr_id{};
         // volatile 从某种层面上来说，仅仅是读安全
-//        volatile bool m_started{false};
-        std::atomic_bool m_started{false};
-        std::atomic_bool m_finished{false};
-        std::atomic_bool m_joined{false};
+//        volatile bool started{false};
+        std::atomic_bool started{false};
+        std::atomic_bool finished{false};
+        std::atomic_bool joined{false};
 
     private:
         friend void *thread_exe(void *);

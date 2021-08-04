@@ -23,7 +23,7 @@ namespace kish {
         void on_acceptnew(const accept_callback &cb);
 
         int fd() const override {
-            return m_serv_sock.fd();
+            return serv_sock.fd();
         }
 
         void handle_event(uint32_t events) override;
@@ -31,8 +31,8 @@ namespace kish {
         uint32_t events() const override;
 
     private:
-        socket &m_serv_sock;
-        accept_callback m_acc_cb{};
+        socket &serv_sock;
+        accept_callback accept_cb{};
     };
 }
 

@@ -23,14 +23,14 @@ namespace kish {
         explicit socket(bool tcp = true, bool ipv6 = false);
 
         ~socket() override {
-            if (!m_closed) {
-                // todo: verify what will happen when fd is -1 to be closed
-                ::close(m_sockfd);
+            if (!sock_closed) {
+                // todo: verify what will happen when fd is -1 to be fd_closed
+                ::close(sockfd);
             }
         }
 
         int fd() const override {
-            return m_sockfd;
+            return sockfd;
         }
 
         bool bind(const inet_address &addr) const;
@@ -52,8 +52,8 @@ namespace kish {
         void shutdown_write() const;
 
     protected:
-        int m_sockfd{-1};
-        bool m_closed{false};
+        int sockfd{-1};
+        bool sock_closed{false};
     };
 
     class socket_utils {

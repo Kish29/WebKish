@@ -195,17 +195,17 @@ void async_stream_writer::fwrite_routine() {
 }
 
 
-const char *kish::logger::klevel_str[LL_LEVEL_NUM] = {"TRACE", "DEBUG", "INFO", "WARN", "FATAL", "RECOR"};
+const char *kish::logger::KLEVEL_STR[LL_LEVEL_NUM] = {"TRACE", "DEBUG", "INFO", "WARN", "FATAL", "RECOR"};
 
 // 2021-08-02 02:04:47 tid-136642 LL_INFO[no error] in main() function --- example_main.cpp:138
 kish::logger::logger(const char *filename, int line, kish::log_level level)
-        : m_filename(filename),
-          m_line(line),
-          m_level(level),
-          m_saved_errno(errno) {
+        : lgf_name(filename),
+          lg_line(line),
+          lg_lv(level),
+          saved_errno(errno) {
     bzero(t_errno_buf, sizeof t_errno_buf);
     // 根据库函数说明， strerror_r的GNU实现是不会将结果存进t_errno_buf中的
-    char *errinfo = strerror_r(m_saved_errno, t_errno_buf, sizeof t_errno_buf);
+    char *errinfo = strerror_r(saved_errno, t_errno_buf, sizeof t_errno_buf);
     if (strlen(errinfo) == 0 || strcmp(errinfo, "Success") == 0) {
         strcpy(t_errno_buf, "No error");
     } else {
@@ -213,31 +213,31 @@ kish::logger::logger(const char *filename, int line, kish::log_level level)
     }
     // 去掉文件路径slash
     weedout_filname_slash();
-    m_stream << m_timestamp.get_format_time(false, false)
-             << " tid-" << kish::tid()
-             << " " << klevel_str[m_level] << "[" << t_errno_buf << "]"
+    lg_strm << lg_ts.get_format_time(false, false)
+            << " tid-" << kish::tid()
+            << " " << KLEVEL_STR[lg_lv] << "[" << t_errno_buf << "]"
              << " ";
 }
 
 kish::logger::~logger() {
     // 添加文件位置，注意，优先输出文件
     append_logpos();
-    switch (m_level) {
+    switch (lg_lv) {
         case LL_TRACE:
-            log_file(m_stream.buffer()->data(), m_stream.buffer()->length());
-            log_stdout(m_stream.buffer()->data(), m_stream.buffer()->length());
+            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_stdout(lg_strm.buffer()->data(), lg_strm.buffer()->length());
             break;
         case LL_DEBUG:
         case LL_INFO:
-            log_stdout(m_stream.buffer()->data(), m_stream.buffer()->length());
+            log_stdout(lg_strm.buffer()->data(), lg_strm.buffer()->length());
             break;
         case LL_WARN:
         case LL_FATAL:
-            log_file(m_stream.buffer()->data(), m_stream.buffer()->length());
-            log_stderr(m_stream.buffer()->data(), m_stream.buffer()->length());
+            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_stderr(lg_strm.buffer()->data(), lg_strm.buffer()->length());
             break;
         case LL_RECOR:
-            log_file(m_stream.buffer()->data(), m_stream.buffer()->length());
+            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
             break;
         case LL_LEVEL_NUM:
             break;
@@ -245,19 +245,19 @@ kish::logger::~logger() {
 }
 
 void kish::logger::weedout_filname_slash() {
-    if (m_filename) {
+    if (lgf_name) {
         // 用strrchr剔除绝对路径的前缀，只保留文件名
         // eg: /root/desktop/info.txt -> /info.txt
-        const char *fn = strrchr(m_filename, '/');
+        const char *fn = strrchr(lgf_name, '/');
         if (fn) {
             fn++;   // 去掉 '/'
-            m_filename = fn;
+            lgf_name = fn;
         }
     }
 }
 
 void kish::logger::append_logpos() {
-    m_stream << "\t-> " << m_filename << ":" << m_line << "\n";
+    lg_strm << "\t-> " << lgf_name << ":" << lg_line << "\n";
 }
 
 void log_stdout(const char *data, size_t len) {

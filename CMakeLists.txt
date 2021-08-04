@@ -3,6 +3,12 @@ project(WebKish)
 
 set(CMAKE_CXX_STANDARD 11)
 
+set(${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS} -Wall -O3")
+set(${CMAKE_CXX_FLAGS_DEBUG} "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O3")
+
+############# libkish ################
+set(LIBKISH_NAME kish)
+
 set(
         SOURCES
         base/base.h
@@ -40,6 +46,7 @@ set(
         net/http/http_parser.cpp
 )
 
+
 include_directories(base)
 include_directories(base/nio)
 include_directories(base/log)
@@ -50,21 +57,32 @@ include_directories(net)
 include_directories(net/tcp)
 include_directories(net/http)
 
-set(${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS} -Wall -O3")
-set(${CMAKE_CXX_FLAGS_DEBUG} "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O3")
-
 add_definitions(-D__DEBUG__)
 
-add_library(kbase ${SOURCES})
+add_library(${LIBKISH_NAME} ${SOURCES})
+
+############ third party #############
+set(THIRD_PARTY_LIBNAME third_pt)
+
+set(
+        THIRD_PARTY_SRC
+        thirdparty/src/api.c
+        thirdparty/src/http.c
+        thirdparty/src/llhttp.c
+)
+
+include_directories(thirdparty/include)
+
+add_library(${THIRD_PARTY_LIBNAME} ${THIRD_PARTY_SRC})
 
 macro(add_example_target TARGET)
     add_executable(example_${TARGET} example_${TARGET}.cpp)
-    target_link_libraries(example_${TARGET} kbase pthread)
+    target_link_libraries(example_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} pthread)
 endmacro()
 
 macro(add_test_target TARGET)
     add_executable(test_${TARGET} tests/test_${TARGET}.cpp)
-    target_link_libraries(test_${TARGET} kbase pthread)
+    target_link_libraries(test_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} pthread)
 endmacro()
 
 add_test_target(other)
@@ -74,3 +92,5 @@ add_test_target(threadpool)
 add_test_target(logger)
 add_test_target(timer)
 add_test_target(thread)
+add_test_target(thirdparty)
+add_test_target(httpparse)

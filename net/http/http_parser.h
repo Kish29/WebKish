@@ -9,62 +9,104 @@
 
 #include "base.h"
 #include "map"
+#include "llhttp.h"
+#include "vector"
+
+const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
+// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
+        {100, "Continue"},
+        {101, "Switching Protocols"},
+        {102, "Processing"},
+        {103, "Early Hints"},
+        {200, "OK"},
+        {201, "Created"},
+        {202, "Accepted"},
+        {203, "Non-Authoritative Information"},
+        {204, "No Content"},
+        {205, "Reset Content"},
+        {206, "Partial Content"},
+        {300, "Multiple Choices"},
+        {301, "Moved Permanently"},
+        {302, "Found"},
+        {303, "See Other"},
+        {304, "Not Modified"},
+        {305, "Use Proxy"},
+        {307, "Temporary Redirect"},
+        {308, "Permanent Redirect"},
+        {400, "Bad Request"},
+        {401, "Unauthorized"},
+        {402, "Payment Required"},
+        {403, "Forbidden"},
+        {404, "Not Found"},
+        {405, "Method Not Allowed"},
+        {406, "Not Acceptable"},
+        {407, "Proxy Authentication Required"},
+        {408, "Request Timeout"},
+        {409, "Conflict"},
+        {410, "Gone"},
+        {411, "Length Required"},
+// ...
+        {500, "Internal Server Error"},
+        {501, "Not Implemented"},
+        {502, "Bad Gateway"},
+        {503, "Service Unavailable"},
+        {504, "Gateway Timeout"},
+        {505, "HTTP Version Not Supported"},
+        {506, "Variant Also Negotiates"},
+        {507, "Insufficient Storage"},
+        {508, "Loop Detected"},
+        {510, "Not Extended"},
+        {511, "Network Authentication Required"}
+};
+
 
 namespace kish {
     using std::string;
 
-    enum req_method {
-        GET,    // GET方法请求一个指定资源的表示形式. 使用GET的请求应该只被用于获取数据.
-        HEAD,   // HEAD方法请求一个与GET请求的响应相同的响应，但没有响应体.
-        POST,   // POST方法用于将实体提交到指定的资源，通常导致在服务器上的状态变化或副作用.
-        PUT,    // PUT方法用请求有效载荷替换目标资源的所有当前表示。会调用数据库update操作
-        DELETE, // DELETE方法删除指定的资源。
-        CONNECT,    // CONNECT方法建立一个到由目标资源标识的服务器的隧道。
-        OPTIONS,  // OPTIONS方法用于描述目标资源的通信选项。
-        TRACE,  // TRACE方法沿着到目标资源的路径执行一个消息环回测试。
-        PATCH   // PATCH方法用于对资源应用部分修改。
-    };
-
-    enum content_type {
-        TEXT_PLAIN,
-
-    };
-
-    enum http_version {
-        HTTP010,
-        HTTP011,
-        HTTP020
-    };
 
     struct http_message : copyable, public printable, public jsonable, public message_type {
         typedef std::map<std::string, std::string> header_item;
 
-        http_version version;
-        header_item headers;
-        std::string content;
-        content_type content_t;
+        uint8_t ver_major;
+        uint8_t ver_minor;
+        header_item headers{};
+        std::vector<string> contents{};
         bool keep_alive;
 
-        http_message() : version(HTTP011), headers(), content(), content_t(TEXT_PLAIN), keep_alive(false) {};
+        http_message() : ver_major(1), ver_minor(0), keep_alive(false) {};
+
     };
 
+    typedef std::shared_ptr<http_message> http_message_ptr;
+
     struct http_request : public http_message {
-        req_method method;
+        typedef struct param {
+            string key{};
+            string val{};
+
+            param(string &&k, string &&v) : key(k), val(v) {}
+        } param;
+
+        llhttp_method_t method;
         std::string uri;
+        // uri中有可能携带参数
+        std::vector<param> params{};
 
         http_request() : http_message() {
-            method = GET;
+            method = HTTP_GET;
             uri = "/";
         }
 
-        http_request(req_method meth, string u) : method(meth), uri(std::move(u)) {}
+        http_request(llhttp_method_t meth, string u) : method(meth), uri(std::move(u)) {}
 
         std::string tostring() const override;
 
         std::string tojson() const override;
 
-        std::string tomessage() const override;
+        std::string tomessage() override;
     };
+
+    typedef std::shared_ptr<http_request> http_request_ptr;
 
     struct http_response : public http_message {
         int status_code;
@@ -73,36 +115,119 @@ namespace kish {
         http_response() : http_message() {
             status_code = 404;
             // todo: response code map
-            short_msg = response_code_map.at(404);
+            short_msg = RESP_STAT_CODE_MAP.at(404);
         }
 
         http_response(int code, string short_msg) : status_code(code), short_msg(std::move(short_msg)) {}
+
+        void update_stat(int stat_code) {
+            if (RESP_STAT_CODE_MAP.find(stat_code) != RESP_STAT_CODE_MAP.end()) {
+                short_msg = RESP_STAT_CODE_MAP.at(stat_code);
+            }
+            status_code = stat_code;
+        }
 
         std::string tostring() const override;
 
         std::string tojson() const override;
 
-        std::string tomessage() const override;
+        std::string tomessage() override;
     };
 
-    // version + code + msg
+    typedef std::shared_ptr<http_response> http_response_ptr;
+
+    // ver + code + msg
     // headers
-    // content
+    // contents
     struct simp_resp {
         int status{400};
         // todo: body可被序列化 RPC
-        string body{};
-        content_type type{TEXT_PLAIN};
+        string content{};
+        string content_type{"text/plain"};
 
-        simp_resp(int st, string bd, content_type tp = TEXT_PLAIN) : status(st), body(std::move(bd)), type(tp) {}
+        simp_resp(int st, string bd) : status(st), content(std::move(bd)) {}
     };
 
     class http_parser : noncopyable {
+        typedef enum { IDLE, FIELD, VALUE } last_on_header;
     public:
+        // 解析次数
+        int parse_time{0};
 
-        static bool parse_req(http_request &req, const char *begin, const char *end);
+    public:
+        enum parse_type {
+            REQUEST,
+            RESPONSE
+        };
 
-        static bool parse_resp(http_response &resp, const char *begin, const char *end);
+        explicit http_parser(parse_type type);
+
+        // false解析失败
+        bool parse(const char *raw, size_t len);
+
+        http_request_ptr get_req();
+
+        http_response_ptr get_resp();
+
+    private:
+        parse_type psr_type;
+        llhttp_t psr{};
+        llhttp_settings_t settings{};
+
+        /* save data */
+        llhttp_method_t method{HTTP_GET};
+        uint8_t ver_major{1};
+        uint8_t ver_minor{0};
+        int stat_code{400};
+        string shrt_msg{};
+        string uri{};
+        http_message::header_item headers{};
+        // 用enum和两个string记录一对键值对
+        string header_field{}, header_value{};
+        last_on_header last_on_hd{IDLE};
+        bool kep_alv{false};
+        std::vector<string> contents{};
+
+#define HP reinterpret_cast<http_parser*>(parser->data)
+    private:
+        static int hp_on_message_begin(llhttp_t *parser) { return HP->on_message_begin(parser); }
+
+        static int hp_on_url(llhttp_t *parser, const char *at, size_t len) { return HP->on_url(parser, at, len); }
+
+        static int hp_on_status(llhttp_t *parser, const char *at, size_t len) { return HP->on_status(parser, at, len); }
+
+        static int hp_on_header_field(llhttp_t *parser, const char *at, size_t len) { return HP->on_header_field(parser, at, len); }
+
+        static int hp_on_header_value(llhttp_t *parser, const char *at, size_t len) { return HP->on_header_value(parser, at, len); }
+
+        static int hp_on_headers_complete(llhttp_t *parser) { return HP->on_headers_complete(parser); }
+
+        static int hp_on_body(llhttp_t *parser, const char *at, size_t len) { return HP->on_body(parser, at, len); }
+
+        static int hp_on_message_complete(llhttp_t *parser) { return HP->on_message_complete(parser); }
+
+#undef HP
+
+    private:
+        // reset可以让parse被多次调用
+        void reset();
+
+        int on_message_begin(llhttp_t *parser);
+
+        int on_url(llhttp_t *parser, const char *at, size_t len);
+
+        int on_status(llhttp_t *parser, const char *at, size_t len);
+
+        int on_header_field(llhttp_t *parser, const char *at, size_t len);
+
+        int on_header_value(llhttp_t *parser, const char *at, size_t len);
+
+        int on_headers_complete(llhttp_t *parser);
+
+        int on_body(llhttp_t *parser, const char *at, size_t len);
+
+        int on_message_complete(llhttp_t *parser);
+
     };
 
     class http_request_builder : noncopyable {
@@ -116,7 +241,7 @@ namespace kish {
             return request;
         }
 
-        http_request_builder &method(const req_method &mtd) {
+        http_request_builder &method(const llhttp_method_t &mtd) {
             request.method = mtd;
             return *this;
         }
@@ -131,8 +256,13 @@ namespace kish {
             return *this;
         }
 
-        http_request_builder &version(const http_version &ver) {
-            request.version = ver;
+        http_request_builder &ver_major(uint8_t major) {
+            request.ver_major = major;
+            return *this;
+        }
+
+        http_request_builder &ver_minor(uint8_t minor) {
+            request.ver_minor = minor;
             return *this;
         }
 
@@ -152,17 +282,12 @@ namespace kish {
         }
 
         http_request_builder &content(const string &data) {
-            request.content = data;
+            request.contents.emplace_back(data);
             return *this;
         }
 
         http_request_builder &content(string &&data) {
-            request.content = std::move(data);
-            return *this;
-        }
-
-        http_request_builder &content_type(const content_type &type) {
-            request.content_t = type;
+            request.contents.emplace_back(std::move(data));
             return *this;
         }
 
@@ -182,8 +307,12 @@ namespace kish {
             return response;
         }
 
+        // 设置status_code 会自动生成short_msg
         http_response_builder &status_code(int code) {
             response.status_code = code;
+            if (RESP_STAT_CODE_MAP.find(code) != RESP_STAT_CODE_MAP.end()) {
+                response.short_msg = RESP_STAT_CODE_MAP.at(code);
+            }
             return *this;
         }
 
@@ -197,8 +326,13 @@ namespace kish {
             return *this;
         }
 
-        http_response_builder &version(const http_version &ver) {
-            response.version = ver;
+        http_response_builder &ver_major(uint8_t major) {
+            response.ver_major = major;
+            return *this;
+        }
+
+        http_response_builder &ver_minor(uint8_t minor) {
+            response.ver_minor = minor;
             return *this;
         }
 
@@ -218,17 +352,12 @@ namespace kish {
         }
 
         http_response_builder &content(const string &data) {
-            response.content = data;
+            response.contents.emplace_back(data);
             return *this;
         }
 
         http_response_builder &content(string &&data) {
-            response.content = std::move(data);
-            return *this;
-        }
-
-        http_response_builder &content_type(const content_type &type) {
-            response.content_t = type;
+            response.contents.emplace_back(std::move(data));
             return *this;
         }
 
@@ -238,6 +367,4 @@ namespace kish {
     };
 
 }
-
-
 #endif //WEBKISH_HTTP_PARSER_H

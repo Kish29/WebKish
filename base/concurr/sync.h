@@ -28,24 +28,24 @@ namespace kish {
 
     public:
         mutex_lock() {
-            pthread_mutex_init(&m_mutex, nullptr);
+            pthread_mutex_init(&mutex, nullptr);
         }
 
         ~mutex_lock() {
-            pthread_mutex_lock(&m_mutex);
-            pthread_mutex_destroy(&m_mutex);
+            pthread_mutex_lock(&mutex);
+            pthread_mutex_destroy(&mutex);
         }
 
         void lock() {
-            pthread_mutex_lock(&m_mutex);
+            pthread_mutex_lock(&mutex);
         }
 
         void unlock() {
-            pthread_mutex_unlock(&m_mutex);
+            pthread_mutex_unlock(&mutex);
         }
 
     private:
-        pthread_mutex_t m_mutex{};
+        pthread_mutex_t mutex{};
 
     private:
         friend class mutex_cond;
@@ -53,11 +53,11 @@ namespace kish {
 
     class mutex_lockguard : noncopyable {
     public:
-        explicit mutex_lockguard(mutex_lock &_locker) : m_locker(_locker) {
-            m_locker.lock();
+        explicit mutex_lockguard(mutex_lock &_locker) : locker(_locker) {
+            locker.lock();
         }
 
-        ~mutex_lockguard() {
+        ~mutex_lockguard() override {
             unlock_internal();
         }
 
@@ -66,15 +66,15 @@ namespace kish {
         }
 
     private:
-        mutex_lock &m_locker;
-        std::atomic_bool m_unlocked{false};
+        mutex_lock &locker;
+        std::atomic_bool unlocked{false};
 
     private:
         void unlock_internal() {
             // 主要是防止外部调用者声明了生命周期（花括号包裹）后，又重复调用unlock函数
-            if (!m_unlocked) {
-                m_unlocked = true;
-                m_locker.unlock();
+            if (!unlocked) {
+                unlocked = true;
+                locker.unlock();
             }
         }
     };
@@ -82,20 +82,20 @@ namespace kish {
     class mutex_cond : noncopyable {
     public:
 
-        explicit mutex_cond(mutex_lock &_locker) : m_locker(_locker) {
-            pthread_cond_init(&m_cond, nullptr);
+        explicit mutex_cond(mutex_lock &_locker) : locker(_locker) {
+            pthread_cond_init(&cond, nullptr);
         }
 
         void notify_one() {
-            pthread_cond_signal(&m_cond);
+            pthread_cond_signal(&cond);
         }
 
         void notify_all() {
-            pthread_cond_broadcast(&m_cond);
+            pthread_cond_broadcast(&cond);
         }
 
         void wait() {
-            pthread_cond_wait(&m_cond, &(m_locker.m_mutex));
+            pthread_cond_wait(&cond, &(locker.mutex));
         }
 
         bool wait_for_sec(uint32_t seconds) {
@@ -104,7 +104,7 @@ namespace kish {
             // 设定超时时间点
             time.tv_sec += static_cast<time_t>(seconds);
             // 返回值为true表示超时了获取了锁
-            return ETIMEDOUT == pthread_cond_timedwait(&m_cond, &(m_locker.m_mutex), &time);
+            return ETIMEDOUT == pthread_cond_timedwait(&cond, &(locker.mutex), &time);
         }
 
         bool wait_for_ms(uint32_t ms) {
@@ -117,12 +117,12 @@ namespace kish {
             time.tv_sec += sec_add;
             time.tv_nsec += nsec_add;
             // 返回值为true表示超时了获取了锁
-            return ETIMEDOUT == pthread_cond_timedwait(&m_cond, &(m_locker.m_mutex), &time);
+            return ETIMEDOUT == pthread_cond_timedwait(&cond, &(locker.mutex), &time);
         }
 
     private:
-        mutex_lock &m_locker;
-        pthread_cond_t m_cond{};
+        mutex_lock &locker;
+        pthread_cond_t cond{};
 
     };
 

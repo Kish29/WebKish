@@ -7,35 +7,35 @@
 #include "socket.h"
 #include "netinet/tcp.h"
 
-// todo: set functions return type is bool
-kish::socket::socket(bool tcp, bool ipv6) : m_sockfd(socket_utils::create(tcp, ipv6)) {}
+// todo: set functions return psr_type is bool
+kish::socket::socket(bool tcp, bool ipv6) : sockfd(socket_utils::create(tcp, ipv6)) {}
 
 void kish::socket::reuse_addr(bool on) const {
-    kish::socket_utils::reuseaddr(m_sockfd, on);
+    kish::socket_utils::reuseaddr(sockfd, on);
 }
 
 void kish::socket::reuse_port(bool on) const {
-    kish::socket_utils::reuse_port(m_sockfd, on);
+    kish::socket_utils::reuse_port(sockfd, on);
 }
 
 void kish::socket::keep_alive(bool on) const {
-    kish::socket_utils::keep_alive(m_sockfd, on);
+    kish::socket_utils::keep_alive(sockfd, on);
 }
 
 void kish::socket::tcp_nodelay(bool on) const {
-    kish::socket_utils::tcp_nodelay(m_sockfd, on);
+    kish::socket_utils::tcp_nodelay(sockfd, on);
 }
 
 void kish::socket::shutdown_write() const {
-    kish::socket_utils::shutdown_write(m_sockfd);
+    kish::socket_utils::shutdown_write(sockfd);
 }
 
 bool kish::socket::bind(const kish::inet_address &addr) const {
-    return kish::socket_utils::bind(m_sockfd, addr);
+    return kish::socket_utils::bind(sockfd, addr);
 }
 
 bool kish::socket::listen(const inet_address &addr) const {
-    return kish::socket_utils::listen(m_sockfd, addr);
+    return kish::socket_utils::listen(sockfd, addr);
 }
 
 bool kish::socket::workon(const kish::inet_address &addr) const {
@@ -44,8 +44,8 @@ bool kish::socket::workon(const kish::inet_address &addr) const {
 
 void kish::socket::close() {
     // todo: check -1
-    ::close(m_sockfd);
-    m_closed = true;
+    ::close(sockfd);
+    sock_closed = true;
 }
 
 int kish::socket_utils::create(bool tcp, bool ipv6) {

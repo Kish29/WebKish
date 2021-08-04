@@ -13,30 +13,30 @@ tcp_handler::tcp_handler(int fd) : epoll_handler(fd) {
 }
 
 uint32_t tcp_handler::events() const {
-    return KREAD_EVENT | KERROR_EVENT ;
+    return KREAD_EVENT | KERROR_EVENT;
 }
 
 void tcp_handler::handle_read() {
     // tcp处理层必须提供正确的事件判断，才能传给上一层协议进行判断
-    ssize_t n = readin();
-    if (n > 0) {
+    curr_read_len = readin();
+    if (curr_read_len > 0) {
         // todo: delete this print
         // todo: log not print
-        printf("observable send new message:\n%s\n", m_read_buf);
-    } else if (n == 0) {
+        printf("observable send new message:\n%s\n", read_buf);
+    } else if (curr_read_len == 0) {
         perror("tcp handler read fd 0");
-        // ❌不准单纯用 n == 0来表示客户端断开了连接❌
+        // ❌不准单纯用 curr_read_len == 0来表示客户端断开了连接❌
         // 方法一
         /*int save_errno = errno;
         // EINTR表示是由系统打断的通知，不应该认为客户端断开了连接
         if (save_errno != EINTR) {
-            m_dead = true;
+            i_am_dead = true;
         }*/
         // 方法二
-        m_dead = socket_utils::tcp_isdead(m_observe_fd);
+        i_am_dead = socket_utils::tcp_isdead(observe_fd);
     } else {
         perror("tcp handler read fd -1");
-        // ❌也不准单纯用 n == -1来表示客户端断开了连接❌
+        // ❌也不准单纯用 curr_read_len == -1来表示客户端断开了连接❌
         int save_errno = errno;
         switch (errno) {
             case EAGAIN: {
@@ -50,7 +50,7 @@ void tcp_handler::handle_read() {
                 // todo: 待完善判断
             case EIO:
             default:
-                m_dead = true;
+                i_am_dead = true;
         }
     }
 }

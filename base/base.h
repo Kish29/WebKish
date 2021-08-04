@@ -36,14 +36,14 @@ namespace kish {
     protected:
         noncopyable() = default;
 
-        ~noncopyable() = default;
+        virtual ~noncopyable() = default;
     };
 
     class copyable {
     protected:
         copyable() = default;
 
-        ~copyable() = default;
+        virtual ~copyable() = default;
 
     };
 
@@ -61,45 +61,53 @@ namespace kish {
     // 返回报文结构
     class message_type {
     public:
-        virtual std::string tomessage() const = 0;
+        virtual std::string tomessage() = 0;
     };
 
     template<class T>
-    class singleton : noncopyable {
+    class singleton {
     public:
 
         singleton() = delete;
 
         ~singleton() = delete;
 
+        singleton(const singleton<T> &) = delete;
+
+        singleton(singleton<T> &&) = delete;
+
+        singleton &operator=(const singleton<T> &) = delete;
+
+        singleton &operator=(singleton<T> &&) = delete;
+
         static T &instance() {
             // 由于指令的乱序执行，double check locking靠不住
-            pthread_once(&m_ponce, init);
-            assert(m_instance != nullptr);
-            return *m_instance;
+            pthread_once(&p_once, init);
+            assert(inst != nullptr);
+            return *inst;
         }
 
     private:
         static void init() {
-            m_instance = new T;
+            inst = new T;
             ::atexit(when_exit);
         }
 
         static void when_exit() {
-            delete m_instance;
-            m_instance = nullptr;
+            delete inst;
+            inst = nullptr;
         }
 
     private:
-        static pthread_once_t m_ponce;
-        static T *m_instance;
+        static pthread_once_t p_once;
+        static T *inst;
 
     };
 
     template<class T>
-    pthread_once_t singleton<T>::m_ponce = PTHREAD_ONCE_INIT;
+    pthread_once_t singleton<T>::p_once = PTHREAD_ONCE_INIT;
     template<class T>
-    T *singleton<T>::m_instance = nullptr;
+    T *singleton<T>::inst = nullptr;
 
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
     // tid会取保存的tid

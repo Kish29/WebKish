@@ -18,7 +18,7 @@ namespace kish {
         typedef sized_buffer<KSMALL_BUFFER> log_buffer;
         typedef shared_ptr<log_buffer> buffer_ptr;
 
-        log_stream() : m_log_buf(std::make_shared<log_buffer>()) {}
+        log_stream() : log_buf(std::make_shared<log_buffer>()) {}
 
     public:
         self &operator<<(char);
@@ -64,7 +64,7 @@ namespace kish {
         void zero_buffer();
 
     private:
-        buffer_ptr m_log_buf;
+        buffer_ptr log_buf;
 
     private:
         // 格式化数字的最大位数

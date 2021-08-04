@@ -23,7 +23,7 @@ namespace kish {
         void handle_read() override;
 
         int fd() const override {
-            return m_observe_fd;
+            return observe_fd;
         }
 
         uint32_t events() const override {

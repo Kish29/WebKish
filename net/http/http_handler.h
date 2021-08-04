@@ -9,6 +9,7 @@
 
 #include "tcp_handler.h"
 #include "http_interface.h"
+#include "time_stamp.h"
 
 namespace kish {
 
@@ -24,41 +25,11 @@ namespace kish {
 
         void set_dead();
 
-#ifdef __DEBUG__
-
-        static void test_mappers() {
-            // todo: 这个算法好垃圾。。。。
-            parameters param;
-            param.insert(std::make_pair("fruit", "apple"));
-            param.insert(std::make_pair("name", "jar"));
-            param.insert(std::make_pair("password", "123456"));
-            // todo: 如何查找更快？？？
-            // 队头队尾
-            size_t len = GLO_RESOLR_MAPPERS.size();
-            for (size_t i = 0, j = len - 1; i <= j; i++, j--) {
-                if (i == j) {
-                    if (GLO_RESOLR_MAPPERS.at(i)->can_resolve("index.html")) {
-                        GLO_RESOLR_MAPPERS.at(i)->on_request("index.html", param);
-                        break;
-                    }
-                } else {
-                    if (GLO_RESOLR_MAPPERS.at(i)->can_resolve("index.html")) {
-                        GLO_RESOLR_MAPPERS.at(i)->on_request("index.html", param);
-                        break;
-                    }
-                    if (GLO_RESOLR_MAPPERS.at(j)->can_resolve("index.html")) {
-                        GLO_RESOLR_MAPPERS.at(j)->on_request("index.html", param);
-                        break;
-                    }
-                }
-
-            }
-        }
-
-#endif
-
     private:
-        bool m_keep_alive{false};
+        bool kp_alv{false};
+        http_parser req_parser{http_parser::REQUEST};
+        // 最新的心跳包接受时间
+        time_stamp latest_heart_rev_time{};
 
     private:
         friend bool reg_http_interfc(const http_infc_ptr &);

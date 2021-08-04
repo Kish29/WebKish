@@ -30,9 +30,9 @@ namespace kish {
         // todo:
 
         // 设置cpu亲和性
-        // CPU_ZERO(&m_mask);
+        // CPU_ZERO(&mask);
         // 将（i % CPU_CORE）号CPU加入集合中
-        // CPU_SET(i % CPU_CORE, &m_mask);
+        // CPU_SET(i % CPU_CORE, &mask);
 
 
         auto *instance = (thread *) args;
@@ -42,11 +42,11 @@ namespace kish {
         }
         t_cache_data = new thread_cache;
         t_cache_data->tid = kish::tid();
-        instance->m_tid = t_cache_data->tid;
-        t_cache_data->thread_name = instance->m_name;
+        instance->thr_tid = t_cache_data->tid;
+        t_cache_data->thread_name = instance->thr_name;
         LOG_TRACE << "new thread [" << t_cache_data->thread_name << "] created and started";
         try {
-            instance->m_exe();
+            instance->thr_exe();
             LOG_TRACE << "thread [" << t_cache_data->thread_name << "] exit";
         } catch (const std::exception &exc) {
             // todo: log error
@@ -59,45 +59,49 @@ namespace kish {
         pthread_exit(nullptr);
     }
 
-    kish::thread::thread(thread_func exe, std::string name, bool setaffinity) : m_exe(std::move(exe)),
-                                                                                m_name(std::move(name)) {}
+    kish::thread::thread(thread_func exe, std::string name, bool setaffinity) : thr_exe(std::move(exe)),
+                                                                                thr_name(std::move(name)) {}
 
     bool kish::thread::judge_in_thread() const {
         if (t_cache_data == nullptr) return false;
-        return m_tid == t_cache_data->tid;
+        return thr_tid == t_cache_data->tid;
     }
 
     void kish::thread::start() {
-        if (pthread_create(&m_ptid, nullptr, thread_exe, this)) {
-            m_started = true;
+        if (pthread_create(&pthr_id, nullptr, thread_exe, this)) {
+            started = true;
         } else {
             // todo: log error
-            m_started = false;
+            started = false;
         }
     }
 
     int thread::join() {
-        // assert(!m_joined);   // 这儿断言存在问题，join有可能在其他地方被调用几次
-        if (!m_joined) {
-            m_joined = true;
-            return pthread_join(m_ptid, nullptr);
+        // assert(!joined);   // 这儿断言存在问题，join有可能在其他地方被调用几次
+        if (!joined) {
+            joined = true;
+            return pthread_join(pthr_id, nullptr);
         }
         return 0;
     }
 
     const std::string &thread::name() const {
-        return m_name;
+        return thr_name;
     }
 
     thread::~thread() {
-        m_finished = true;
-        if (m_started && !m_joined) {
+        finished = true;
+        if (started && !joined) {
             detach();
         }
     }
 
     int thread::detach() {
-        return pthread_detach(m_ptid);
+        return pthread_detach(pthr_id);
+    }
+
+    pid_t thread::thread_pid() const {
+        return thr_tid;
     }
 
 }

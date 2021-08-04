@@ -118,12 +118,8 @@ public:
         resolver_list.insert("index.html");
     }
 
-    simp_resp on_request(const string &uri, const parameters &params) override {
+    void on_request(const string &uri, http_response &params) override {
         printf("test_mapper received response!\n");
-        for (auto &param: params) {
-            printf("{%s :%s}\n", param.first.c_str(), param.second.c_str());
-        }
-        return simp_resp{200, "success"};
     }
 
 };
@@ -194,8 +190,8 @@ void *tf(void *) {
 #include "thread_pool.h"
 
 int main() {
-//    EXECUTOR_POOL.init(4, 1024);
-    /*thread_pool::instance()->init(8);
+//    EXECUTOR_POOL.thread_pool(4, 1024);
+    /*thread_pool::instance()->thread_pool(8);
     thread_pool::instance()->submit(nullptr, [](const std::shared_ptr<void> &) -> void {
         printf("hello");
         fflush(stdout);
@@ -223,8 +219,25 @@ int main() {
     task();
 
     printf("vs size is %ld\n", vc.size());*/
-    reg_http_interfc(std::make_shared<test_mapper>());
-    http_handler::test_mappers();
+    /*reg_http_interfc(std::make_shared<test_mapper>());
+    http_handler::test_mappers();*/
 
+    /*char *str{nullptr};
+    str = new char[9];
+    memcpy(str, "i am jar", 8);
+    *(str + 8) = '\0';
+    std::string my_str(str);
+    delete[] str;
+    printf("%s\n", str);
+    std::cout << my_str;*/
+
+    const char *pos;
+    const char *text = "/users/842?id=9";
+    pos = strchrnul(text, '?');
+    if (pos) {
+        printf("%s", pos);
+    } else {
+        printf("no '?' found in text");
+    }
     exit(EXIT_SUCCESS);
 }

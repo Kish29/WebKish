@@ -22,7 +22,7 @@ namespace kish {
 
         explicit timer(std::string name);
 
-        ~timer();
+        ~timer() override;
 
         void async(callable &&task, uint32_t ms_t);
 
@@ -35,11 +35,11 @@ namespace kish {
         void stop();
 
     private:
-        thread_ptr m_exe;
-        std::string m_name;
-        mutex_lock m_locker;
-        mutex_cond m_cond;
-        std::atomic_bool m_stop{false};
+        thread_ptr task_executor;
+        std::string tm_name;
+        mutex_lock locker;
+        mutex_cond cond;
+        std::atomic_bool tm_stop{false};
 
     private:
         void schedule(callable &&task, bool async, bool loop, uint32_t ms_t);

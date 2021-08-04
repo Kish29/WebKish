@@ -15,14 +15,14 @@ namespace kish {
     public:
         explicit file_writer(const char *filename);
 
-        ~file_writer();
+        ~file_writer() override;
 
         size_t append(const char *line, size_t len);
 
         void flush();
 
     private:
-        FILE *m_fptr;
+        FILE *fptr;
 
     };
 }

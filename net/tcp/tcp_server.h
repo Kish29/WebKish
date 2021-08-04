@@ -27,12 +27,12 @@ namespace kish {
         void on_acceptnew(int, const inet_address &) override;
 
     protected:
-        event_looper m_looper;
-        socket m_serv_sock;
-        inet_address m_serv_addr;
-        shared_ptr<accept_handler> m_acceptor;
-        bool m_started{};
-        bool m_stopped{};
+        event_looper looper;
+        socket serv_sock;
+        inet_address serv_addr;
+        shared_ptr<accept_handler> acceptor;
+        bool started{};
+        bool stopped{};
     };
 
 }

@@ -38,10 +38,10 @@ namespace kish {
         const sockaddr *socketaddr() const;
 
     private:
-        bool m_ipv6;
+        bool ipv6;
         union {
-            sockaddr_in m_addr;
-            sockaddr_in6 m_addr6;
+            sockaddr_in addr;
+            sockaddr_in6 addr6;
         };
     };
 }

@@ -32,9 +32,9 @@ namespace kish {
     struct infc_type {
         // 不包含参数的url
         string base_url{};
-        req_method method{GET};
+        llhttp_method_t method{HTTP_GET};
 
-        infc_type(string url, req_method m) : base_url(std::move(url)), method(m) {}
+        infc_type(string url, llhttp_method_t m) : base_url(std::move(url)), method(m) {}
     };
 
     // resolver表示方法
@@ -48,7 +48,6 @@ namespace kish {
 
         // todo: url包含参数，所以  on_request 的入餐应当是一个结构体
         // todo: 序列化 RPC 参数
-        virtual ~http_interface() = default;
 
         // 表示该类是否能够处理该uri请求
         virtual bool can_resolve(const string &uri) {
@@ -56,10 +55,7 @@ namespace kish {
         }
 
         // todo: 支持RESTFUL风格
-        virtual simp_resp on_request(const string &uri, const parameters &params) {
-            // 在这里判断uri是否符合
-            return simp_resp{400, ""};
-        }
+        virtual void on_request(const string &uri, http_response &response) = 0;
 
     protected:
         std::unordered_set<string> resolver_list;
