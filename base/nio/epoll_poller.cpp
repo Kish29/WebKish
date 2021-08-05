@@ -48,7 +48,6 @@ handler_list &epoll_poller::poll(int timeout) {
 
     ret_list.clear();
     if (readyn > 0) {
-        // todo: delete this print
         ret_list.reserve(readyn);
         for (int i = 0; i < readyn; ++i) {
             int curr_fd = query_list.at(i).data.fd;
@@ -72,19 +71,17 @@ handler_list &epoll_poller::poll(int timeout) {
 }
 
 void epoll_poller::update_savemap() {
-    handler_map tmp = handler_map(save_map);
-    for (auto &m:tmp) {
-        if (m.second->dead()) {
-            // todo: 待验证：在不移除fd的情况下，另一个looper分配到了同样的文件描述符时
-            // todo：本looper是否会收到IO事件
-            // todo: 根据epoll的manual page，文件描述符始终指向的是一个文件资源
-            // todo：那么应当新到来的连接分配了一个用过的文件描述符，这个文件描述符会不会指向新的文件资源
-            // todo: 将dead对象的fd从epoll的fd列表中移除
-//            struct epoll_event ev{};
-//            ev.data.fd = m.second->fd();
-//            ev.events = KNONE_EVENT;
-//            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, m.second->fd(), &ev);
-            save_map.erase(m.first);
+    auto it = save_map.begin();
+    while (it != save_map.end()) {
+        if (it->second->dead()) {
+            struct epoll_event ev{};
+            ev.data.fd = it->second->fd();
+            ev.events = KNONE_EVENT;
+            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, it->second->fd(), &ev);
+            save_map.at(it->first).reset();
+            it = save_map.erase(it);
+        } else {
+            it++;
         }
     }
 }

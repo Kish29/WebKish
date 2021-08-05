@@ -129,7 +129,6 @@ void test() {
         printf("reg false");
         exit(EXIT_FAILURE);
     }
-    http_handler::test_mappers();
 }
 
 class holer {
@@ -231,13 +230,27 @@ int main() {
     printf("%s\n", str);
     std::cout << my_str;*/
 
-    const char *pos;
+    /*const char *pos;
     const char *text = "/users/842?id=9";
     pos = strchrnul(text, '?');
     if (pos) {
         printf("%s", pos);
     } else {
         printf("no '?' found in text");
+    }*/
+    /*shared_ptr<atomic_clock> ac(new atomic_clock);
+    shared_ptr<atomic_clock> eh(dynamic_cast<atomic_clock *>(ac.get()));
+    shared_ptr<atomic_clock> eh2(ac);
+    printf("count is %lu", ac.use_count());*/
+
+    string cnn = "timeout=60";
+    size_t timeout_pos = cnn.find("timeout");
+    // 设置过期字段
+    if (timeout_pos != string::npos) {
+        string to = cnn.substr(timeout_pos + 8/* strlen(timeout=) + 1 */);
+        int timeout = atoi(to.c_str());
+        printf("timeout is %d", timeout);
     }
+
     exit(EXIT_SUCCESS);
 }

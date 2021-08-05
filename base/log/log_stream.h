@@ -18,7 +18,7 @@ namespace kish {
         typedef sized_buffer<KSMALL_BUFFER> log_buffer;
         typedef shared_ptr<log_buffer> buffer_ptr;
 
-        log_stream() : log_buf(std::make_shared<log_buffer>()) {}
+        log_stream() : log_buf(new log_buffer) {}
 
     public:
         self &operator<<(char);
@@ -57,7 +57,11 @@ namespace kish {
 
     public:
 
-        const buffer_ptr &buffer() const;
+//        const buffer_ptr &buffer() const;
+
+        const char *data() const;
+
+        size_t length() const;
 
         void clear_buffer();
 

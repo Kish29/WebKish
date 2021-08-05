@@ -44,6 +44,7 @@ set(
         net/http/http_server.cpp
         net/http/http_interface.cpp
         net/http/http_parser.cpp
+        net/http/http_heart_check.h
 )
 
 

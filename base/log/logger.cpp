@@ -59,7 +59,7 @@ public:
         fwrite_thread.start();
     }
 
-    ~async_stream_writer() {
+    ~async_stream_writer() override {
         stop_write();
     }
 
@@ -216,7 +216,7 @@ kish::logger::logger(const char *filename, int line, kish::log_level level)
     lg_strm << lg_ts.get_format_time(false, false)
             << " tid-" << kish::tid()
             << " " << KLEVEL_STR[lg_lv] << "[" << t_errno_buf << "]"
-             << " ";
+            << " ";
 }
 
 kish::logger::~logger() {
@@ -224,20 +224,20 @@ kish::logger::~logger() {
     append_logpos();
     switch (lg_lv) {
         case LL_TRACE:
-            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
-            log_stdout(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_file(lg_strm.data(), lg_strm.length());
+            log_stdout(lg_strm.data(), lg_strm.length());
             break;
         case LL_DEBUG:
         case LL_INFO:
-            log_stdout(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_stdout(lg_strm.data(), lg_strm.length());
             break;
         case LL_WARN:
         case LL_FATAL:
-            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
-            log_stderr(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_file(lg_strm.data(), lg_strm.length());
+            log_stderr(lg_strm.data(), lg_strm.length());
             break;
         case LL_RECOR:
-            log_file(lg_strm.buffer()->data(), lg_strm.buffer()->length());
+            log_file(lg_strm.data(), lg_strm.length());
             break;
         case LL_LEVEL_NUM:
             break;

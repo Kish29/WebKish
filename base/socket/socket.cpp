@@ -6,6 +6,7 @@
 
 #include "socket.h"
 #include "netinet/tcp.h"
+#include "logger.h"
 
 // todo: set functions return psr_type is bool
 kish::socket::socket(bool tcp, bool ipv6) : sockfd(socket_utils::create(tcp, ipv6)) {}
@@ -156,5 +157,14 @@ bool kish::socket_utils::tcp_isdead(int sockfd) {
         return info.tcpi_state != TCP_ESTABLISHED;
     }
     // 出错认为断开了连接
+    return true;
+}
+
+bool kish::socket_utils::set_sock_keep_alive(int sockfd) {
+    int optval = 1;
+    if (::setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof optval)) {
+        LOG_WARN << "socket set SO_KEEPALIVE false";
+        return false;
+    }
     return true;
 }

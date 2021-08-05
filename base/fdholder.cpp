@@ -5,12 +5,8 @@
 //
 
 #include "fdholder.h"
-#include "cstdio"
 
-kish::fdholder::~fdholder() {
-    // todo: delete this print
-    printf("~fdholder() invoked\n");
-}
+kish::fdholder::~fdholder() = default;
 
 bool kish::fdholder::dead() const {
     return false;

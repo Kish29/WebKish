@@ -13,8 +13,7 @@ bool enable_nonblock_and_cloexec(int fd) {
     int res = ::fcntl(fd, F_SETFL, flags);
     if (res == -1) {
 #ifdef __DEBUG__
-        // todo: delete this print
-        perror("set O_NONBLOCK failed!");
+        printf("set fd[%d] O_NONBLOCK failed!", fd);
 #endif
         return false;
     }
@@ -23,13 +22,11 @@ bool enable_nonblock_and_cloexec(int fd) {
     res = ::fcntl(fd, F_SETFL, flags);
     if (res == -1) {
 #ifdef __DEBUG__
-        // todo: delete this print
-        printf("set O_CLOEXEC failed!");
+        printf("set fd[%d] O_CLOEXEC failed!", fd);
 #endif
         return false;
     }
 #ifdef __DEBUG__
-    // todo: delete this print
     printf("set non-block for %d success!\n", fd);
 #endif
     return true;

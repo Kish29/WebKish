@@ -83,6 +83,8 @@ namespace kish {
         static void shutdown_rdwr(int sockfd);
 
         static bool tcp_isdead(int sockfd);
+
+        static bool set_sock_keep_alive(int sockfd);
     };
 
 }

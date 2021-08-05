@@ -13,7 +13,6 @@
 
 namespace kish {
 
-    const int KMAX_THREADS = 1 << 10;    // 1024
     const int KMAX_QUEUE = (1 << 16) - 1;    // 65536
 
     enum shutdown_mode {

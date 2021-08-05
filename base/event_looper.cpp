@@ -4,31 +4,22 @@
 // $desc
 //
 
-#include "event_looper.h"
 #include "sys/eventfd.h"
+#include "event_looper.h"
+#include "logger.h"
 
-void event_looper::submit(thread_func exe) {
-    char buf[64];
-    pthread_getname_np(pthread_self(), buf, 64);
-    // todo: delete this printf
-    printf("submit in %s\n", buf);
+void event_looper::add_observe(const handler_ptr &eh) {
     if (judge_in_thread()) {
-        exe();
+        poller.addev(eh);
     } else {
         mutex_lockguard lck(locker);
-        pending_funcs.emplace_back(std::move(exe));
+        pending_handlers.emplace_back(eh);
         // 唤醒looper
         wakeup();
     }
 }
 
 void event_looper::wakeup() const {
-    // todo: delete this printf
-    printf("event_looper wakeup\n");
-    char buf[64];
-    pthread_getname_np(pthread_self(), buf, 64);
-    // todo: delete this printf
-    printf("poller.wakeup in %s\n", buf);
     wakeuper->wakeup();
 }
 
@@ -38,23 +29,29 @@ event_looper::event_looper()
 event_looper::event_looper(std::string name) : event_looper(std::bind(&event_looper::loop, this), std::move(name)) {}
 
 void event_looper::loop() {
+    LOG_TRACE << "looper[" << poller.fd() << "] starts loop";
+    loop_started = true;
     while (!finished) {
         handler_list list = poller.poll(KEPOLL_WAITTIME);
+
+        // 更新触发的IO事件总数
+        total_polled_events += list.size();
+
         for (handler_ptr &h: list) {
             // poller会将handler的latest_event进行更新
             h->handle_event(h->events());
         }
-        std::vector<thread_func> functors;
-        functors.swap(pending_funcs);
-        for (thread_func &f:functors) {
-            f();
+        handlers hds;
+        {
+            mutex_lockguard lck(locker);
+            hds.swap(pending_handlers);
+        }
+        for (handler_ptr &f: hds) {
+            add_observe(f);
         }
     }
 }
 
-void event_looper::add_observe(const handler_ptr &eh) {
-    poller.addev(eh);
-}
 
 event_looper::event_looper(thread_func func, std::string name)
         : thread(std::move(func), std::move(name), true),

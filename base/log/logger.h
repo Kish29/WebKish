@@ -42,10 +42,10 @@ namespace kish {
     private:
         const char *lgf_name;
         int lg_line;
-        log_stream lg_strm{};
-        time_stamp lg_ts{};
         log_level lg_lv;
         int saved_errno;
+        log_stream lg_strm{};
+        time_stamp lg_ts{};
 
     private:
         void weedout_filname_slash();

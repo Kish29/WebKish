@@ -27,7 +27,7 @@ namespace kish {
         ~epoll_handler() override {
             if (!fd_closed) {
                 // todo: verify what will happen when fd is -1 to be fd_closed
-                printf("epoll_handler) close fd: %d\n", observe_fd);
+                printf("epoll_handler() close fd: %d\n", observe_fd);
                 ::close(observe_fd);
             }
         }
@@ -71,7 +71,7 @@ namespace kish {
         // 由于IO事件到来后必须从缓冲区读取数据
         // 否则epoll_wait始终有事件
         char read_buf[KREAD_BUFSIZ]{};
-        size_t curr_read_len{0};
+        ssize_t curr_read_len{0};
     };
 }
 

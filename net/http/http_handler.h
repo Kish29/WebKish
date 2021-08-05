@@ -23,13 +23,23 @@ namespace kish {
 
         bool keep_alive() const;
 
+        bool has_set_timeout() const;
+
+        uint32_t get_timeout() const { return timeout; }
+
+        const time_stamp &get_last_heart_rev_time() const { return latest_heart_rev_time; }
+
         void set_dead();
 
     private:
-        bool kp_alv{false};
+        keep_alive_t alive{KEEP_ALIVE};
+        uint32_t timeout{60};   // 60s
         http_parser req_parser{http_parser::REQUEST};
         // 最新的心跳包接受时间
         time_stamp latest_heart_rev_time{};
+
+        // 保存不完整的请求，直到完整
+        string save_request{};
 
     private:
         friend bool reg_http_interfc(const http_infc_ptr &);

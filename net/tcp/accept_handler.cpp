@@ -10,7 +10,7 @@ namespace kish {
 
     accept_handler::accept_handler(int fd, socket &sk) : epoll_handler(fd), serv_sock(sk) {}
 
-    void accept_handler::on_acceptnew(const accept_callback &cb) {
+    void accept_handler::set_on_acceptnew(const accept_callback &cb) {
         accept_cb = cb;
     }
 
@@ -19,10 +19,7 @@ namespace kish {
             struct sockaddr_in client_addr{};
             socklen_t claddr_len = sizeof client_addr;
             int client_fd = ::accept(observe_fd, (sockaddr *) &client_addr, &claddr_len);
-            // todo: 限制连接数量
             if (client_fd > 0 && accept_cb) {
-                // todo: delete this print
-                printf("client fd is %d\n", client_fd);
                 inet_address a(client_addr.sin_port, client_addr.sin_addr.s_addr, true);
                 accept_cb(client_fd, a);
             } else {

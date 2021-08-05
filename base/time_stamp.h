@@ -26,9 +26,13 @@ namespace kish {
         // 是否使用UTC时间，否则使用local时间
         std::string get_format_time(bool show_micro = false, bool UTC = false) const;
 
+        uint64_t get_time_milsec() const;
+
+        uint64_t get_time_sec() const;
+
     private:
         // 从1900年过去的时间
-        timeval m_tm_epoch{};
+        timeval tm_epoch{};
     };
 }
 

@@ -8,9 +8,13 @@
 #include "logger.h"
 #include "sstream"
 
-#define SPACE   ' '
-#define COLON   ':'
-#define CRLF      "\r\n"
+size_t kish::http_message::content_length() const {
+    size_t length = 0;
+    for (auto &c: contents) {
+        length += c.size();
+    }
+    return length;
+}
 
 std::string kish::http_request::tostring() const {
     return std::string();
@@ -51,6 +55,17 @@ std::string kish::http_response::tojson() const {
 std::string kish::http_response::tomessage() {
     std::ostringstream os;
     os << "HTTP/" << (int) ver_major << '.' << (int) ver_minor << SPACE << status_code << SPACE << short_msg << CRLF;  // request line
+    /*⚠️检查是否缺失必要的字段⚠️*/
+    if (headers.find(CONTENT_TYPE_KEY) == headers.end()) {
+        headers.insert(std::make_pair(CONTENT_TYPE_KEY, "text/plain"));
+    }
+    // ⚠️Content-Length是必须的，否则客户端没有收到此字段会认为仍然有数据，然后一直等待
+    if (headers.find(CONTENT_LENGTH_KEY) == headers.end()) {
+        headers.insert(std::make_pair(CONTENT_LENGTH_KEY, std::to_string(content_length())));
+    }
+    /*if (headers.find(CONNECTION_KEY) == headers.end()) {
+        headers.insert(std::make_pair(CONNECTION_KEY, KEEP_ALIVE_VAL));
+    }*/
     for (const auto &h: headers) {
         os << h.first << COLON << SPACE << h.second << CRLF;
     }
@@ -90,16 +105,26 @@ void kish::http_parser::reset() {
     header_field.clear();
     header_value.clear();
     last_on_hd = IDLE;
-    kep_alv = false;
+    kep_alv = KEEP_ALIVE;
     contents.clear();
+    message_complete = false;
 }
 
-bool kish::http_parser::parse(const char *raw, size_t len) {
-    if (!raw || len <= 0) return false;
+kish::http_parser::parse_res kish::http_parser::parse(const char *raw, size_t len) {
+    if (!raw || len <= 0) return http_parser::PARSE_FAIL;
     reset();
     // 使用 llhttp_execute 进行解析
-    int err = llhttp_execute(&psr, raw, len);
-    return err == HPE_OK;
+    enum llhttp_errno err = llhttp_execute(&psr, raw, len);
+    // ⚠️注意，先判断是否出错，然后是否继续输入请求，最后判断是否成功
+    if (err != HPE_OK) {
+        return http_parser::PARSE_FAIL;
+    } else if (!message_complete) {
+        return http_parser::PARSE_GO_ON;
+    } else if (err == HPE_OK) {
+        return http_parser::PARSE_SUCCESS;
+    } else {
+        return http_parser::PARSE_FAIL;
+    }
 }
 
 int kish::http_parser::on_message_begin(llhttp_t *parser) {
@@ -169,14 +194,34 @@ int kish::http_parser::on_body(llhttp_t *parser, const char *at, size_t len) {
 }
 
 int kish::http_parser::on_message_complete(llhttp_t *parser) {
+    message_complete = true;
     method = static_cast<llhttp_method_t>(parser->method);
     ver_major = parser->http_major;
     ver_minor = parser->http_minor;
     if (RESP_STAT_CODE_MAP.find(stat_code) != RESP_STAT_CODE_MAP.end()) {
         shrt_msg = RESP_STAT_CODE_MAP.at(stat_code);
     }
-    const char *cnn = headers.at("Connection").c_str();
-    kep_alv = !((strcmp(cnn, "close") == 0 || (ver_major <= 1 && ver_minor == 0) && strcmp(cnn, "Keep-Alive") != 0));
+    string cnn;
+    if (headers.find(CONNECTION_KEY) != headers.end()) {
+        cnn = headers.at(CONNECTION_KEY);
+    }
+
+    // 设置连接类型
+    size_t timeout_pos = string::npos;
+    if (!cnn.empty()) {
+        timeout_pos = cnn.find("timeout");
+    }
+
+    if (llhttp_should_keep_alive(parser)) {
+        kep_alv = KEEP_ALIVE;
+    } else if (timeout_pos != string::npos) {
+        kep_alv = SET_TIMEOUT;
+        string to = cnn.substr(timeout_pos + 8/* strlen(timeout=) + 1 */);
+        timeout = atoi(to.c_str());
+    } else {
+        kep_alv = CLOSE_IMM;
+    }
+
     return 0;
 }
 
@@ -189,7 +234,8 @@ kish::http_request_ptr kish::http_parser::get_req() {
         request->ver_minor = this->ver_minor;
         request->headers = this->headers;
         request->contents = this->contents;
-        request->keep_alive = this->kep_alv;
+        request->alive = this->kep_alv;
+        request->timeout = this->timeout;
         return request;
     } else return nullptr;
 }
@@ -203,10 +249,8 @@ kish::http_response_ptr kish::http_parser::get_resp() {
         response->ver_minor = this->ver_minor;
         response->headers = this->headers;
         response->contents = this->contents;
-        response->keep_alive = this->kep_alv;
+        response->alive = this->kep_alv;
+        response->timeout = this->timeout;
         return response;
     } else return nullptr;
 }
-
-
-

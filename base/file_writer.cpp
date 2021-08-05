@@ -25,10 +25,11 @@ size_t kish::file_writer::append(const char *line, size_t len) {
     while (remain > 0) {
         size_t rewrite = ::fwrite_unlocked(line + written, 1, remain, fptr);
         if (rewrite == 0) {
+            // todo: 完善判断条件
             int err = ferror(fptr);
             if (err) {
-                // todo: delete this print
-                printf("file_writer::append failed!\n");
+                perror("log system internal fatal error occurred!\n");
+                abort();
             }
         }
         remain -= rewrite;

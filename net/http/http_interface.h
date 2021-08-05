@@ -11,6 +11,12 @@
 #include "vector"
 #include "unordered_set"
 
+// 服务器名称，修改此字段更改
+static const char *kish_server_name = "Kish";
+// 服务器HTTP版本号
+static uint8_t http_major_ver = 1;
+static uint8_t http_minor_ver = 1;
+
 namespace kish {
 
     using std::string;

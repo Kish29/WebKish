@@ -129,9 +129,9 @@ kish::log_stream::self &kish::log_stream::operator<<(const kish::printable *val)
     }
 }
 
-const kish::log_stream::buffer_ptr &kish::log_stream::buffer() const {
+/*const kish::log_stream::buffer_ptr &kish::log_stream::buffer() const {
     return log_buf;
-}
+}*/
 
 void kish::log_stream::clear_buffer() {
     log_buf->clear();
@@ -139,4 +139,12 @@ void kish::log_stream::clear_buffer() {
 
 void kish::log_stream::zero_buffer() {
     log_buf->zero_buffer();
+}
+
+const char *kish::log_stream::data() const {
+    return log_buf->data();
+}
+
+size_t kish::log_stream::length() const {
+    return log_buf->length();
 }

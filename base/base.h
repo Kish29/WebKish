@@ -57,7 +57,6 @@ namespace kish {
         virtual std::string tojson() const = 0;
     };
 
-
     // 返回报文结构
     class message_type {
     public:
@@ -112,6 +111,8 @@ namespace kish {
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
     // tid会取保存的tid
     extern pid_t tid();
+
+    extern const char *curr_thread_name();
 }
 
 #endif //WEBKISH_BASE_H

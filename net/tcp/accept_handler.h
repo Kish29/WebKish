@@ -20,7 +20,7 @@ namespace kish {
 
         accept_handler(int fd, socket &sk);
 
-        void on_acceptnew(const accept_callback &cb);
+        void set_on_acceptnew(const accept_callback &cb);
 
         int fd() const override {
             return serv_sock.fd();

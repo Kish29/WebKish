@@ -65,15 +65,15 @@ int main() {
 //    sleep(5);
 //    SLEEP_ADAY;
 //    int i = 1 / 0;
-    /*char buf[50];
-    int res = read(-1, buf, 50);
+    /*char fbuf[50];
+    int res = read(-1, fbuf, 50);
     int se{};
     if (res == -1) {
         se = errno;
         perror("read fd:-1");
-        bzero(buf, sizeof buf);
+        bzero(fbuf, sizeof fbuf);
         printf("%s\n", strerror(se));
-        char *out = strerror_r(se, buf, sizeof buf);
+        char *out = strerror_r(se, fbuf, sizeof fbuf);
         printf("%s\n", out);
     }*/
     LOG_TRACE << "read fd:-1 for errno test";

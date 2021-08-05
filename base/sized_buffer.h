@@ -24,6 +24,8 @@ namespace kish {
 
         ~sized_buffer() override {
             delete[] buffer;
+            buffer = nullptr;
+            indexer = nullptr;
         }
 
         void append(const char *data, size_t size) {

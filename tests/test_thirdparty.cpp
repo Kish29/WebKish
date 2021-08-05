@@ -11,7 +11,7 @@
 int handle_on_message_complete(llhttp_t *t) {
     if (t) {
         printf("method is %s\n", llhttp_method_name(static_cast<llhttp_method_t>(t->method)));
-        printf("http ver is HTTP/%u.%u", t->http_major, t->http_minor);
+        printf("http ver is HTTP/%u.%u\n", t->http_major, t->http_minor);
     }
     return 0;
 }
@@ -63,30 +63,15 @@ int main() {
     llhttp_init(&parser, HTTP_BOTH, &settings);
 
 /* Parse request! */
-    const char text[] = "POST /uri.cgi HTTP/1.1\r\n"
-                        "From: user@example.com\r\n"
-                        "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0\r\n"
-                        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
-                        "Accept-Language: en-US,en;q=0.5\r\n"
-                        "Accept-Encoding: gzip, deflate\r\n"
-                        "Content-Type: text/plain\r\n"
-                        "Transfer-Encoding: chunked\r\n"
-                        "Host: 127.0.0.1\r\n"
-                        "\r\n"
-                        "23\r\n"
-                        "This is the data in the first chunk\r\n"
-                        "1A\r\n"
-                        "and this is the second one\r\n"
-                        "3\r\n"
-                        "con\r\n"
-                        "9\r\n"
-                        "sequence\0\r\n"
-                        "0\r\n\r\n";
+    const char *text = "\n";
     int request_len = strlen(text);
 
     enum llhttp_errno err = llhttp_execute(&parser, text, request_len);
+    if (llhttp_message_needs_eof(&parser)) {
+        printf("needs eof!");
+    }
     if (err == HPE_OK) {
-        /* Successfully parsed! */
+        printf("Successfully parsed!\n");
     } else {
         fprintf(stderr, "Parse error: %s %s\n", llhttp_errno_name(err),
                 parser.reason);

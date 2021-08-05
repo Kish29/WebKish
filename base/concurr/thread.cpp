@@ -5,7 +5,6 @@
 //
 
 #include "thread.h"
-#include "cassert"
 #include "logger.h"
 
 using namespace kish;
@@ -14,6 +13,10 @@ __thread thread_cache *t_cache_data = nullptr;
 __thread pid_t t_tid = -1;
 
 namespace kish {
+
+    cpu_set_t thread::mask;
+
+    pthread_once_t thread::p_once = PTHREAD_ONCE_INIT;
 
     // 原函数在base.h中声明
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
@@ -25,16 +28,13 @@ namespace kish {
         return t_tid;
     }
 
+    extern const char *curr_thread_name() {
+        if (t_cache_data) {
+            return t_cache_data->thread_name.c_str();
+        } else return "thread-with-no-name";
+    }
+
     void *thread_exe(void *args) {
-
-        // todo:
-
-        // 设置cpu亲和性
-        // CPU_ZERO(&mask);
-        // 将（i % CPU_CORE）号CPU加入集合中
-        // CPU_SET(i % CPU_CORE, &mask);
-
-
         auto *instance = (thread *) args;
         if (instance == nullptr) {
             LOG_TRACE << "thread_exe -> instance is null";
@@ -44,14 +44,23 @@ namespace kish {
         t_cache_data->tid = kish::tid();
         instance->thr_tid = t_cache_data->tid;
         t_cache_data->thread_name = instance->thr_name;
+        if (instance->set_affinity) {
+            if (sched_setaffinity(t_cache_data->tid, sizeof kish::thread::mask, &kish::thread::mask) == -1) {
+                LOG_WARN << "thread[" << t_cache_data->tid << "] set cpu affinity failed";
+            } else {
+#ifdef __DEBUG__
+                LOG_INFO << "thread[" << t_cache_data->tid << "] set cpu affinity success";
+#endif
+            }
+        }
         LOG_TRACE << "new thread [" << t_cache_data->thread_name << "] created and started";
         try {
             instance->thr_exe();
             LOG_TRACE << "thread [" << t_cache_data->thread_name << "] exit";
         } catch (const std::exception &exc) {
-            // todo: log error
+            LOG_FATAL << "thread-start encountered internal error: " << exc.what();
         } catch (...) {
-            // todo: log error
+            LOG_FATAL << "thread-start encountered unknown internal error!";
             throw;
         }
         // todo: check
@@ -59,8 +68,18 @@ namespace kish {
         pthread_exit(nullptr);
     }
 
-    kish::thread::thread(thread_func exe, std::string name, bool setaffinity) : thr_exe(std::move(exe)),
-                                                                                thr_name(std::move(name)) {}
+    kish::thread::thread(thread_func exe, std::string name, bool setaffinity)
+            : thr_exe(std::move(exe)),
+              thr_name(std::move(name)),
+              set_affinity(setaffinity) {
+        // 初始化CPU集合
+        pthread_once(&p_once, []() -> void {
+            CPU_ZERO(&mask);
+            for (int i = 0; i < CPU_CORE; ++i) {
+                CPU_SET(i, &mask);
+            }
+        });
+    }
 
     bool kish::thread::judge_in_thread() const {
         if (t_cache_data == nullptr) return false;

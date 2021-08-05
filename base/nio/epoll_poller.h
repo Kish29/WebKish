@@ -10,6 +10,7 @@
 #include "sys/epoll.h"
 #include "poller.h"
 #include "map"
+#include "logger.h"
 #include "unistd.h"
 
 using namespace kish;
@@ -45,8 +46,9 @@ namespace kish {
         epoll_poller();
 
         ~epoll_poller() override {
-            // todo: delete this printf
-            printf("~epoll_poller() close fd: %d\n", epoll_fd);
+#ifdef __DEBUG__
+            LOG_INFO << "~epoll_poller() close fd[ " << epoll_fd << "]";
+#endif
             ::close(epoll_fd);
         }
 

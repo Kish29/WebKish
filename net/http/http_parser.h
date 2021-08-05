@@ -60,9 +60,24 @@ const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
 };
 
 
+#define SPACE   ' '
+#define COLON   ':'
+#define CRLF      "\r\n"
+
+#define CONNECTION_KEY      "Connection"
+#define KEEP_ALIVE_VAL      "Keep-Alive"
+#define CLOSE_VAL           "close"
+#define CONTENT_TYPE_KEY    "Content-Type"
+#define CONTENT_LENGTH_KEY  "Content-Length"
+
 namespace kish {
     using std::string;
 
+    enum keep_alive_t {
+        CLOSE_IMM,      // close immediate
+        KEEP_ALIVE, // keep alive forever
+        SET_TIMEOUT // set timeout
+    };
 
     struct http_message : copyable, public printable, public jsonable, public message_type {
         typedef std::map<std::string, std::string> header_item;
@@ -71,9 +86,14 @@ namespace kish {
         uint8_t ver_minor;
         header_item headers{};
         std::vector<string> contents{};
-        bool keep_alive;
 
-        http_message() : ver_major(1), ver_minor(0), keep_alive(false) {};
+        keep_alive_t alive;
+        // 如果 alive 类型为 has_set_timeout，该字段会被设置
+        uint32_t timeout{60};
+
+        size_t content_length() const;
+
+        http_message() : ver_major(1), ver_minor(0), alive(KEEP_ALIVE) {};
 
     };
 
@@ -148,6 +168,7 @@ namespace kish {
         simp_resp(int st, string bd) : status(st), content(std::move(bd)) {}
     };
 
+    // todo: 0.2 版本应当根据当前的解析情况返回给调用者判断执行，否则按照现在0.1版本的情况，每次string要保留一段数据，造成了很不必要的浪费
     class http_parser : noncopyable {
         typedef enum { IDLE, FIELD, VALUE } last_on_header;
     public:
@@ -162,12 +183,20 @@ namespace kish {
 
         explicit http_parser(parse_type type);
 
-        // false解析失败
-        bool parse(const char *raw, size_t len);
+        enum parse_res {
+            PARSE_GO_ON,
+            PARSE_SUCCESS,
+            PARSE_FAIL
+        };
 
+        parse_res parse(const char *raw, size_t len);
+
+        // todo: 删掉这两个接口
         http_request_ptr get_req();
 
         http_response_ptr get_resp();
+
+        // todo: 增加上层回调
 
     private:
         parse_type psr_type;
@@ -185,8 +214,12 @@ namespace kish {
         // 用enum和两个string记录一对键值对
         string header_field{}, header_value{};
         last_on_header last_on_hd{IDLE};
-        bool kep_alv{false};
+        keep_alive_t kep_alv{KEEP_ALIVE};
+        int timeout{0};
         std::vector<string> contents{};
+
+        // 报文是否完整
+        bool message_complete{false};
 
 #define HP reinterpret_cast<http_parser*>(parser->data)
     private:
@@ -267,7 +300,13 @@ namespace kish {
         }
 
         http_request_builder &keep_alive(bool keep) {
-            request.keep_alive = keep;
+            request.alive = keep ? KEEP_ALIVE : CLOSE_IMM;
+            return *this;
+        }
+
+        http_request_builder &timeout(uint32_t time) {
+            request.alive = SET_TIMEOUT;
+            request.timeout = time;
             return *this;
         }
 
@@ -337,7 +376,13 @@ namespace kish {
         }
 
         http_response_builder &keep_alive(bool keep) {
-            response.keep_alive = keep;
+            response.alive = keep ? KEEP_ALIVE : CLOSE_IMM;
+            return *this;
+        }
+
+        http_response_builder &timeout(uint32_t time) {
+            response.alive = SET_TIMEOUT;
+            response.timeout = time;
             return *this;
         }
 

@@ -10,15 +10,17 @@
 #include "base.h"
 #include "socket.h"
 #include "server.h"
-#include "event_looper.h"
+#include "looper_pool.h"
 
 namespace kish {
 
+
     class tcp_server : public server {
     public:
+
         explicit tcp_server(uint16_t port);
 
-        tcp_server(uint16_t port, const string &host);
+        tcp_server(uint16_t port, const string &host, int looper_num = CPU_CORE);
 
         void startup() override;
 
@@ -27,10 +29,10 @@ namespace kish {
         void on_acceptnew(int, const inet_address &) override;
 
     protected:
-        event_looper looper;
         socket serv_sock;
         inet_address serv_addr;
         shared_ptr<accept_handler> acceptor;
+        looper_pool loopers;
         bool started{};
         bool stopped{};
     };

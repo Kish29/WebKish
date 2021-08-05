@@ -15,11 +15,15 @@
 #include "sys/sysinfo.h"
 
 const static int CPU_CORE = get_nprocs_conf();
+
+const static int KMAX_THREADS = _SC_THREAD_THREADS_MAX;
 #else
 
 #include "thread"
 
 const static int CPU_CORE = std::thread::hardware_concurrency();
+
+const static int KMAX_THREADS = 512;
 #endif
 
 namespace kish {
@@ -62,11 +66,15 @@ namespace kish {
         // pid_t 用于gettid判断，pthread_t表示某个posix线程
         pid_t thr_tid{};  // atomic
         pthread_t pthr_id{};
+        bool set_affinity{true};
         // volatile 从某种层面上来说，仅仅是读安全
 //        volatile bool started{false};
         std::atomic_bool started{false};
         std::atomic_bool finished{false};
         std::atomic_bool joined{false};
+
+        static cpu_set_t mask;
+        static pthread_once_t p_once;
 
     private:
         friend void *thread_exe(void *);

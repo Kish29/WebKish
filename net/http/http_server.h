@@ -7,23 +7,43 @@
 #ifndef WEBKISH_HTTP_SERVER_H
 #define WEBKISH_HTTP_SERVER_H
 
+#include "http_handler.h"
 #include "tcp_server.h"
 #include "timer.h"
+#include "http_heart_check.h"
 
 namespace kish {
 
-    class http_server : public tcp_server {
+    // 服务器的最大连接数量
+    const static int KMAX_SERVER_CNN = 2048;
+
+    static int HEART_CHECK_INTERVAL = 10000;    // 10s
+
+    class http_server : public tcp_server, public http_heart_check {
+        typedef tcp_server base;
     public:
 
-        explicit http_server(uint16_t port) : tcp_server(port) {}
+        explicit http_server(uint16_t port) : tcp_server(port) {
+            connectors.reserve(KMAX_SERVER_CNN);
+        }
 
-        http_server(uint16_t port, const string &host) : tcp_server(port, host) {}
+        http_server(uint16_t port, const string &host, int looper_num = CPU_CORE) : tcp_server(port, host, looper_num) {}
+
+        http_server(uint16_t port, int looper_num, const string &host = "0.0.0.0") : tcp_server(port, host, looper_num) {}
 
         void on_acceptnew(int fd, const inet_address &peer_addr) override;
 
-    private:
-        timer m_timer{"http-server timer"};
+        void check_for_alive() override;
 
+        void startup() override;
+
+    private:
+        typedef std::shared_ptr<http_handler> http_handler_ptr;
+        timer serv_timer{"http-server timer"};
+        std::vector<http_handler_ptr> connectors{};
+
+        mutex_lock locker;
+        std::atomic_int64_t cnn_num{0};
     };
 }
 
