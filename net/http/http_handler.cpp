@@ -11,6 +11,9 @@ std::vector<shared_ptr<kish::http_interface>> kish::http_handler::GLO_RESOLR_MAP
 
 void http_handler::handle_read() {
     base::handle_read();
+
+    // todo: 0.0.1版本问题：parser封装过度，使用一个save_request保留增量的请求报文，然后重复parse，这样不好
+    // todo: 后续版本设计parser的回调接口，进行增量parse
     if (!i_am_dead && curr_read_len > 0) {
         /* 上层只负责：
          * ⚠️1、接受请求, ⚠️并更新心跳时间
@@ -40,10 +43,16 @@ void http_handler::handle_read() {
 
         // 添加数据，解析请求
         if (curr_read_len - 1 > 0) {
-            save_request.append(read_buf, curr_read_len - 1);
+            save_request.append(read_buf, curr_read_len - 1);   // -1 去掉末尾的 '\n'，服务端手动添加CRLF
         }
-        // 只有一个字符，认为是 CRLF "\r\n"
-        save_request.append(CRLF);
+        if (!save_request.empty()) {
+            // 手动添加CRLF
+            save_request.append(CRLF);
+        } else {
+            // 过滤客户端一直只输入 CRLF的情况
+            return;
+        }
+
         http_parser::parse_res psr_res = req_parser.parse(save_request.c_str(), save_request.size());
 
         switch (psr_res) {
@@ -85,6 +94,8 @@ void http_handler::handle_read() {
 
                 // 更新dead标志
                 if (alive == CLOSE_IMM) {
+                    // 关闭写端
+                    socket_utils::shutdown_write(observe_fd);
                     i_am_dead = true;
                 }
                 break;

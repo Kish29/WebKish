@@ -20,7 +20,7 @@ namespace kish {
         void handle_read() override;
 
     protected:
-        char m_send_buf[KSEND_BUFSIZ]{};
+        char send_buf[KSEND_BUFSIZ]{};
     };
 }
 

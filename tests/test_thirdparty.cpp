@@ -60,10 +60,10 @@ int main() {
  * HTTP_REQUEST and HTTP_RESPONSE parsing automatically while reading the first
  * input.
  */
-    llhttp_init(&parser, HTTP_BOTH, &settings);
+    llhttp_init(&parser, HTTP_REQUEST, &settings);
 
 /* Parse request! */
-    const char *text = "\n";
+    const char *text = "GET / HTTP/1.0\r\n\r\n";
     int request_len = strlen(text);
 
     enum llhttp_errno err = llhttp_execute(&parser, text, request_len);

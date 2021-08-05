@@ -28,7 +28,7 @@ public:
     }
 
     void on_request(const string &uri, http_response &response) override {
-        if (uri == "/" || uri == "index.html") {
+        if (uri == "/" || uri == "/index.html") {
             FILE *fptr = fopen("index.html", "r");
             if (fptr) {
                 response.update_stat(200);

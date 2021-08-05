@@ -108,6 +108,10 @@ void kish::http_parser::reset() {
     kep_alv = KEEP_ALIVE;
     contents.clear();
     message_complete = false;
+
+    // todo: 0.0.1版本问题，设计一个更好的接口，以达到增量parse的效果
+    llhttp_init(&psr, psr_type == REQUEST ? HTTP_REQUEST : HTTP_RESPONSE, &settings);
+    psr.data = this;
 }
 
 kish::http_parser::parse_res kish::http_parser::parse(const char *raw, size_t len) {
