@@ -48,7 +48,7 @@ namespace kish {
 
         ~epoll_poller() override {
 #ifdef __DEBUG__
-            LOG_INFO << "~epoll_poller() close fd[ " << epoll_fd << "]";
+            LOG_INFO << "~epoll_poller() dead and close epoll_fd[ " << epoll_fd << "]";
 #endif
             ::close(epoll_fd);
         }
