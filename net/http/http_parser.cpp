@@ -32,11 +32,8 @@ std::string kish::http_request::tomessage() {
         os << h.first << COLON << SPACE << h.second << CRLF;
     }
     os << CRLF;
-    if (method == HTTP_POST) {
-        for (const auto &c : contents) {
-            os << c.size() << CRLF;
-            os << c << CRLF;
-        }
+    for (const auto &c : contents) {
+        os << c << CRLF;
     }
     if (!contents.empty()) {
         os << CRLF;
@@ -63,9 +60,6 @@ std::string kish::http_response::tomessage() {
     if (headers.find(CONTENT_LENGTH_KEY) == headers.end()) {
         headers.insert(std::make_pair(CONTENT_LENGTH_KEY, std::to_string(content_length())));
     }
-    /*if (headers.find(CONNECTION_KEY) == headers.end()) {
-        headers.insert(std::make_pair(CONNECTION_KEY, KEEP_ALIVE_VAL));
-    }*/
     for (const auto &h: headers) {
         os << h.first << COLON << SPACE << h.second << CRLF;
     }
@@ -83,10 +77,12 @@ kish::http_parser::http_parser(kish::http_parser::parse_type type) : psr_type(ty
     llhttp_settings_init(&settings);
     settings.on_message_begin = hp_on_message_begin;
     settings.on_url = hp_on_url;
+    settings.on_url_complete = hp_on_url_complete;
     settings.on_header_field = hp_on_header_field;
     settings.on_header_value = hp_on_header_value;
     settings.on_headers_complete = hp_on_headers_complete;
     settings.on_status = hp_on_status;
+    settings.on_status_complete = hp_on_status_complete;
     settings.on_body = hp_on_body;
     settings.on_message_complete = hp_on_message_complete;
 
@@ -96,38 +92,36 @@ kish::http_parser::http_parser(kish::http_parser::parse_type type) : psr_type(ty
 
 void kish::http_parser::reset() {
     method = HTTP_GET;
-    ver_major = 1;
-    ver_minor = 0;
-    stat_code = 400;
-    shrt_msg = RESP_STAT_CODE_MAP.at(400);
     uri.clear();
     headers.clear();
     header_field.clear();
     header_value.clear();
     last_on_hd = IDLE;
-    kep_alv = KEEP_ALIVE;
+    alive = KEEP_ALIVE;
     contents.clear();
-    message_complete = false;
 
-    // todo: 0.0.1版本问题，设计一个更好的接口，以达到增量parse的效果
-    llhttp_init(&psr, psr_type == REQUEST ? HTTP_REQUEST : HTTP_RESPONSE, &settings);
-    psr.data = this;
+    llhttp_reset(&psr);
 }
 
-kish::http_parser::parse_res kish::http_parser::parse(const char *raw, size_t len) {
-    if (!raw || len <= 0) return http_parser::PARSE_FAIL;
-    reset();
-    // 使用 llhttp_execute 进行解析
-    enum llhttp_errno err = llhttp_execute(&psr, raw, len);
-    // ⚠️注意，先判断是否出错，然后是否继续输入请求，最后判断是否成功
-    if (err != HPE_OK) {
-        return http_parser::PARSE_FAIL;
-    } else if (!message_complete) {
-        return http_parser::PARSE_GO_ON;
-    } else if (err == HPE_OK) {
-        return http_parser::PARSE_SUCCESS;
+void kish::http_parser::parse(const char *raw, size_t len) {
+    if (!raw || len <= 0) {
+        on_error();
+        reset();
+        return;
     } else {
-        return http_parser::PARSE_FAIL;
+        // 检查上一次解析的结构是否完成
+        if (last_parse_complete) {
+            // 如果完成，重置资源
+            last_parse_complete = false;
+            reset();
+        }
+        enum llhttp_errno err = llhttp_execute(&psr, raw, len);
+        if (err != HPE_OK) {
+            reset();
+            on_error();
+            // todo: 这儿仅仅做了日志的记录
+            LOG_TRACE << "llhttp parse error: " << llhttp_errno_name(err) << " reason: " << llhttp_get_error_reason(&psr);
+        }
     }
 }
 
@@ -143,8 +137,6 @@ int kish::http_parser::on_url(llhttp_t *parser, const char *at, size_t len) {
 }
 
 int kish::http_parser::on_status(llhttp_t *parser, const char *at, size_t len) {
-    string code(at, len);
-    stat_code = atoi(code.c_str());
     return 0;
 }
 
@@ -189,6 +181,25 @@ int kish::http_parser::on_headers_complete(llhttp_t *parser) {
         headers.emplace(std::make_pair(header_field, header_value));
         last_on_hd = IDLE;
     }
+    // headers完成后，设置连接类型
+    string cnn;
+    if (headers.find(CONNECTION_KEY) != headers.end()) {
+        cnn = headers.at(CONNECTION_KEY);
+    }
+    size_t timeout_pos = string::npos;
+    if (!cnn.empty()) {
+        timeout_pos = cnn.find("timeout");
+    }
+    if (llhttp_should_keep_alive(parser) && timeout_pos == string::npos) {
+        // 这里光依赖llhttp的判断是不可靠的，因为设置了timeout会被llhttp忽略掉
+        alive = KEEP_ALIVE;
+    } else if (timeout_pos != string::npos) {
+        alive = SET_TIMEOUT;
+        string to = cnn.substr(timeout_pos + 8);    /* 8 = strlen(timeout=) + 1 */
+        timeout = atoi(to.c_str());
+    } else {
+        alive = CLOSE_IMM;
+    }
     return 0;
 }
 
@@ -198,63 +209,110 @@ int kish::http_parser::on_body(llhttp_t *parser, const char *at, size_t len) {
 }
 
 int kish::http_parser::on_message_complete(llhttp_t *parser) {
-    message_complete = true;
-    method = static_cast<llhttp_method_t>(parser->method);
-    ver_major = parser->http_major;
-    ver_minor = parser->http_minor;
-    if (RESP_STAT_CODE_MAP.find(stat_code) != RESP_STAT_CODE_MAP.end()) {
-        shrt_msg = RESP_STAT_CODE_MAP.at(stat_code);
-    }
-    string cnn;
-    if (headers.find(CONNECTION_KEY) != headers.end()) {
-        cnn = headers.at(CONNECTION_KEY);
-    }
-
-    // 设置连接类型
-    size_t timeout_pos = string::npos;
-    if (!cnn.empty()) {
-        timeout_pos = cnn.find("timeout");
-    }
-
-    if (llhttp_should_keep_alive(parser)) {
-        kep_alv = KEEP_ALIVE;
-    } else if (timeout_pos != string::npos) {
-        kep_alv = SET_TIMEOUT;
-        string to = cnn.substr(timeout_pos + 8/* strlen(timeout=) + 1 */);
-        timeout = atoi(to.c_str());
-    } else {
-        kep_alv = CLOSE_IMM;
-    }
-
     return 0;
 }
 
-kish::http_request_ptr kish::http_parser::get_req() {
-    if (psr_type == REQUEST) {
-        std::shared_ptr<http_request> request = std::make_shared<http_request>();
-        request->method = this->method;
-        request->uri = this->uri;
-        request->ver_major = this->ver_major;
-        request->ver_minor = this->ver_minor;
-        request->headers = this->headers;
-        request->contents = this->contents;
-        request->alive = this->kep_alv;
-        request->timeout = this->timeout;
-        return request;
-    } else return nullptr;
+int kish::http_parser::on_url_complete(llhttp_t *parser) {
+    return 0;
 }
 
-kish::http_response_ptr kish::http_parser::get_resp() {
-    if (psr_type == RESPONSE) {
-        std::shared_ptr<http_response> response = std::make_shared<http_response>();
-        response->status_code = this->stat_code;
-        response->short_msg = shrt_msg;
-        response->ver_major = this->ver_major;
-        response->ver_minor = this->ver_minor;
-        response->headers = this->headers;
-        response->contents = this->contents;
-        response->alive = this->kep_alv;
-        response->timeout = this->timeout;
-        return response;
-    } else return nullptr;
+int kish::http_parser::on_status_complete(llhttp_t *parser) {
+    return 0;
 }
+
+int kish::http_request_parser::on_url_complete(llhttp_t *parser) {
+    assert(request);
+    request->method = static_cast<llhttp_method_t> (parser->method);
+    request->uri.swap(base::uri);
+    // 通知调用者 uri 解析成功
+    cb_on_uri(request);
+    return 0;
+}
+
+int kish::http_request_parser::on_headers_complete(llhttp_t *parser) {
+    base::on_headers_complete(parser);
+
+    assert(request);
+    request->headers.swap(headers);
+    request->ver_major = parser->http_major;
+    request->ver_minor = parser->http_minor;
+    parse_control res = cb_on_headers(request);
+    switch (res) {
+        case GO_ON:
+            return 0;
+        case SKIP:
+            return 1;
+        case ERROR:
+            return -1;
+    }
+    // no reachable here
+    return 0;
+}
+
+int kish::http_request_parser::on_message_complete(llhttp_t *parser) {
+    assert(request);
+    // 注意：有可能一个GET请求没有Header部分，在这里再次赋值，确保版本更新
+    request->ver_major = parser->http_major;
+    request->ver_minor = parser->http_minor;
+    request->contents.swap(contents);
+    request->alive = alive;
+    request->timeout = timeout;
+    cb_on_complete(request);
+
+    // 一次报文解析成功，重置状态
+    last_parse_complete = true;
+    return 0;
+}
+
+int kish::http_response_parser::on_status_complete(llhttp_t *parser) {
+    assert(response);
+    response->update_stat(parser->status_code);
+    cb_on_resp_line(response);
+    return base::on_status_complete(parser);
+}
+
+int kish::http_response_parser::on_headers_complete(llhttp_t *parser) {
+    base::on_headers_complete(parser);
+
+    assert(response);
+    response->headers.swap(headers);
+    response->ver_major = parser->http_major;
+    response->ver_minor = parser->http_minor;
+    parse_control res = cb_on_headers(response);
+    switch (res) {
+        case GO_ON:
+            return 0;
+        case SKIP:
+            return 1;
+        case ERROR:
+            return -1;
+    }
+    // no reachable here
+    return 0;
+}
+
+int kish::http_response_parser::on_message_complete(llhttp_t *parser) {
+    assert(response);
+
+    response->ver_major = parser->http_major;
+    response->ver_minor = parser->http_minor;
+    response->contents.swap(contents);
+    response->alive = alive;
+    response->timeout = timeout;
+    cb_on_complete(response);
+
+    last_parse_complete = true;
+    return 0;
+}
+
+
+void kish::http_request_parser::reset() {
+    base::reset();
+    request.reset(new http_request);
+}
+
+void kish::http_response_parser::reset() {
+    base::reset();
+    response.reset(new http_response);
+}
+

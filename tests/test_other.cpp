@@ -188,69 +188,97 @@ void *tf(void *) {
 
 #include "thread_pool.h"
 
+class tt {
+public:
+    void aplusplus() {
+        a++;
+    }
+
+protected:
+    int a{0};
+};
+
+class tt3 : public tt {
+    typedef tt base;
+public:
+    void show_basea() {
+        printf("a is %d\n", base::a);
+    }
+
+    void show_thisa() {
+        printf("a is %d\n", this->a);
+    }
+};
+
 int main() {
+
+    tt3 t3;
+    t3.aplusplus();
+    t3.show_basea();
+    t3.show_thisa();
+
+    exit(EXIT_SUCCESS);
+}
+
 //    EXECUTOR_POOL.thread_pool(4, 1024);
-    /*thread_pool::instance()->thread_pool(8);
-    thread_pool::instance()->submit(nullptr, [](const std::shared_ptr<void> &) -> void {
-        printf("hello");
-        fflush(stdout);
-    });*/
+/*thread_pool::instance()->thread_pool(8);
+thread_pool::instance()->submit(nullptr, [](const std::shared_ptr<void> &) -> void {
+    printf("hello");
+    fflush(stdout);
+});*/
 /*
     pthread_t pt{};
     pthread_create(&pt, nullptr, test4, nullptr);
     sleep(5);
     quit = true;
 */
-    /* pthread_t tid[100];
-     for (int i = 0; i < 100; ++i) {
-         pthread_create(&tid[i], nullptr, tf, nullptr);
-     }
-     sleep(1);
-     printf("started_num %d", (int) started_num);*/
-    /*std::vector<callable> vc;
-    vc.emplace_back([]() -> void {
-        printf("????\n");
-        fflush(stdout);
-    });
-    vc.at(0)();
+/* pthread_t tid[100];
+ for (int i = 0; i < 100; ++i) {
+     pthread_create(&tid[i], nullptr, tf, nullptr);
+ }
+ sleep(1);
+ printf("started_num %d", (int) started_num);*/
+/*std::vector<callable> vc;
+vc.emplace_back([]() -> void {
+    printf("????\n");
+    fflush(stdout);
+});
+vc.at(0)();
 
-    callable task = std::move(vc.at(0));
-    task();
+callable task = std::move(vc.at(0));
+task();
 
-    printf("vs size is %ld\n", vc.size());*/
-    /*reg_http_interfc(std::make_shared<test_mapper>());
-    http_handler::test_mappers();*/
+printf("vs size is %ld\n", vc.size());*/
+/*reg_http_interfc(std::make_shared<test_mapper>());
+http_handler::test_mappers();*/
 
-    /*char *str{nullptr};
-    str = new char[9];
-    memcpy(str, "i am jar", 8);
-    *(str + 8) = '\0';
-    std::string my_str(str);
-    delete[] str;
-    printf("%s\n", str);
-    std::cout << my_str;*/
+/*char *str{nullptr};
+str = new char[9];
+memcpy(str, "i am jar", 8);
+*(str + 8) = '\0';
+std::string my_str(str);
+delete[] str;
+printf("%s\n", str);
+std::cout << my_str;*/
 
-    /*const char *pos;
-    const char *text = "/users/842?id=9";
-    pos = strchrnul(text, '?');
-    if (pos) {
-        printf("%s", pos);
-    } else {
-        printf("no '?' found in text");
-    }*/
-    /*shared_ptr<atomic_clock> ac(new atomic_clock);
-    shared_ptr<atomic_clock> eh(dynamic_cast<atomic_clock *>(ac.get()));
-    shared_ptr<atomic_clock> eh2(ac);
-    printf("count is %lu", ac.use_count());*/
+/*const char *pos;
+const char *text = "/users/842?id=9";
+pos = strchrnul(text, '?');
+if (pos) {
+    printf("%s", pos);
+} else {
+    printf("no '?' found in text");
+}*/
+/*shared_ptr<atomic_clock> ac(new atomic_clock);
+shared_ptr<atomic_clock> eh(dynamic_cast<atomic_clock *>(ac.get()));
+shared_ptr<atomic_clock> eh2(ac);
+printf("count is %lu", ac.use_count());*/
 
-    string cnn = "timeout=60";
-    size_t timeout_pos = cnn.find("timeout");
-    // 设置过期字段
-    if (timeout_pos != string::npos) {
-        string to = cnn.substr(timeout_pos + 8/* strlen(timeout=) + 1 */);
+/*string cnn = "timeout=60";
+size_t timeout_pos = cnn.find("timeout");
+// 设置过期字段
+if (timeout_pos != string::npos) {
+    string to = cnn.substr(timeout_pos + 8*//* strlen(timeout=) + 1 *//*);
         int timeout = atoi(to.c_str());
         printf("timeout is %d", timeout);
-    }
-
-    exit(EXIT_SUCCESS);
-}
+    }*/

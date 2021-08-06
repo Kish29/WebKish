@@ -69,6 +69,7 @@ const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
 #define CLOSE_VAL           "close"
 #define CONTENT_TYPE_KEY    "Content-Type"
 #define CONTENT_LENGTH_KEY  "Content-Length"
+#define TRANSFER_TYPE_KEY   "Transfer-Encoding"
 
 namespace kish {
     using std::string;
@@ -156,19 +157,12 @@ namespace kish {
 
     typedef std::shared_ptr<http_response> http_response_ptr;
 
-    // ver + code + msg
-    // headers
-    // contents
-    struct simp_resp {
-        int status{400};
-        // todo: body可被序列化 RPC
-        string content{};
-        string content_type{"text/plain"};
-
-        simp_resp(int st, string bd) : status(st), content(std::move(bd)) {}
+    enum parse_control {
+        GO_ON,      // 表示调用者检测通过，继续解析
+        SKIP,       // 表示调用者跳过此报文的解析    --->  调用message_complete
+        ERROR       // 表示调用者检测失败，parser内部会重置所有的状态和资源
     };
 
-    // todo: 0.2 版本应当根据当前的解析情况返回给调用者判断执行，否则按照现在0.1版本的情况，每次string要保留一段数据，造成了很不必要的浪费
     class http_parser : noncopyable {
         typedef enum { IDLE, FIELD, VALUE } last_on_header;
     public:
@@ -176,6 +170,13 @@ namespace kish {
         int parse_time{0};
 
     public:
+        void set_on_parse_error(const callable &cb) {
+            on_error = cb;
+        }
+
+        virtual void parse(const char *raw, size_t len);
+
+    protected:
         enum parse_type {
             REQUEST,
             RESPONSE
@@ -183,51 +184,38 @@ namespace kish {
 
         explicit http_parser(parse_type type);
 
-        enum parse_res {
-            PARSE_GO_ON,
-            PARSE_SUCCESS,
-            PARSE_FAIL
-        };
-
-        parse_res parse(const char *raw, size_t len);
-
-        // todo: 删掉这两个接口
-        http_request_ptr get_req();
-
-        http_response_ptr get_resp();
-
-        // todo: 增加上层回调
-
-    private:
+    protected:
         parse_type psr_type;
         llhttp_t psr{};
         llhttp_settings_t settings{};
 
-        /* save data */
+        // 这个是request和response的公共部分
+        callable on_error{};
         llhttp_method_t method{HTTP_GET};
-        uint8_t ver_major{1};
-        uint8_t ver_minor{0};
-        int stat_code{400};
-        string shrt_msg{};
         string uri{};
         http_message::header_item headers{};
         // 用enum和两个string记录一对键值对
         string header_field{}, header_value{};
         last_on_header last_on_hd{IDLE};
-        keep_alive_t kep_alv{KEEP_ALIVE};
+        keep_alive_t alive{KEEP_ALIVE};
         int timeout{0};
         std::vector<string> contents{};
 
-        // 报文是否完整
-        bool message_complete{false};
+        // ⚠️重要，指示上一次报文是否解析完成，以在报文解析开始前选择是否重置资源
+        bool last_parse_complete{false};
+
 
 #define HP reinterpret_cast<http_parser*>(parser->data)
-    private:
+    protected:
         static int hp_on_message_begin(llhttp_t *parser) { return HP->on_message_begin(parser); }
 
         static int hp_on_url(llhttp_t *parser, const char *at, size_t len) { return HP->on_url(parser, at, len); }
 
+        static int hp_on_url_complete(llhttp_t *parser) { return HP->on_url_complete(parser); }
+
         static int hp_on_status(llhttp_t *parser, const char *at, size_t len) { return HP->on_status(parser, at, len); }
+
+        static int hp_on_status_complete(llhttp_t *parser) { return HP->on_status_complete(parser); }
 
         static int hp_on_header_field(llhttp_t *parser, const char *at, size_t len) { return HP->on_header_field(parser, at, len); }
 
@@ -241,25 +229,107 @@ namespace kish {
 
 #undef HP
 
-    private:
+    protected:
         // reset可以让parse被多次调用
-        void reset();
+        virtual void reset();
 
-        int on_message_begin(llhttp_t *parser);
+        virtual int on_message_begin(llhttp_t *parser);
 
-        int on_url(llhttp_t *parser, const char *at, size_t len);
+        virtual int on_url(llhttp_t *parser, const char *at, size_t len);
 
-        int on_status(llhttp_t *parser, const char *at, size_t len);
+        virtual int on_url_complete(llhttp_t *parser);
 
-        int on_header_field(llhttp_t *parser, const char *at, size_t len);
+        virtual int on_status(llhttp_t *parser, const char *at, size_t len);
 
-        int on_header_value(llhttp_t *parser, const char *at, size_t len);
+        virtual int on_status_complete(llhttp_t *parser);
 
-        int on_headers_complete(llhttp_t *parser);
+        virtual int on_header_field(llhttp_t *parser, const char *at, size_t len);
 
-        int on_body(llhttp_t *parser, const char *at, size_t len);
+        virtual int on_header_value(llhttp_t *parser, const char *at, size_t len);
 
-        int on_message_complete(llhttp_t *parser);
+        virtual int on_headers_complete(llhttp_t *parser);
+
+        virtual int on_body(llhttp_t *parser, const char *at, size_t len);
+
+        virtual int on_message_complete(llhttp_t *parser);
+
+    };
+
+    typedef std::function<void(const http_request_ptr &request)> request_parse_callback;
+    typedef std::function<parse_control(const http_request_ptr &request)> request_header_callback;
+
+    class http_request_parser : public http_parser {
+        typedef http_parser base;
+    public:
+        http_request_parser() : http_parser(http_parser::REQUEST) {}
+
+        void set_on_request_uri_parse_complete(const request_parse_callback &cb) {
+            cb_on_uri = cb;
+        }
+
+        void set_on_headers_parse_complete(const request_header_callback &cb) {
+            cb_on_headers = cb;
+        }
+
+        void set_on_message_parser_complete(const request_parse_callback &cb) {
+            cb_on_complete = cb;
+        }
+
+    private:
+        http_request_ptr request{new http_request};
+        request_parse_callback cb_on_uri{};
+        request_header_callback cb_on_headers{};
+        request_parse_callback cb_on_complete{};
+
+    private:
+
+        void reset() override;
+
+        // request 重写这四个
+        int on_url_complete(llhttp_t *parser) override;
+
+        int on_headers_complete(llhttp_t *parser) override;
+
+        int on_message_complete(llhttp_t *parser) override;
+
+    };
+
+    typedef std::function<parse_control(const http_response_ptr &response)> response_parse_callback;
+    typedef std::function<parse_control(const http_response_ptr &request)> response_header_callback;
+
+    class http_response_parser : public http_parser {
+        typedef http_parser base;
+    public:
+        http_response_parser() : http_parser(http_parser::RESPONSE) {}
+
+        void set_on_response_line_parse_complete(const response_parse_callback &cb) {
+            cb_on_resp_line = cb;
+        }
+
+        void set_on_headers_parse_complete(const response_header_callback &cb) {
+            cb_on_headers = cb;
+        }
+
+        void set_on_message_parser_complete(const response_parse_callback &cb) {
+            cb_on_complete = cb;
+        }
+
+    private:
+        http_response_ptr response{new http_response};
+        response_parse_callback cb_on_resp_line;
+        response_header_callback cb_on_headers;
+        response_parse_callback cb_on_complete;
+
+    private:
+
+        void reset() override;
+
+        // response重写这三个
+        int on_status_complete(llhttp_t *parser) override;
+
+        int on_headers_complete(llhttp_t *parser) override;
+
+        int on_message_complete(llhttp_t *parser) override;
 
     };
 

@@ -13,11 +13,13 @@
 
 namespace kish {
 
+    typedef shared_ptr<http_interface> resolver_ptr;
+
     class http_handler : public tcp_handler {
         typedef tcp_handler base;
     public:
 
-        explicit http_handler(int fd) : tcp_handler(fd) {}
+        explicit http_handler(int fd);
 
         void handle_read() override;
 
@@ -31,22 +33,31 @@ namespace kish {
 
         void set_dead();
 
-    private:
+    protected:
+        void on_req_parse_error();
+
+        void on_req_parse_uri_complete(const http_request_ptr &request);
+
+        parse_control on_req_parse_headers_complete(const http_request_ptr &request);
+
+        void on_message_parse_complete(const http_request_ptr &request);
+
+    protected:
+
         keep_alive_t alive{KEEP_ALIVE};
         uint32_t timeout{60};   // 60s
-        http_parser req_parser{http_parser::REQUEST};
+        http_request_parser req_parser{};
         // 最新的心跳包接受时间
         time_stamp latest_heart_rev_time{};
 
-        // 保存不完整的请求，直到完整
-        string save_request{};
+        bool is_404{true};
+        std::vector<resolver_ptr>::iterator resolver{};
 
-    private:
+    protected:
         friend bool reg_http_interfc(const http_infc_ptr &);
 
         static const int KDEFAULT_RESOLVER_SIZE = 2048;
 
-        typedef shared_ptr<http_interface> resolver_ptr;
         // 保存全局注册的方法，解析请求后，调用
         static std::vector<resolver_ptr> GLO_RESOLR_MAPPERS;
     };

@@ -1,3 +1,7 @@
+GET http://www.baidu.com/
+Accept: application/json
+
+###
 POST http://localhost:80/api/item
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
