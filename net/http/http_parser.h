@@ -10,6 +10,7 @@
 #include "base.h"
 #include "map"
 #include "llhttp.h"
+#include "kish_utils.h"
 #include "vector"
 
 const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
@@ -80,6 +81,8 @@ namespace kish {
         SET_TIMEOUT // set timeout
     };
 
+    typedef std::map<string, string> param_container;
+
     struct http_message : copyable, public printable, public jsonable, public message_type {
         typedef std::map<std::string, std::string> header_item;
 
@@ -92,6 +95,14 @@ namespace kish {
         // 如果 alive 类型为 has_set_timeout，该字段会被设置
         uint32_t timeout{60};
 
+        param_container params{};
+
+        virtual void parse_params_in_contents() {
+            for (const string &c:contents) {
+                split_str2(c, ";", "=", params);
+            }
+        }
+
         size_t content_length() const;
 
         http_message() : ver_major(1), ver_minor(0), alive(KEEP_ALIVE) {};
@@ -101,21 +112,33 @@ namespace kish {
     typedef std::shared_ptr<http_message> http_message_ptr;
 
     struct http_request : public http_message {
-        typedef struct param {
-            string key{};
-            string val{};
-
-            param(string &&k, string &&v) : key(k), val(v) {}
-        } param;
 
         llhttp_method_t method;
         std::string uri;
         // uri中有可能携带参数
-        std::vector<param> params{};
+
+        void parse_params_in_uri() {
+            size_t question_mark_pos = uri.find_first_of('?');
+            string param_str{};
+            if (question_mark_pos != string::npos) {
+                param_str = uri.substr(question_mark_pos + 1);
+                uri = uri.substr(0, question_mark_pos);
+            }
+            if (!param_str.empty()) {
+                split_str2(param_str, "&", "=", params);
+            }
+        }
 
         http_request() : http_message() {
             method = HTTP_GET;
             uri = "/";
+        }
+
+        void parse_params_in_contents() override {
+            // todo: 检查是否合理？
+            if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end() && headers.at(CONTENT_TYPE_KEY) == "text/plain") {
+                http_message::parse_params_in_contents();
+            }
         }
 
         http_request(llhttp_method_t meth, string u) : method(meth), uri(std::move(u)) {}

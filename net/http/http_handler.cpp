@@ -77,15 +77,6 @@ void http_handler::on_req_parse_error() {
 
 // 请求的uri解析成功
 void http_handler::on_req_parse_uri_complete(const http_request_ptr &request) {
-    size_t question_mark_pos = request->uri.find_first_of('?');
-    string param_str{};
-    if (question_mark_pos != string::npos) {
-        param_str = request->uri.substr(question_mark_pos + 1);
-        request->uri = request->uri.substr(0, question_mark_pos);
-    }
-    // todo: 解析长uri包含的参数
-    // parse_param(param_str)
-
     // 可以在这里查找resolver是否存在
     // 查找resolver
     if (!GLO_RESOLR_MAPPERS.empty()) {
@@ -117,7 +108,7 @@ void http_handler::on_message_parse_complete(const http_request_ptr &request) {
 
     // 检测resolver
     if (!is_404) {
-        resolver->get()->on_request(request->uri, resp);
+        resolver->get()->on_request(request->uri, request->params, resp);
     } else {
         resp.update_stat(404);
     }

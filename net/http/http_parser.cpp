@@ -224,6 +224,8 @@ int kish::http_request_parser::on_url_complete(llhttp_t *parser) {
     assert(request);
     request->method = static_cast<llhttp_method_t> (parser->method);
     request->uri.swap(base::uri);
+    // 解析uri中可能携带的参数
+    request->parse_params_in_uri();
     // 通知调用者 uri 解析成功
     cb_on_uri(request);
     return 0;
@@ -255,6 +257,8 @@ int kish::http_request_parser::on_message_complete(llhttp_t *parser) {
     request->ver_major = parser->http_major;
     request->ver_minor = parser->http_minor;
     request->contents.swap(contents);
+    // 解析contents总可能携带的参数
+    request->parse_params_in_contents();
     request->alive = alive;
     request->timeout = timeout;
     cb_on_complete(request);
@@ -275,9 +279,10 @@ int kish::http_response_parser::on_headers_complete(llhttp_t *parser) {
     base::on_headers_complete(parser);
 
     assert(response);
-    response->headers.swap(headers);
     response->ver_major = parser->http_major;
     response->ver_minor = parser->http_minor;
+    response->headers.swap(headers);
+    response->parse_params_in_contents();
     parse_control res = cb_on_headers(response);
     switch (res) {
         case GO_ON:

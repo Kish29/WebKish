@@ -61,7 +61,7 @@ namespace kish {
         }
 
         // todo: 支持RESTFUL风格
-        virtual void on_request(const string &uri, http_response &response) = 0;
+        virtual void on_request(const string &uri, const param_container &params, http_response &response) = 0;
 
     protected:
         std::unordered_set<string> resolver_list;

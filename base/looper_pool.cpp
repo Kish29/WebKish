@@ -7,7 +7,7 @@
 #include "looper_pool.h"
 
 #include "logger.h"
-#include "util.h"
+#include "kish_utils.h"
 
 looper_pool::looper_pool(int looper_num) {
     looper_num = coerce_in(looper_num, CPU_CORE, KMAX_THREADS);

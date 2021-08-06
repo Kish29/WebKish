@@ -118,7 +118,7 @@ public:
         resolver_list.insert("index.html");
     }
 
-    void on_request(const string &uri, http_response &params) override {
+    void on_request(const string &uri, const param_container &params, http_response &params) override {
         printf("test_mapper received response!\n");
     }
 

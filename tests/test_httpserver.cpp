@@ -27,7 +27,7 @@ public:
         delete[] fbuf;
     }
 
-    void on_request(const string &uri, http_response &response) override {
+    void on_request(const string &uri, const param_container &params, http_response &response) override {
         if (uri == "/" || uri == "/index.html") {
             FILE *fptr = fopen("index.html", "r");
             if (fptr) {

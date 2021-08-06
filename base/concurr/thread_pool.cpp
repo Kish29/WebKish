@@ -6,7 +6,7 @@
 
 #include "thread_pool.h"
 
-#include "util.h"
+#include "kish_utils.h"
 #include "logger.h"
 
 const int kish::thread_pool::KDEFAULT_QUEUE_SIZE = 2048;
