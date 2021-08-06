@@ -10,6 +10,7 @@
 #include "tcp_handler.h"
 #include "http_interface.h"
 #include "time_stamp.h"
+#include "server_config.h"
 
 namespace kish {
 

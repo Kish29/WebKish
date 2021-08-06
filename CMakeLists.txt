@@ -37,6 +37,7 @@ set(
         base/utils/kish_utils.cpp
         net/tcp/wakeup_handler.cpp
         net/tcp/accept_handler.cpp
+        net/server_config.cpp
         net/server.h
         net/tcp/tcp_server.cpp
         net/tcp/tcp_handler.cpp

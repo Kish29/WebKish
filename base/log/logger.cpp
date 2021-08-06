@@ -8,7 +8,6 @@
 #include "vector"
 #include "sync.h"
 #include "thread.h"
-#include "atomic"
 #include "file_writer.h"
 
 class async_stream_writer;

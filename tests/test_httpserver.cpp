@@ -51,6 +51,7 @@ private:
 };
 
 int main() {
+    KISH_CONFIG.setKishServerName("kishkish");
     reg_http_interfc(http_infc_ptr(new index_resolver));
     kish::http_server hs(5555, 8);
     hs.startup();

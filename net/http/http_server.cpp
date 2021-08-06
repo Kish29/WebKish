@@ -11,7 +11,7 @@
 void http_server::on_acceptnew(int fd, const inet_address &peer_addr) {
     LOG_TRACE << "new connection from " << peer_addr.ip_port() << " for new connector[" << fd << "]";
     // todo: 限制连接数量
-    if (cnn_num < KMAX_SERVER_CNN) {
+    if (cnn_num < KISH_CONFIG.MAX_SERVER_CNN()) {
         looper_ptr looper = loopers.next_loop();
         auto http_obs = std::make_shared<http_handler>(fd);
         looper->add_observe(http_obs);
@@ -70,5 +70,5 @@ void http_server::check_for_alive() {
 
 void http_server::startup() {
     base::startup();
-    serv_timer.sync_loop(std::bind(&http_server::check_for_alive, this), HEART_CHECK_INTERVAL);
+    serv_timer.sync_loop(std::bind(&http_server::check_for_alive, this), KISH_CONFIG.HEART_CHECK_INTERVAL());
 }

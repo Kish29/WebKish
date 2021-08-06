@@ -11,20 +11,16 @@
 #include "tcp_server.h"
 #include "timer.h"
 #include "http_heart_check.h"
+#include "server_config.h"
 
 namespace kish {
-
-    // 服务器的最大连接数量
-    const static int KMAX_SERVER_CNN = 2048;
-
-    static int HEART_CHECK_INTERVAL = 10000;    // 10s
 
     class http_server : public tcp_server, public http_heart_check {
         typedef tcp_server base;
     public:
 
         explicit http_server(uint16_t port) : tcp_server(port) {
-            connectors.reserve(KMAX_SERVER_CNN);
+            connectors.reserve(KISH_CONFIG.MAX_SERVER_CNN());
         }
 
         http_server(uint16_t port, const string &host, int looper_num = CPU_CORE) : tcp_server(port, host, looper_num) {}

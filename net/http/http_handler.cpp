@@ -56,11 +56,11 @@ void http_handler::handle_read() {
 // 请求解析失败
 void http_handler::on_req_parse_error() {
     http_response resp = http_response_builder()
-            .ver_major(http_major_ver)
-            .ver_minor(http_minor_ver)
+            .ver_major(KISH_CONFIG.HTTP_MAJOR_VER())
+            .ver_minor(KISH_CONFIG.HTTP_MINOR_VER())
             .status_code(400)
             .header("Connection", "close")
-            .header("Server", kish_server_name)
+            .header("Server", KISH_CONFIG.KISH_SERVER_NAME())
             .build();
 
     // 发送响应
@@ -103,7 +103,7 @@ void http_handler::on_message_parse_complete(const http_request_ptr &request) {
     http_response resp = http_response_builder()
             .ver_major(1)
             .ver_minor(1)
-            .header("Server", kish_server_name)
+            .header("Server", KISH_CONFIG.KISH_SERVER_NAME())
             .build();
 
     // 检测resolver
