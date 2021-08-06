@@ -43,7 +43,6 @@ namespace kish {
     public:
 
         http_interface() {
-            // 默认保留两个方法
             resolver_list.reserve(KDEFAULT_RESOLVER_SIZE);
         }
 
@@ -62,7 +61,8 @@ namespace kish {
         std::unordered_set<string> resolver_list;
 
     private:
-        static const int KDEFAULT_RESOLVER_SIZE = 2;
+        // 默认保留8个方法
+        static const int KDEFAULT_RESOLVER_SIZE = 8;
 
     };
 
