@@ -35,7 +35,7 @@ public:
                 size_t flen = ::fread_unlocked(fbuf, 1, file_size, fptr);
                 response.contents.emplace_back(string(fbuf, flen));
                 response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
-                response.headers.insert(std::make_pair("Content-Type", "text/html"));
+                response.headers.insert(std::make_pair("Content-Type", "text/html; charset=UTF-8"));
                 ::fclose(fptr);
                 fptr = nullptr;
             } else {

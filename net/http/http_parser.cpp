@@ -54,7 +54,7 @@ std::string kish::http_response::tomessage() {
     os << "HTTP/" << (int) ver_major << '.' << (int) ver_minor << SPACE << status_code << SPACE << short_msg << CRLF;  // request line
     /*⚠️检查是否缺失必要的字段⚠️*/
     if (headers.find(CONTENT_TYPE_KEY) == headers.end()) {
-        headers.insert(std::make_pair(CONTENT_TYPE_KEY, "text/plain"));
+        headers.insert(std::make_pair(CONTENT_TYPE_KEY, "text/plain; charset=UTF-8"));
     }
     // ⚠️Content-Length是必须的，否则客户端没有收到此字段会认为仍然有数据，然后一直等待
     if (headers.find(CONTENT_LENGTH_KEY) == headers.end()) {

@@ -46,7 +46,7 @@ void http_handler::handle_read() {
         // 1. 更新心跳时间
         latest_heart_rev_time = time_stamp();
 
-        // 2. 解析请求
+        // 2. 解析请求，解析时，每个阶段会自动调用handler的on_XXXX方法(同一个线程中)
         req_parser.parse(read_buf, curr_read_len);
 
     }
@@ -79,11 +79,12 @@ void http_handler::on_req_parse_error() {
 void http_handler::on_req_parse_uri_complete(const http_request_ptr &request) {
     // 可以在这里查找resolver是否存在
     // 查找resolver
+    has_resolver = false;
     if (!GLO_RESOLR_MAPPERS.empty()) {
         auto it = GLO_RESOLR_MAPPERS.begin();
         while (it != GLO_RESOLR_MAPPERS.end()) {
             if (it->get()->can_resolve(request->uri)) {
-                is_404 = false;
+                has_resolver = true;
                 // 记录resolver位置
                 resolver = it;
             }
@@ -107,7 +108,7 @@ void http_handler::on_message_parse_complete(const http_request_ptr &request) {
             .build();
 
     // 检测resolver
-    if (!is_404) {
+    if (has_resolver) {
         resolver->get()->on_request(request->uri, request->params, resp);
     } else {
         resp.update_stat(404);

@@ -51,7 +51,7 @@ namespace kish {
         // 最新的心跳包接受时间
         time_stamp latest_heart_rev_time{};
 
-        bool is_404{true};
+        bool has_resolver{false};
         std::vector<resolver_ptr>::iterator resolver{};
 
     protected:
