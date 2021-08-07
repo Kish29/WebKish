@@ -61,7 +61,19 @@ include_directories(net/http)
 
 add_definitions(-D__DEBUG__)
 
-add_library(${LIBKISH_NAME} ${SOURCES})
+add_library(${LIBKISH_NAME} SHARED ${SOURCES})
+
+############ lib sql #################
+set(
+        SQL_SRCS
+        sql/mysequal/mysql_connector.cpp
+)
+
+add_library(ksql ${SQL_SRCS})
+target_link_libraries(ksql ${LIBKISH_NAME} mariadb)
+
+include_directories(sql)
+include_directories(sql/mysequal)
 
 ############ third party #############
 set(THIRD_PARTY_LIBNAME third_pt)
@@ -75,7 +87,7 @@ set(
 
 include_directories(thirdparty/include)
 
-add_library(${THIRD_PARTY_LIBNAME} ${THIRD_PARTY_SRC})
+add_library(${THIRD_PARTY_LIBNAME} SHARED ${THIRD_PARTY_SRC})
 
 macro(add_example_target TARGET)
     add_executable(example_${TARGET} example_${TARGET}.cpp)
@@ -97,3 +109,4 @@ add_test_target(thread)
 add_test_target(thirdparty)
 add_test_target(httpparse)
 add_test_target(stringsplit)
+add_test_target(fileresolver)

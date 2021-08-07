@@ -23,21 +23,6 @@ namespace kish {
     // 注册接口
     bool reg_http_interfc(const http_infc_ptr &);
 
-    // http请求接口，当一个url到来的时候，应当返回什么样的响应
-    // 该类必须进行注册才能生效
-
-
-    typedef std::map<string, string> parameters;
-    typedef std::vector<string> param_list;
-
-    struct infc_type {
-        // 不包含参数的url
-        string base_url{};
-        llhttp_method_t method{HTTP_GET};
-
-        infc_type(string url, llhttp_method_t m) : base_url(std::move(url)), method(m) {}
-    };
-
     // resolver表示方法
     class http_interface : copyable {
     public:

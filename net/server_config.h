@@ -38,8 +38,8 @@ public:
 
 private:
 // 服务器的最大连接数量
-    int max_server_cnn{2048};
-    int heart_check_interval{10000};    // 10s
+    uint64_t max_server_cnn{UINT64_MAX};
+    int heart_check_interval{10};    // 10ms
 // 服务器名称，修改此字段更改
     std::string kish_server_name{"Kish"};
 // 服务器HTTP版本号

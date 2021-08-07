@@ -31,14 +31,6 @@ namespace kish {
         if (n < 0) {
             i_am_dead = true;
         }
-//        if (rdn < 0) {
-        // todo: log error
-//            perror("void epoll_handler::handle_read() read n <=0 ");
-        // todo: 待商榷 ⚠️基类不应该设置i_am_dead，应当交给网络协议tcp/http
-//            i_am_dead = true;
-//        }
-        // todo: 如何判断一个文件描述符的错误
-//        i_am_dead = JUDGE_DEAD(n);
     }
 
     void epoll_handler::handle_write() {
