@@ -37,6 +37,10 @@ void http_server::check_for_alive() {
         mutex_lockguard lck(locker);
         auto it = connectors.begin();
         while (it != connectors.end()) {
+            if (it->get()->dead()) {    // 如果已经死亡，直接移除
+                it = connectors.erase(it);
+                continue;
+            }
             if (it->get()->keep_alive()) {
                 it++;
                 continue;

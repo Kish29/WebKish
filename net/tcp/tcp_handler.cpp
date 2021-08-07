@@ -27,7 +27,9 @@ void tcp_handler::handle_read() {
         LOG_RECOR << "tcp peer send new message " << read_buf;
 #endif
     } else if (curr_read_len == 0) {
-        perror("tcp handler read fd 0");
+#ifdef __DEBUG__
+        LOG_INFO << "tcp handler read 0";
+#endif
         // ❌不准单纯用 curr_read_len == 0来表示客户端断开了连接❌
         // 方法一
         /*int save_errno = errno;

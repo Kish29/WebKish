@@ -26,8 +26,9 @@ namespace kish {
         /* ⚠️警告Warning⚠️️原则上禁止子类调用close将fd关闭掉，close只能在基类的析构函数中进行 ⚠️*/
         ~epoll_handler() override {
             if (!fd_closed) {
-                // todo: verify what will happen when fd is -1 to be fd_closed
-                printf("epoll_handler() close fd: %d\n", observe_fd);
+#ifdef __DEBUG__
+                LOG_INFO << "epoll_handler() close fd[" << observe_fd << "]";
+#endif
                 ::close(observe_fd);
             }
         }

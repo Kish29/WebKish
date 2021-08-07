@@ -6,11 +6,11 @@ WebKish是一个运行在Linux系统上基于现代C++11标准的一个natvie高
 
 其核心来自于Linux2.6之后新增的系统调用epoll，当然也可以实现select和poll版本的poller，继承即可。
 
-WebKish拥有完善的异步日志系统，在Apple mini M1版的parallels Desktop虚拟机安装的Fedora操作系统中（2个CPU核心），并发写入500W条数据用了不到2s的时间。
+WebKish拥有完善的异步日志系统，在Apple mini M1版的parallels Desktop虚拟机安装的Fedora操作系统中（2个CPU核心），并发写入500W条数据用了不到2s的时间，思路借鉴了[linyacool](https://github.com/linyacool/WebServer)。
 
 整个项目的核心框架借鉴了开源的web服务框架：[muduo](https://github.com/chenshuo/muduo), 所以该框架是响应式的，并且CPU占用率很小，但不影响它的高并发和高性能，编写更加简洁更加完善，自己也封装了Linux的pthread库，以及实现了一个简单版本的线程池。
 
-http服务器有一个同步的loop timer，每隔一定的时间会检查连接队列的最新心跳时间，如果设置了timeout，将会根据timeout来进行过期淘汰，keep-alive将保持永久连接，除非对端主动断开，而一次性的请求将会被直接移除，间隔检查时间暂时设置为10s，可以在服务器启动前自己更改。
+http服务器有一个同步的loop timer，每隔一定的时间会检查连接队列的最新心跳时间，如果设置了timeout，将会根据timeout来进行过期淘汰，keep-alive将保持永久连接，除非对端主动断开，而一次性的请求将会被直接移除，间隔检查时间暂时设置为10ms，可以在服务器启动前自己更改。
 
 http报文的解析采用了开源库[llhttp](https://github.com/nodejs/llhttp), 并对该库做了一个较为完善的封装，该部分花了我不少的精力。
 

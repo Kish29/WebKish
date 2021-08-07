@@ -59,9 +59,11 @@ handler_list &epoll_poller::poll(int timeout) {
             uint32_t curr_ev = query_list.at(i).events;
             // 获取保存的epoll_handler指针
             if (save_map.find(curr_fd) != save_map.end()) {
-                handler_ptr h = save_map.at(curr_fd);
-                h->update_latest_events(curr_ev);
-                ret_list.emplace_back(h);
+                handler_weak_ptr h = save_map.at(curr_fd);
+                if (h.lock()) {
+                    h.lock()->update_latest_events(curr_ev);
+                    ret_list.emplace_back(h);
+                }
             }
         }
     } else if (readyn < 0) {
@@ -73,11 +75,11 @@ handler_list &epoll_poller::poll(int timeout) {
 void epoll_poller::update_savemap() {
     auto it = save_map.begin();
     while (it != save_map.end()) {
-        if (it->second->dead()) {
+        if (it->second.lock() == nullptr || it->second.lock()->dead()) {
             struct epoll_event ev{};
-            ev.data.fd = it->second->fd();
+            ev.data.fd = it->first;     // fd
             ev.events = KNONE_EVENT;
-            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, it->second->fd(), &ev);
+            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, it->first, &ev);
             save_map.at(it->first).reset();
             it = save_map.erase(it);
         } else {
