@@ -30,9 +30,6 @@ void http_server::on_acceptnew(int fd, const inet_address &peer_addr) {
 }
 
 void http_server::check_for_alive() {
-#ifdef __DEBUG__
-    LOG_INFO << "server check for heart alive";
-#endif
     if (connectors.empty()) return;
     // 注意，整个web服务器框架，仅仅有两处持续持有着fdholder对象，一个是poller的save_map
     // 另一个就是http_server的connectors，所以，在更新移除时，确保没有其他地方持有fdholder对象
