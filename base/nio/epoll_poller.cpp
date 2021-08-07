@@ -76,10 +76,13 @@ void epoll_poller::update_savemap() {
     auto it = save_map.begin();
     while (it != save_map.end()) {
         if (it->second.lock() == nullptr || it->second.lock()->dead()) {
-            struct epoll_event ev{};
-            ev.data.fd = it->first;     // fd
-            ev.events = KNONE_EVENT;
-            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, it->first, &ev);
+			if (it->second.lock()) {	// 如果不是nullptr，即dead状态，才调用epoll_ctl
+				// 否则nullptr表示该对象已经死亡了，会在析构函数中close其持有的文件描述符
+				struct epoll_event ev{};
+				ev.data.fd = it->first;     // fd
+				ev.events = KNONE_EVENT;
+				epoll_ctl(epoll_fd, EPOLL_CTL_DEL, it->first, &ev);
+			}
             save_map.at(it->first).reset();
             it = save_map.erase(it);
         } else {
