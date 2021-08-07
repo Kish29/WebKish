@@ -41,7 +41,7 @@ namespace kish {
     // 核心类
     class epoll_poller : public poller {
         typedef std::vector<epoll_event> event_list;
-        typedef std::map<int, handler_ptr> handler_map;
+        typedef std::map<int, handler_weak_ptr> handler_map;
     public:
 
         epoll_poller();

@@ -13,8 +13,9 @@
 
 namespace kish {
 
-    typedef std::vector<shared_ptr<event_handler>> handler_list;
     typedef shared_ptr<event_handler> handler_ptr;
+    typedef std::weak_ptr<event_handler> handler_weak_ptr;
+    typedef std::vector<handler_ptr> handler_list;
 
     class poller : public fdholder {
     public:
