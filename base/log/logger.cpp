@@ -202,7 +202,6 @@ kish::logger::logger(const char *filename, int line, kish::log_level level)
           lg_line(line),
           lg_lv(level),
           saved_errno(errno) {
-    return;
     bzero(t_errno_buf, sizeof t_errno_buf);
     // 根据库函数说明， strerror_r的GNU实现是不会将结果存进t_errno_buf中的
     char *errinfo = strerror_r(saved_errno, t_errno_buf, sizeof t_errno_buf);
@@ -220,7 +219,6 @@ kish::logger::logger(const char *filename, int line, kish::log_level level)
 }
 
 kish::logger::~logger() {
-    return;
     // 添加文件位置，注意，优先输出文件
     append_logpos();
     switch (lg_lv) {
