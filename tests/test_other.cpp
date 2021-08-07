@@ -118,7 +118,7 @@ public:
         resolver_list.insert("index.html");
     }
 
-    void on_request(const string &uri, const param_container &params, http_response &params) override {
+    void on_request(const string &uri, const param_container &params, http_response &response) override {
         printf("test_mapper received response!\n");
     }
 
@@ -210,15 +210,31 @@ public:
     }
 };
 
+std::weak_ptr<atomic_clock> wac;
+
 int main() {
 
-    tt3 t3;
-    t3.aplusplus();
-    t3.show_basea();
-    t3.show_thisa();
-
+    shared_ptr<atomic_clock> ac(new atomic_clock);
+    wac = std::weak_ptr<atomic_clock>(ac);
+    pthread_t t;
+    pthread_create(&t, nullptr, [](void *) -> void * {
+        sleep(1);
+        printf("wac is %s\n", wac.lock() == nullptr ? "null!" : "not null");
+        sleep(3);
+        printf("wac is %s\n", wac.lock() == nullptr ? "null!" : "not null");
+        pthread_exit(nullptr);
+    }, nullptr);
+    sleep(3);
+    ac.reset();
+    sleep(3);
     exit(EXIT_SUCCESS);
 }
+
+/*tt3 t3;
+t3.aplusplus();
+t3.show_basea();
+t3.show_thisa();*/
+
 
 //    EXECUTOR_POOL.thread_pool(4, 1024);
 /*thread_pool::instance()->thread_pool(8);
