@@ -105,18 +105,15 @@ void http_handler::on_message_parse_complete(const http_request_ptr &request) {
             .ver_major(1)
             .ver_minor(1)
             .header("Server", KISH_CONFIG.KISH_SERVER_NAME())
-            .header(CONTENT_TYPE_KEY, "text/plain")
-            .header(CONTENT_LENGTH_KEY, "6")
-            .content("Hello!")
             .build();
     resp.update_stat(200);
 
     // 检测resolver
-    /*if (has_resolver) {
+    if (has_resolver) {
         resolver->get()->on_request(request->uri, request->params, resp);
     } else {
         resp.update_stat(404);
-    }*/
+    }
 
     // 发送响应
     const string &data = resp.tomessage();
