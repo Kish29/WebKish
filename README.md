@@ -6,7 +6,7 @@ WebKish是一个运行在Linux系统上基于现代C++11标准的一个natvie高
 
 其核心来自于Linux2.6之后新增的系统调用epoll，当然也可以实现select和poll版本的poller，继承即可。
 
-WebKish拥有完善的异步日志系统，在Apple mini M1版的parallels Desktop虚拟机安装的Fedora操作系统中（2个CPU核心），并发写入500W条数据用了不到2s的时间。
+WebKish拥有完善的异步日志系统，在Apple mini M1版的parallels Desktop虚拟机安装的Fedora操作系统中（2个CPU核心），并发写入500W条数据用了不到2s的时间，思路借鉴了[linyacool](https://github.com/linyacool/WebServer)。
 
 整个项目的核心框架借鉴了开源的web服务框架：[muduo](https://github.com/chenshuo/muduo), 所以该框架是响应式的，并且CPU占用率很小，但不影响它的高并发和高性能，编写更加简洁更加完善，自己也封装了Linux的pthread库，以及实现了一个简单版本的线程池。
 
