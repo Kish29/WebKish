@@ -35,6 +35,7 @@ namespace kish {
     const int KERROR_EVENT = EPOLLHUP | EPOLLERR;
 
     const int KEPOLL_WAITTIME = 10000;  // 10s
+//    const int KEPOLL_WAITTIME = -1;  // infinity会导致save_map不能被清理
     const int KINIT_EVENT_SIZE = 16;
 
     // 核心类
@@ -47,7 +48,7 @@ namespace kish {
 
         ~epoll_poller() override {
 #ifdef __DEBUG__
-            LOG_INFO << "~epoll_poller() close fd[ " << epoll_fd << "]";
+            LOG_INFO << "~epoll_poller() dead and close epoll_fd[ " << epoll_fd << "]";
 #endif
             ::close(epoll_fd);
         }

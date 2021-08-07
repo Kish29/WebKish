@@ -61,7 +61,9 @@ void kish::timer::schedule(kish::callable &&task, bool async, bool loop, uint32_
         task_executor->start();
     } else {
         do {
-            usleep(ms_t * 1000);
+            if (ms_t > 0) {
+                usleep(ms_t * 1000);
+            }
             task();
         } while (loop);
     }
