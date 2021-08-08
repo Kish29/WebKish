@@ -39,7 +39,6 @@ namespace kish {
         std::vector<http_handler_ptr> connectors{};
 
         mutex_lock locker;
-        std::atomic_uint64_t cnn_num{0};
     };
 }
 

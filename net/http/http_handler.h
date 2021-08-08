@@ -44,7 +44,8 @@ namespace kish {
         void on_message_parse_complete(const http_request_ptr &request);
 
     protected:
-
+        // 因为我们的框架设计是用一个主线程进行心跳清理
+        // 所以不像其他web服务框架，我们默认保持连接，后续的http请求报文到来时，更新timeout或者keepalive或者close
         keep_alive_t alive{KEEP_ALIVE};
         uint32_t timeout{60};   // 60s
         http_request_parser req_parser{};

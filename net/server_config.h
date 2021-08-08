@@ -37,8 +37,8 @@ public:
     void setHttpMinorVer(uint8_t httpMinorVer);
 
 private:
-// 服务器的最大连接数量
-    uint64_t max_server_cnn{UINT64_MAX};
+// 服务器的最大并发连接数量
+    int max_server_cnn{100000};
     int heart_check_interval{10};    // 10ms
 // 服务器名称，修改此字段更改
     std::string kish_server_name{"Kish"};

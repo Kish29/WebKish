@@ -16,14 +16,14 @@ namespace kish {
 
     void accept_handler::handle_event(uint32_t events) {
         if (events & KREAD_EVENT) {
-            struct sockaddr_in client_addr{};
-            socklen_t claddr_len = sizeof client_addr;
-            int client_fd = ::accept(observe_fd, (sockaddr *) &client_addr, &claddr_len);
-            if (client_fd > 0 && accept_cb) {
-                inet_address a(client_addr.sin_port, client_addr.sin_addr.s_addr, true);
-                accept_cb(client_fd, a);
-            } else {
-                ::close(client_fd);
+            if (accept_cb) {
+                struct sockaddr_in client_addr{};
+                socklen_t claddr_len = sizeof client_addr;
+                int client_fd;
+                while ((client_fd = ::accept(observe_fd, (sockaddr *) &client_addr, &claddr_len)) > 0) {
+                    inet_address a(client_addr.sin_port, client_addr.sin_addr.s_addr, true);
+                    accept_cb(client_fd, a);
+                }
             }
         } else if (events & KERROR_EVENT) {
             // todo: log error

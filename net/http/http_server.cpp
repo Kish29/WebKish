@@ -10,13 +10,10 @@
 
 void http_server::on_acceptnew(int fd, const inet_address &peer_addr) {
     LOG_TRACE << "new connection from " << peer_addr.ip_port() << " for new connector[" << fd << "]";
-    // todo: 限制连接数量
-    if (cnn_num < KISH_CONFIG.MAX_SERVER_CNN()) {
+    if (connectors.size() < KISH_CONFIG.MAX_SERVER_CNN()) {
         looper_ptr looper = loopers.next_loop();
         auto http_obs = std::make_shared<http_handler>(fd);
         looper->add_observe(http_obs);
-
-        cnn_num++;
 
         // 加入到连接池中
         {
