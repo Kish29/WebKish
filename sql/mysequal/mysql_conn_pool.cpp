@@ -6,7 +6,6 @@
 
 #include "mysql_conn_pool.h"
 
-#include <memory>
 #include "kish_utils.h"
 
 kish::mysql_conn_pool::~mysql_conn_pool() {
