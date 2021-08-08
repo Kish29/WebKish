@@ -11,6 +11,8 @@
 #include "socket.h"
 #include "server.h"
 #include "looper_pool.h"
+#include "tcp_handler.h"
+#include "thread_pool.h"
 
 namespace kish {
 
@@ -34,7 +36,13 @@ namespace kish {
         shared_ptr<accept_handler> acceptor;
         looper_pool loopers;
         bool started{};
-        bool stopped{};
+
+    private:
+        typedef shared_ptr<tcp_handler> tcp_handler_ptr;
+        std::vector<tcp_handler_ptr> tcp_connectors;
+        mutex_lock locker;
+        thread_pool single_t_pool;  // 单个线程池，负责移除dead连接对象
+
     };
 
 }

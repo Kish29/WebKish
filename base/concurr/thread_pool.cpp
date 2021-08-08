@@ -13,7 +13,7 @@ const int kish::thread_pool::KDEFAULT_QUEUE_SIZE = 2048;
 
 kish::thread_pool::thread_pool(int thread_num, int queue_size) {
     // 参数合法化
-    thr_num = coerce_in(thread_num, CPU_CORE, KMAX_THREADS);
+    thr_num = coerce_in(thread_num, 1, KMAX_THREADS);
     que_siz = coerce_in(queue_size, KDEFAULT_QUEUE_SIZE, KMAX_QUEUE);
 
     threads.reserve(thr_num);

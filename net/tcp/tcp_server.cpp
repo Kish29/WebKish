@@ -5,7 +5,7 @@
 //
 
 #include "tcp_server.h"
-#include "tcp_handler.h"
+
 #include "logger.h"
 
 using namespace std::placeholders;
@@ -20,7 +20,8 @@ kish::tcp_server::tcp_server(uint16_t port, const string &host, int looper_num)
         : serv_sock(true, false),
           serv_addr(port, host),
           acceptor(std::make_shared<accept_handler>(serv_sock.fd(), serv_sock)),
-          loopers(looper_num) {
+          loopers(looper_num),
+          single_t_pool(1) {
     serv_sock.reuse_addr(true);
     if (!serv_sock.workon(serv_addr)) {
         LOG_FATAL << "server work on " << serv_addr.ip_port() << " failed!";
@@ -38,11 +39,38 @@ void tcp_server::on_acceptnew(int fd, const inet_address &peer_addr) {
     // ❌️智能指针教科书式的错误用法
     // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(acceptor.get()));
     // shared_ptr<epoll_handler> eh(dynamic_cast<epoll_handler *>(tcp_obs.get()));
-    looper->add_observe(handler_ptr(new tcp_handler(fd)));;
+    auto tcp_obs = std::make_shared<tcp_handler>(fd);
+    looper->add_observe(tcp_obs);;
+    // 由于poller保存的是weak ptr，所以我们需要保存到来的连接
+    // 由于tcp服务器不像http服务器，一次请求代表一次tcp的连接与关闭
+    // 所以我们在每到一个连接的时候，检查已经断开的对象，并移除
+    {
+        mutex_lockguard lck(locker);
+        tcp_connectors.emplace_back(tcp_obs);
+    }
 
+    // 移除连接对象
+    single_t_pool.submit([&]() -> void {
+        {
+            mutex_lockguard lck(locker);
+            auto it = tcp_connectors.begin();
+            while (it != tcp_connectors.end()) {
+                if (it->get()->dead()) {
+#ifdef __DEBUG__
+                    LOG_INFO << "tcp server remove [" << it->get()->fd() << "]";
+#endif
+                    it = tcp_connectors.erase(it);
+                } else {
+                    it++;
+                }
+            }
+        }
+    });
 }
 
 void tcp_server::startup() {
+    if (started) return;
+    started = true;
     /* ❌禁止进行栈空间构造event_looper ❌️*/
     // event_looper looper;
     loopers.start_loop_pool();
@@ -56,6 +84,6 @@ void tcp_server::startup() {
 }
 
 void tcp_server::stop() {
-
+    started = false;
 }
 
