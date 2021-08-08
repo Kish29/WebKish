@@ -63,10 +63,12 @@ add_definitions(-D__DEBUG__)
 
 add_library(${LIBKISH_NAME} SHARED ${SOURCES})
 
-############ lib sql #################
+############ lib mysql #################
 set(
         SQL_SRCS
-        sql/mysequal/mysql_connector.cpp
+        sql/mysequal/mysql_proxy.cpp
+        sql/sql_proxy.h
+        sql/mysequal/mysql_conn_pool.cpp
 )
 
 add_library(ksql ${SQL_SRCS})
@@ -99,6 +101,11 @@ macro(add_test_target TARGET)
     target_link_libraries(test_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} pthread)
 endmacro()
 
+macro(add_sql_test_target TARGET)
+    add_executable(test_${TARGET} tests/test_${TARGET}.cpp)
+    target_link_libraries(test_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} ksql pthread)
+endmacro()
+
 add_test_target(other)
 add_test_target(tcpserver)
 add_test_target(httpserver)
@@ -110,3 +117,4 @@ add_test_target(thirdparty)
 add_test_target(httpparse)
 add_test_target(stringsplit)
 add_test_target(fileresolver)
+add_sql_test_target(sqltest)
