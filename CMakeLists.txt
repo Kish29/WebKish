@@ -3,7 +3,7 @@ project(WebKish)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS} -Wall -O3")
+set(${CMAKE_CXX_FLAGS_RELEASE} "${CMAKE_CXX_FLAGS} -Wall -O3")
 set(${CMAKE_CXX_FLAGS_DEBUG} "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O3")
 
 ############# libkish ################
