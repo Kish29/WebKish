@@ -60,6 +60,20 @@ const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
         {511, "Network Authentication Required"}
 };
 
+#define MIME_HTML   "TEXT/html"
+#define MIME_AVI    "video/x-msvideo"
+#define MIME_BMP    "image/bmp"
+#define MIME_C      "TEXT/plain"
+#define MIME_DOC    "application/msword"
+#define MIME_GIF    "image/gif"
+#define MIME_GZ     "application/x-gzip"
+#define MIME_HTM    "TEXT/html"
+#define MIME_ICO    "image/x-icon"
+#define MIME_JPG    "image/jpeg"
+#define MIME_PNG    "image/png"
+#define MIME_TXT    "TEXT/plain"
+#define MIME_MP3    "audio/mp3"
+#define MIME_DFT    "TEXT/plain"
 
 #define SPACE   ' '
 #define COLON   ':'
@@ -136,7 +150,7 @@ namespace kish {
 
         void parse_params_in_contents() override {
             // todo: 检查是否合理？
-            if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end() && headers.at(CONTENT_TYPE_KEY) == "text/plain") {
+            if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end() && headers.at(CONTENT_TYPE_KEY) == MIME_TXT) {
                 http_message::parse_params_in_contents();
             }
         }

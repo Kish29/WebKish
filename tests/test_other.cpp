@@ -278,12 +278,12 @@ printf("%s\n", str);
 std::cout << my_str;*/
 
 /*const char *pos;
-const char *text = "/users/842?id=9";
-pos = strchrnul(text, '?');
+const char *TEXT = "/users/842?id=9";
+pos = strchrnul(TEXT, '?');
 if (pos) {
     printf("%s", pos);
 } else {
-    printf("no '?' found in text");
+    printf("no '?' found in TEXT");
 }*/
 /*shared_ptr<atomic_clock> ac(new atomic_clock);
 shared_ptr<atomic_clock> eh(dynamic_cast<atomic_clock *>(ac.get()));

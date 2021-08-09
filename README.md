@@ -41,6 +41,7 @@ class index_resolver : public http_interface {
   
 }
 ```
+> 当然，你可以自己实现一个fileresolver，遍历某个路径下的所有可访问文件，将数据传入响应。
 
 然后，在执行前通过reg_http_interfc方法注册该类（传入一个shared指针）：
 
@@ -57,4 +58,9 @@ int main() {
 }
 ```
 
+## 压力测试
+
+对服务器进行http的请求压力测试，结果在这里[压力测试](https://github.com/Kish29/WebKish/prestest/压力测试.md)
+
+## 接入开发
 TODO：后续更新接入方法。。。。

@@ -5,10 +5,20 @@
 //
 
 #include "accept_handler.h"
+#include "sysio_utils.h"
 
 namespace kish {
 
-    accept_handler::accept_handler(int fd, socket &sk) : epoll_handler(fd), serv_sock(sk) {}
+    accept_handler::accept_handler(int fd, socket &sk, bool sock_nonblock) : epoll_handler(fd), serv_sock(sk) {
+        if (sock_nonblock) {
+            if (enable_nonblock_and_cloexec(fd)) {
+                LOG_INFO << "acceptor set server socket fd non-blocking success!";
+            } else {
+                LOG_FATAL << "acceptor set server socket fd non-blocking failed!";
+                abort();
+            }
+        }
+    }
 
     void accept_handler::set_on_acceptnew(const accept_callback &cb) {
         accept_cb = cb;
