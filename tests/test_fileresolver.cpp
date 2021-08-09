@@ -23,31 +23,24 @@ public:
     }
 
     bool can_resolve(const string &uri) override {
-        if (uri == "/") return true;
+        if (uri == "/") return (curr_fptr = ::fopen("index.html", "rb")) != nullptr;
         // 首先判断本路径下该文件是否存在
         string target_file(file_dir);
         target_file.append("/").append(uri);
-        curr_fptr = fopen(target_file.c_str(), "rb");
+        curr_fptr = ::fopen(target_file.c_str(), "rb");
         return curr_fptr != nullptr;
     }
 
     void on_request(const string &uri, const param_container &params, http_response &response) override {
-        if (uri == "/") {
-            curr_fptr = fopen((file_dir + "/" + "index.html").c_str(), "rb");
-        }
-        if (curr_fptr) {
-            assert(curr_fptr);
-            response.update_stat(200);
-            setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
-            size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
-            response.contents.emplace_back(string(fbuf, flen));
-            response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
-            response.headers.insert(std::make_pair("Content-Type", MIME_TXT"; charset=UTF-8"));
-            ::fclose(curr_fptr);
-            curr_fptr = nullptr;
-        } else {
-            response.update_stat(500);
-        }
+        assert(curr_fptr);
+        response.update_stat(200);
+        setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
+        size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
+        response.contents.emplace_back(string(fbuf, flen));
+        response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
+        response.headers.insert(std::make_pair("Content-Type", MIME_TXT"; charset=UTF-8"));
+        ::fclose(curr_fptr);
+        curr_fptr = nullptr;
     }
 
 private:

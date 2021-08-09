@@ -34,7 +34,7 @@ Content-Type: application/x-www-form-urlencoded
 id=99&contents=new-element
 
 ###
-GET http://10.211.55.3:5555
+GET http://10.211.55.3:5555/
 Accept: application/json
 
 ###

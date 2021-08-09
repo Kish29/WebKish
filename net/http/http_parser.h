@@ -60,20 +60,20 @@ const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
         {511, "Network Authentication Required"}
 };
 
-#define MIME_HTML   "TEXT/html"
+#define MIME_HTML   "text/html"
 #define MIME_AVI    "video/x-msvideo"
 #define MIME_BMP    "image/bmp"
-#define MIME_C      "TEXT/plain"
+#define MIME_C      "text/plain"
 #define MIME_DOC    "application/msword"
 #define MIME_GIF    "image/gif"
 #define MIME_GZ     "application/x-gzip"
-#define MIME_HTM    "TEXT/html"
+#define MIME_HTM    "text/html"
 #define MIME_ICO    "image/x-icon"
 #define MIME_JPG    "image/jpeg"
 #define MIME_PNG    "image/png"
-#define MIME_TXT    "TEXT/plain"
+#define MIME_TXT    "text/plain"
 #define MIME_MP3    "audio/mp3"
-#define MIME_DFT    "TEXT/plain"
+#define MIME_DFT    "text/plain"
 
 #define SPACE   ' '
 #define COLON   ':'
