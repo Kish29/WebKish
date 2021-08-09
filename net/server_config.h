@@ -14,6 +14,7 @@ class server_config;
 #define KISH_CONFIG kish::singleton<server_config>::instance()
 
 // todo: 将一些配置放在该类中
+// todo: 该类读取配置文件，解析配置
 class server_config : kish::noncopyable {
 public:
     int MAX_SERVER_CNN() const;

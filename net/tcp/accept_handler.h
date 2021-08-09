@@ -18,7 +18,7 @@ namespace kish {
     class accept_handler : public epoll_handler, noncopyable {
     public:
 
-        accept_handler(int fd, socket &sk);
+        accept_handler(int fd, socket &sk, bool sock_nonblock = true);
 
         void set_on_acceptnew(const accept_callback &cb);
 

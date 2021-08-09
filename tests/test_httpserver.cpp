@@ -35,7 +35,7 @@ public:
                 size_t flen = ::fread_unlocked(fbuf, 1, file_size, fptr);
                 response.contents.emplace_back(string(fbuf, flen));
                 response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
-                response.headers.insert(std::make_pair("Content-Type", "text/html; charset=UTF-8"));
+                response.headers.insert(std::make_pair("Content-Type", MIME_HTML"; charset=UTF-8"));
                 ::fclose(fptr);
                 fptr = nullptr;
             } else {
@@ -53,6 +53,6 @@ private:
 int main() {
     KISH_CONFIG.setKishServerName("kishkish");
     reg_http_interfc(http_infc_ptr(new index_resolver));
-    kish::http_server hs(5555, 8);
+    kish::http_server hs(5555, 2);
     hs.startup();
 }

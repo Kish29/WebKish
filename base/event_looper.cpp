@@ -41,6 +41,7 @@ void event_looper::loop() {
             // poller会将handler的latest_event进行更新
             h->handle_event(h->events());
         }
+        LOG_INFO << "looper[" << poller.fd() << "] do pending handlers\n";
         handlers hds;
         {
             mutex_lockguard lck(locker);

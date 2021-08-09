@@ -4,71 +4,105 @@
 // $desc
 //
 
+#include "sysio_utils.h"
 #include "http_server.h"
 #include "http_interface.h"
-#include "dirent.h"
-#include "sys/stat.h"
+#include "algorithm"
+
+constexpr int file_size = 8 * 1024 * 1024;  // 8MB
 
 class file_resolver : public kish::http_interface {
-
 public:
     file_resolver() {
+        fbuf = new char[file_size];
+    }
 
+    ~file_resolver() override {
+        delete[] fbuf;
+        fclose(curr_fptr);
+    }
+
+    bool can_resolve(const string &uri) override {
+        if (uri == "/") return true;
+        // 首先判断本路径下该文件是否存在
+        string target_file(file_dir);
+        target_file.append("/").append(uri);
+        curr_fptr = fopen(target_file.c_str(), "rb");
+        return curr_fptr != nullptr;
+    }
+
+    void on_request(const string &uri, const param_container &params, http_response &response) override {
+        if (uri == "/") {
+            curr_fptr = fopen((file_dir + "/" + "index.html").c_str(), "rb");
+        }
+        if (curr_fptr) {
+            assert(curr_fptr);
+            response.update_stat(200);
+            setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
+            size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
+            response.contents.emplace_back(string(fbuf, flen));
+            response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
+            response.headers.insert(std::make_pair("Content-Type", MIME_TXT"; charset=UTF-8"));
+            ::fclose(curr_fptr);
+            curr_fptr = nullptr;
+        } else {
+            response.update_stat(500);
+        }
     }
 
 private:
+    FILE *curr_fptr{nullptr};
+    const string file_dir{"/home/parallels/webserver/static_docs"};
 
+    char *fbuf{nullptr};
 };
 
+void map_test() {
+    printf("------------- map test ---------------\n");
+    file_mapper mapper;
+    const char *path = "/tmp/webkish";
+    readdir_sort_by_suffix(path, mapper, [](const char *f_d_name) -> bool {
+        if (strcmp(f_d_name, "/tmp/webkish/cmake-build-debug") == 0 || strcmp(f_d_name, "/tmp/webkish/cmake-build-debug-fedora") == 0) {
+            return true;
+        } else return false;
+    });
+
+    for (auto const &fs: mapper) {
+        printf("suffix is: %s\n", fs.first.c_str());
+        for (const string &fn: fs.second) {
+            printf("%s\n", fn.c_str());
+        }
+        printf("\n");
+    }
+}
+
+void saver_test() {
+    printf("------------- saver test ---------------\n");
+    std::vector<string> saver;
+    saver.reserve(200);
+    const char *path = "/tmp/webkish";
+    readdir_and_save(path, saver, [](const char *f_d_name) -> bool {
+        if (strcmp(f_d_name, "/tmp/webkish/cmake-build-debug") == 0 || strcmp(f_d_name, "/tmp/webkish/cmake-build-debug-fedora") == 0) {
+            return true;
+        } else return false;
+    });
+
+    for (auto const &fn: saver) {
+        printf("%s\n", fn.c_str());
+    }
+}
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) exit(EXIT_SUCCESS);
-//    const char *file_path = argv[1];
-    const char *file_path = ".";
-    struct stat s_buf{};
-
-    stat(file_path, &s_buf);
-
-    if (S_ISDIR(s_buf.st_mode)) {
-        printf("[%s] is a directory\n", file_path);
-
-        struct dirent *filename{};
-        DIR *dir_ptr = opendir(file_path);
-        int i = 0;
-        while ((filename = readdir(dir_ptr)) != nullptr) {
-            char buf[200];
-            bzero(buf, 200);
-//            strcat(buf, file_path);
-            strcat(buf, "/");
-            strcat(buf, filename->d_name);
-
-            stat(filename->d_name, &s_buf);
-            if (S_ISDIR(s_buf.st_mode)) {
-                printf("[%s] is a directory\n", buf);
-            } else if (S_ISREG(s_buf.st_mode)) {
-                printf("[%s] is a normal file\n", buf);
-                FILE *fptr = fopen(filename->d_name, "r");
-                setvbuf(fptr, nullptr, _IOFBF, 8196);
-                if (fptr) {
-                    char buf2[512];
-                    size_t readn;
-                    do {
-                        bzero(buf2, 512);
-                        readn = fread(buf2, 1, 512, fptr);
-                        printf("buf2 is %s\n", buf2);
-                    } while (readn);
-
-                    fclose(fptr);
-                }
-            }
-
-            i++;
-        }
-        printf("total file num is %d\n", i);
-        closedir(dir_ptr);
-
-    } else if (S_ISREG(s_buf.st_mode)) {
-        printf("[%s] is a normal file!\n", file_path);
-    }
-
+//    map_test();
+//    saver_test();
+//    FILE *p = fopen("/tmp/hhh", "rb");
+//    if (p) {
+//        printf("success");
+//    } else {
+//        printf("failed");
+//    }
+    reg_http_interfc(http_infc_ptr(new file_resolver));
+    http_server hs(5555, 2);
+    hs.startup();
+    return 0;
 }

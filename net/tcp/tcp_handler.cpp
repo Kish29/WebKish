@@ -22,7 +22,7 @@ void tcp_handler::handle_read() {
     curr_read_len = readin();
     if (curr_read_len > 0) {
 #ifdef __DEBUG__
-        LOG_INFO << "tcp peer send new message " << read_buf;
+        LOG_INFO << "[" << observe_fd << "] tcp peer send new message:\n" << read_buf;
 #else
         LOG_RECOR << "tcp peer send new message " << read_buf;
 #endif
