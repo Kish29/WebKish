@@ -111,7 +111,7 @@ using namespace kish;
 
 #include "unordered_set"
 
-class test_mapper : public kish::http_interface {
+class test_mapper : public kish::http_resolver {
 public:
 
     test_mapper() {
@@ -125,7 +125,7 @@ public:
 };
 
 void test() {
-    if (!reg_http_interfc(std::shared_ptr<http_interface>(new test_mapper))) {
+    if (!reg_http_interface(std::shared_ptr<http_resolver>(new test_mapper))) {
         printf("reg false");
         exit(EXIT_FAILURE);
     }
@@ -265,7 +265,7 @@ callable task = std::move(vc.at(0));
 task();
 
 printf("vs size is %ld\n", vc.size());*/
-/*reg_http_interfc(std::make_shared<test_mapper>());
+/*reg_http_interface(std::make_shared<test_mapper>());
 http_handler::test_mappers();*/
 
 /*char *str{nullptr};

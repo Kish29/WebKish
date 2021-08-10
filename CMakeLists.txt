@@ -46,6 +46,7 @@ set(
         net/http/http_interface.cpp
         net/http/http_parser.cpp
         net/http/http_heart_check.h
+        net/http/http_transform.cpp
 )
 
 
@@ -85,6 +86,8 @@ set(
         thirdparty/src/api.c
         thirdparty/src/http.c
         thirdparty/src/llhttp.c
+        thirdparty/src/cJSON.c
+        thirdparty/src/cJSON_Utils.c
 )
 
 include_directories(thirdparty/include)

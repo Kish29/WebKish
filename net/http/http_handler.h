@@ -14,7 +14,7 @@
 
 namespace kish {
 
-    typedef shared_ptr<http_interface> resolver_ptr;
+    typedef shared_ptr<http_resolver> resolver_ptr;
 
     class http_handler : public tcp_handler {
         typedef tcp_handler base;
@@ -52,16 +52,33 @@ namespace kish {
         // 最新的心跳包接受时间
         time_stamp latest_heart_rev_time{};
 
+        // 是否有对应的接受者，这里指接口或者resolver
         bool has_resolver{false};
-        std::vector<resolver_ptr>::iterator resolver{};
+        bool has_hi_func{false};
+        // 错误的请求
+        bool bad_request{false};
+        std::vector<resolver_ptr>::iterator curr_resolver{};
+        hi_func curr_hi_func{};
 
     protected:
-        friend bool reg_http_interfc(const http_infc_ptr &);
+        // 注册接口
+        friend bool reg_http_interface(const http_intc_ptr &);
 
-        static const int KDEFAULT_RESOLVER_SIZE = 2048;
+        // 注册resolver类
+        friend bool reg_http_resolver(const http_resol_ptr &);
+
+        // big enough to use!!!
+        static const int KDEFAULT_RESOLVER_SIZE = 512;
 
         // 保存全局注册的方法，解析请求后，调用
         static std::vector<resolver_ptr> GLO_RESOLR_MAPPERS;
+
+        static http_interface_holder GLO_INTFC_HOLDER;
+
+        static void default_404_content(http_response &response);
+
+        static void default_400_content(http_response &response);
+
     };
 
 }

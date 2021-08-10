@@ -8,6 +8,9 @@
 #include "logger.h"
 #include "sstream"
 
+const std::string kish::http_message::NO_CONTENT_TYPE = string("NOCNT");
+const std::string kish::http_message::NO_TRANSFER_ENCODE = string("NOENC");
+
 size_t kish::http_message::content_length() const {
     size_t length = 0;
     for (auto &c: contents) {
@@ -16,12 +19,34 @@ size_t kish::http_message::content_length() const {
     return length;
 }
 
-std::string kish::http_request::tostring() const {
-    return std::string();
+std::shared_ptr<kish::http_transform> kish::http_message::get_param(const std::string &key) const {
+    return params.find(key) != params.end() ? std::make_shared<kish::http_transform>(params.at(key)) : nullptr;
 }
 
-std::string kish::http_request::tojson() const {
-    return std::string();
+void kish::http_message::parse_params_in_contents() {
+    for (const string &c:contents) {
+        split_str2_in_map(c, ";", "=", params);
+    }
+}
+
+void kish::http_message::set_content_length(size_t len) {
+    headers.insert(std::make_pair(CONTENT_LENGTH_KEY, std::to_string(len)));
+}
+
+void kish::http_message::set_content_type(const std::string &type) {
+    headers.insert(std::make_pair(CONTENT_TYPE_KEY, type));
+}
+
+const std::string &kish::http_message::get_content_type() const {
+    return headers.find(CONTENT_TYPE_KEY) != headers.end() ? headers.at(CONTENT_TYPE_KEY) : NO_CONTENT_TYPE;
+}
+
+void kish::http_message::set_transfer_encoding(const std::string &enc) {
+    headers.insert(std::make_pair(TRANSFER_TYPE_KEY, enc));
+}
+
+const std::string &kish::http_message::get_transfer_encoding() const {
+    return headers.find(TRANSFER_TYPE_KEY) != headers.end() ? headers.at(TRANSFER_TYPE_KEY) : NO_TRANSFER_ENCODE;
 }
 
 std::string kish::http_request::tomessage() {
@@ -41,12 +66,41 @@ std::string kish::http_request::tomessage() {
     return os.str();
 }
 
-std::string kish::http_response::tostring() const {
-    return std::string();
+void kish::http_request::parse_params_in_uri() {
+    size_t question_mark_pos = uri.find_first_of('?');
+    string param_str{};
+    if (question_mark_pos != string::npos) {
+        param_str = uri.substr(question_mark_pos + 1);
+        uri = uri.substr(0, question_mark_pos);
+    }
+    if (!param_str.empty()) {
+        split_str2_in_map(param_str, "&", "=", params);
+    }
 }
 
-std::string kish::http_response::tojson() const {
-    return std::string();
+void kish::http_request::parse_params_in_contents() {
+    // todo: 检查是否合理？
+    if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end()) {
+        // url数据
+        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_URL) {
+            for (const string &c: contents) {
+                split_str2_in_map(c, "&", "=", params);
+            }
+            return;
+        }
+        // json数据
+        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_JSON) {
+            return;
+        }
+        // 纯文本数据
+        if (headers.at(CONTENT_TYPE_KEY) == MIME_T_TXT) {
+            return;
+        }
+        // 表单数据
+        if (headers.at(CONTENT_TYPE_KEY) == MIME_F_FORM) {
+
+        }
+    }
 }
 
 std::string kish::http_response::tomessage() {
@@ -54,7 +108,7 @@ std::string kish::http_response::tomessage() {
     os << "HTTP/" << (int) ver_major << '.' << (int) ver_minor << SPACE << status_code << SPACE << short_msg << CRLF;  // request line
     /*⚠️检查是否缺失必要的字段⚠️*/
     if (headers.find(CONTENT_TYPE_KEY) == headers.end()) {
-        headers.insert(std::make_pair(CONTENT_TYPE_KEY, MIME_TXT"; charset=UTF-8"));
+        headers.insert(std::make_pair(CONTENT_TYPE_KEY, MIME_T_TXT"; charset=UTF-8"));
     }
     // ⚠️Content-Length是必须的，否则客户端没有收到此字段会认为仍然有数据，然后一直等待
     if (headers.find(CONTENT_LENGTH_KEY) == headers.end()) {

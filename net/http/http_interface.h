@@ -14,40 +14,62 @@
 
 namespace kish {
 
+    class http_handler;
+
     using std::string;
 
     class http_interface;
 
-    typedef std::shared_ptr<http_interface> http_infc_ptr;
+    class http_interface_holder;
 
-    // 注册接口
-    bool reg_http_interfc(const http_infc_ptr &);
+    class http_resolver;
 
-    // resolver表示方法
+    typedef std::function<void(const http_request_ptr &, http_response &)> hi_func;
+
+    // http接口，表示能处理某一个uri请求
     class http_interface : copyable {
     public:
+        virtual void on_reg_in(http_interface_holder &holder) = 0;
+    };
 
-        http_interface() {
-            resolver_list.reserve(KDEFAULT_RESOLVER_SIZE);
-        }
-
-        // todo: url包含参数，所以  on_request 的入餐应当是一个结构体
-        // todo: 序列化 RPC 参数
+    // resolver表示能处理某一些uri，比如文件resolver
+    class http_resolver : copyable {
+    public:
 
         // 表示该类是否能够处理该uri请求
-        virtual bool can_resolve(const string &uri) {
-            return resolver_list.find(uri) != resolver_list.end();
+        virtual bool can_resolve(const string &uri) = 0;
+
+        virtual void on_request(const http_request_ptr &, http_response &response) = 0;
+
+    };
+
+    typedef std::shared_ptr<http_resolver> http_resol_ptr;
+    typedef std::shared_ptr<http_interface> http_intc_ptr;
+
+    // 注册接口
+    bool reg_http_interface(const http_intc_ptr &);
+
+    // 注册resolver类
+    bool reg_http_resolver(const http_resol_ptr &);
+
+    struct infc_type_t {
+        hi_func infc;
+        llhttp_method_t method;
+    };
+
+    class http_interface_holder : noncopyable {
+    public:
+
+        void regin(const string &uri, infc_type_t type) {
+            hi_fcs.insert(std::make_pair(uri, std::move(type)));
         }
 
-        // todo: 支持RESTFUL风格
-        virtual void on_request(const string &uri, const param_container &params, http_response &response) = 0;
-
-    protected:
-        std::unordered_set<string> resolver_list;
+    private:
+        typedef string uri;
+        std::map<uri, infc_type_t> hi_fcs;
 
     private:
-        // 默认保留8个方法
-        static const int KDEFAULT_RESOLVER_SIZE = 8;
+        friend class http_handler;
 
     };
 

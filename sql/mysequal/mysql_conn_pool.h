@@ -25,7 +25,7 @@ namespace kish {
         ~mysql_conn_pool() override;
 
         // 初始化连接池，返回成功连接的数量
-        int init(int capacity, const char *host, const char *user, const char *password, const char *schema, uint16_t port);
+        int init(const char *host, const char *user, const char *password, const char *schema, uint16_t port, int capacity = KMAX_MYSQL_CONN);
 
         // sql连接池这种取出、归还的方式，一定程度上减少了并发的安全风险
         // 虽然多线程情况下，不同的connector对同一个表做修改操作也不安全就是了

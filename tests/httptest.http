@@ -1,8 +1,18 @@
+POST http://localhost:80/api/item
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="field-name"; filename="file.txt"
+
+< ./relative/path/to/local_file.txt
+--WebAppBoundary--
+
+###
 GET http://www.baidu.com/
 Accept: application/json
 
 ###
-POST http://localhost:80/api/item
+POST http://10.211.55.3:5555/users/reg
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
@@ -22,19 +32,37 @@ field-value
 --WebAppBoundary--
 
 ###
-POST http://localhost:80/api/item
+POST http://10.211.55.3:5555/users/reg
 Content-Type: application/json
 
-{}
+{
+  "username": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "password": 214214,
+  "file_list": [
+    {
+      "file1": "xxx.txt",
+      "file2": "xxx2.txt"
+    },
+    {
+      "file3": "xxx.txt",
+      "file4": "asdfdsaf"
+    }
+  ]
+}
 
 ###
-POST http://localhost:80/api/item
+POST http://10.211.55.3:5555/users/reg
 Content-Type: application/x-www-form-urlencoded
 
 id=99&contents=new-element
 
 ###
-GET http://10.211.55.3:5555/
+GET http://10.211.55.3:5555/to_my_macmini.sh
 Accept: application/json
 
 ###

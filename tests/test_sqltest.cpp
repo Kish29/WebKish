@@ -49,7 +49,7 @@ void normal_test() {
 }
 
 void pool_test() {
-    MYSQL_POOL.init(4, "localhost", "jiangaoran", "jiangaoran", "mysql_basic", 3306);
+    MYSQL_POOL.init("localhost", "jiangaoran", "jiangaoran", "mysql_basic", 3306, 4);
     /*kish::mysql_conn_ptr p;
     while ((p = MYSQL_POOL.get_connector()) != nullptr) {
         auto res = p->sql_query("select * from customers where cust_id=100001");
@@ -83,8 +83,55 @@ void pool_test() {
 
 }
 
+struct room_registrant {
+    const char *reg_uname;
+    const char *reg_use;
+    uint32_t reg_people;
+    const char *reg_contact;
+    const char *reg_date;
+    const char *reg_remark;
+};
+
+void normal_test2() {
+    char tmp[26];
+    time_t t;
+    time(&t);
+    strftime(tmp, sizeof tmp, "%Y-%m-%d %H:%M:%S", localtime(&t));
+    room_registrant reg{
+            .reg_uname = "蒋澳然",
+            .reg_use = "测试",
+            .reg_people = 9,
+            .reg_contact = "18810730872",
+            .reg_date = tmp,
+            .reg_remark = "暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议暑期迎新会议"
+    };
+    MYSQL_POOL.init("localhost", "jiangaoran", "jiangaoran", "mysql_basic", 3306, 4);
+
+    auto sqlp = MYSQL_POOL.get_connector();
+    char sql_exe[2048];
+    sprintf(sql_exe, "insert into `%s`(reg_uname, reg_use, reg_people, reg_contact, reg_date, reg_remark) "
+                     "values('%s', '%s', %u, '%s', '%s', '%s');",
+            "room_registrant",
+            reg.reg_uname,
+            reg.reg_use,
+            reg.reg_people,
+            reg.reg_contact,
+            reg.reg_date,
+            reg.reg_remark
+    );
+
+    std::string ss(sql_exe);
+    if (sqlp->sql_insert(sql_exe)) {
+        printf("insert success\n");
+    } else {
+        printf("insert failed\n");
+    }
+    MYSQL_POOL.return_connector(sqlp);
+}
+
 int main() {
 //    normal_test();
-    pool_test();
+//    pool_test();
+    normal_test2();
     return 0;
 }

@@ -12,7 +12,7 @@ kish::mysql_conn_pool::~mysql_conn_pool() {
     close_pool();
 }
 
-int kish::mysql_conn_pool::init(int capacity, const char *host, const char *user, const char *password, const char *schema, uint16_t port) {
+int kish::mysql_conn_pool::init(const char *host, const char *user, const char *password, const char *schema, uint16_t port, int capacity) {
     if (has_inited) return (int) conns.size();
     has_inited = true;
     capacity = coerce_in(capacity, 1, KMAX_MYSQL_CONN);

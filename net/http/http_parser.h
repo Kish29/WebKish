@@ -12,6 +12,7 @@
 #include "llhttp.h"
 #include "kish_utils.h"
 #include "vector"
+#include "http_transform.h"
 
 const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
 // see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
@@ -60,24 +61,40 @@ const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
         {511, "Network Authentication Required"}
 };
 
-#define MIME_HTML   "text/html"
-#define MIME_AVI    "video/x-msvideo"
-#define MIME_BMP    "image/bmp"
-#define MIME_C      "text/plain"
-#define MIME_DOC    "application/msword"
-#define MIME_GIF    "image/gif"
-#define MIME_GZ     "application/x-gzip"
-#define MIME_HTM    "text/html"
-#define MIME_ICO    "image/x-icon"
-#define MIME_JPG    "image/jpeg"
-#define MIME_PNG    "image/png"
-#define MIME_TXT    "text/plain"
-#define MIME_MP3    "audio/mp3"
-#define MIME_DFT    "text/plain"
+// T[text] text type
+#define MIME_T_HTML     "text/html"
+#define MIME_T_TXT      "text/plain"
+#define MIME_T_XML      "text/xml"
+#define MIME_T_C        "text/plain"
+#define MIME_T_HTM      "text/html"
+#define MIME_T_DFT      "text/plain"
+
+// M[media] media type
+#define MIME_M_AVI      "video/x-msvideo"
+#define MIME_M_MP3      "audio/mp3"
+
+#define MIME_M_BMP      "image/bmp"
+#define MIME_M_GIF      "image/gif"
+#define MIME_M_ICO      "image/x-icon"
+#define MIME_M_JPG      "image/jpeg"
+#define MIME_M_PNG      "image/png"
+
+// A[application] application type
+#define MIME_A_GZ       "application/x-gzip"
+#define MIME_A_DOC      "application/msword"
+#define MIME_A_URL      "application/x-www-form-urlencoded"
+#define MIME_A_PDF      "application/pdf"
+#define MIME_A_XML      "application/xml"
+#define MIME_A_JSON     "application/json"
+#define MIME_A_XHTML    "application/xhtml+xml"
+#define MIME_A_BSTRM    "application/octet-stream"
+
+// F[form]  form type
+#define MIME_F_FORM     "multipart/form-data"
 
 #define SPACE   ' '
 #define COLON   ':'
-#define CRLF      "\r\n"
+#define CRLF    "\r\n"
 
 #define CONNECTION_KEY      "Connection"
 #define KEEP_ALIVE_VAL      "Keep-Alive"
@@ -95,9 +112,9 @@ namespace kish {
         SET_TIMEOUT // set timeout
     };
 
-    typedef std::map<string, string> param_container;
+    typedef std::map<string, http_transform> param_container;
 
-    struct http_message : copyable, public printable, public jsonable, public message_type {
+    struct http_message : copyable, public message_type {
         typedef std::map<std::string, std::string> header_item;
 
         uint8_t ver_major;
@@ -111,55 +128,47 @@ namespace kish {
 
         param_container params{};
 
-        virtual void parse_params_in_contents() {
-            for (const string &c:contents) {
-                split_str2(c, ";", "=", params);
-            }
-        }
+        std::shared_ptr<http_transform> get_param(const string &key) const;
+
+        virtual void parse_params_in_contents();
+
+        void set_content_length(size_t len);
 
         size_t content_length() const;
 
+        void set_content_type(const string &type);
+
+        const string &get_content_type() const;
+
+        void set_transfer_encoding(const string &enc);
+
+        const string &get_transfer_encoding() const;
+
         http_message() : ver_major(1), ver_minor(0), alive(KEEP_ALIVE) {};
 
+        static const std::string NO_CONTENT_TYPE;
+        static const std::string NO_TRANSFER_ENCODE;
     };
 
-    typedef std::shared_ptr<http_message> http_message_ptr;
-
     struct http_request : public http_message {
-
         llhttp_method_t method;
-        std::string uri;
         // uri中有可能携带参数
+        std::string uri;
 
-        void parse_params_in_uri() {
-            size_t question_mark_pos = uri.find_first_of('?');
-            string param_str{};
-            if (question_mark_pos != string::npos) {
-                param_str = uri.substr(question_mark_pos + 1);
-                uri = uri.substr(0, question_mark_pos);
-            }
-            if (!param_str.empty()) {
-                split_str2(param_str, "&", "=", params);
-            }
-        }
+        void parse_params_in_uri();
 
         http_request() : http_message() {
             method = HTTP_GET;
             uri = "/";
         }
 
-        void parse_params_in_contents() override {
-            // todo: 检查是否合理？
-            if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end() && headers.at(CONTENT_TYPE_KEY) == MIME_TXT) {
-                http_message::parse_params_in_contents();
-            }
-        }
+        const string &get_host() const;
+
+        const string &set_host() const;
+
+        void parse_params_in_contents() override;
 
         http_request(llhttp_method_t meth, string u) : method(meth), uri(std::move(u)) {}
-
-        std::string tostring() const override;
-
-        std::string tojson() const override;
 
         std::string tomessage() override;
     };
@@ -184,10 +193,6 @@ namespace kish {
             }
             status_code = stat_code;
         }
-
-        std::string tostring() const override;
-
-        std::string tojson() const override;
 
         std::string tomessage() override;
     };
