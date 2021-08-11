@@ -108,9 +108,11 @@ public:
     void user_regis(const http_request_ptr &request, http_response &response) {
         response.update_stat(200);
         cJSON *json = cJSON_Parse(request->contents.at(0).c_str());
-        char *str = cJSON_Print(json);
-        printf("%s\n", str);
-        cJSON_Delete(json);
+        if (json) {
+            char *str = cJSON_Print(json);
+            printf("%s\n", str);
+            cJSON_Delete(json);
+        }
     }
 
 private:

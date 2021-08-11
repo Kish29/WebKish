@@ -68,7 +68,7 @@ namespace kish {
 
         std::vector<http_transform> child;
         std::string stringval{};
-        std::vector<string> strings;
+        std::vector<std::string> strings;
         int intval{};
         std::vector<int> integers;
         // trick names here :-)

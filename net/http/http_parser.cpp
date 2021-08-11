@@ -215,7 +215,7 @@ int kish::http_parser::on_header_field(llhttp_t *parser, const char *at, size_t 
 int kish::http_parser::on_header_value(llhttp_t *parser, const char *at, size_t len) {
     switch (last_on_hd) {
         case IDLE:
-            LOG_INFO << "header value error: before field value comes in";
+            LOG_INFO << "header value_t error: before field value_t comes in";
             break;
         case FIELD:
             // 注意，只能有一边更新

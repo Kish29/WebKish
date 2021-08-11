@@ -830,8 +830,8 @@ static int apply_patch(cJSON *object, const cJSON *patch, const cJSON_bool case_
     }
     else if (opcode == TEST)
     {
-        /* compare value: {...} with the given path */
-        status = !compare_json(get_item_from_pointer(object, path->valuestring, case_sensitive), get_object_item(patch, "value", case_sensitive), case_sensitive);
+        /* compare value_t: {...} with the given path */
+        status = !compare_json(get_item_from_pointer(object, path->valuestring, case_sensitive), get_object_item(patch, "value_t", case_sensitive), case_sensitive);
         goto cleanup;
     }
 
@@ -850,10 +850,10 @@ static int apply_patch(cJSON *object, const cJSON *patch, const cJSON_bool case_
 
         if ((opcode == REPLACE) || (opcode == ADD))
         {
-            value = get_object_item(patch, "value", case_sensitive);
+            value = get_object_item(patch, "value_t", case_sensitive);
             if (value == NULL)
             {
-                /* missing "value" for add/replace. */
+                /* missing "value_t" for add/replace. */
                 status = 7;
                 goto cleanup;
             }
@@ -868,11 +868,11 @@ static int apply_patch(cJSON *object, const cJSON *patch, const cJSON_bool case_
 
             overwrite_item(object, *value);
 
-            /* delete the duplicated value */
+            /* delete the duplicated value_t */
             cJSON_free(value);
             value = NULL;
 
-            /* the string "value" isn't needed */
+            /* the string "value_t" isn't needed */
             if (object->string != NULL)
             {
                 cJSON_free(object->string);
@@ -938,12 +938,12 @@ static int apply_patch(cJSON *object, const cJSON *patch, const cJSON_bool case_
             goto cleanup;
         }
     }
-    else /* Add/Replace uses "value". */
+    else /* Add/Replace uses "value_t". */
     {
-        value = get_object_item(patch, "value", case_sensitive);
+        value = get_object_item(patch, "value_t", case_sensitive);
         if (value == NULL)
         {
-            /* missing "value" for add/replace. */
+            /* missing "value_t" for add/replace. */
             status = 7;
             goto cleanup;
         }
@@ -956,7 +956,7 @@ static int apply_patch(cJSON *object, const cJSON *patch, const cJSON_bool case_
         }
     }
 
-    /* Now, just add "value" to "path". */
+    /* Now, just add "value_t" to "path". */
 
     /* split pointer in parent and child */
     parent_pointer = cJSONUtils_strdup((unsigned char*)path->valuestring);
@@ -1128,7 +1128,7 @@ static void compose_patch(cJSON * const patches, const unsigned char * const ope
 
     if (value != NULL)
     {
-        cJSON_AddItemToObject(patch, "value", cJSON_Duplicate(value, 1));
+        cJSON_AddItemToObject(patch, "value_t", cJSON_Duplicate(value, 1));
     }
     cJSON_AddItemToArray(patches, patch);
 }
@@ -1324,7 +1324,7 @@ static cJSON *merge_patch(cJSON *target, const cJSON * const patch, const cJSON_
 
     if (!cJSON_IsObject(patch))
     {
-        /* scalar value, array or NULL, just duplicate */
+        /* scalar value_t, array or NULL, just duplicate */
         cJSON_Delete(target);
         return cJSON_Duplicate(patch, 1);
     }
@@ -1340,7 +1340,7 @@ static cJSON *merge_patch(cJSON *target, const cJSON * const patch, const cJSON_
     {
         if (cJSON_IsNull(patch_child))
         {
-            /* NULL is the indicator to remove a value, see RFC7396 */
+            /* NULL is the indicator to remove a value_t, see RFC7396 */
             if (case_sensitive)
             {
                 cJSON_DeleteItemFromObjectCaseSensitive(target, patch_child->string);
@@ -1433,28 +1433,28 @@ static cJSON *generate_merge_patch(cJSON * const from, cJSON * const to, const c
 
         if (diff < 0)
         {
-            /* from has a value that to doesn't have -> remove */
+            /* from has a value_t that to doesn't have -> remove */
             cJSON_AddItemToObject(patch, from_child->string, cJSON_CreateNull());
 
             from_child = from_child->next;
         }
         else if (diff > 0)
         {
-            /* to has a value that from doesn't have -> add to patch */
+            /* to has a value_t that from doesn't have -> add to patch */
             cJSON_AddItemToObject(patch, to_child->string, cJSON_Duplicate(to_child, 1));
 
             to_child = to_child->next;
         }
         else
         {
-            /* object key exists in both objects */
+            /* object key_t exists in both objects */
             if (!compare_json(from_child, to_child, case_sensitive))
             {
                 /* not identical --> generate a patch */
                 cJSON_AddItemToObject(patch, to_child->string, cJSONUtils_GenerateMergePatch(from_child, to_child));
             }
 
-            /* next key in the object */
+            /* next key_t in the object */
             from_child = from_child->next;
             to_child = to_child->next;
         }

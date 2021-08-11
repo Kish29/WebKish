@@ -1198,7 +1198,7 @@ static unsigned char *print(const cJSON * const item, cJSON_bool format, const i
         goto fail;
     }
 
-    /* print the value */
+    /* print the value_t */
     if (!print_value(item, buffer))
     {
         goto fail;
@@ -1359,7 +1359,7 @@ static cJSON_bool parse_value(cJSON * const item, parse_buffer * const input_buf
     return false;
 }
 
-/* Render a value to text. */
+/* Render a value_t to text. */
 static cJSON_bool print_value(const cJSON * const item, printbuffer * const output_buffer)
 {
     unsigned char *output = NULL;
@@ -1492,12 +1492,12 @@ static cJSON_bool parse_array(cJSON * const item, parse_buffer * const input_buf
             current_item = new_item;
         }
 
-        /* parse next value */
+        /* parse next value_t */
         input_buffer->offset++;
         buffer_skip_whitespace(input_buffer);
         if (!parse_value(current_item, input_buffer))
         {
-            goto fail; /* failed to parse value */
+            goto fail; /* failed to parse value_t */
         }
         buffer_skip_whitespace(input_buffer);
     }
@@ -1668,12 +1668,12 @@ static cJSON_bool parse_object(cJSON * const item, parse_buffer * const input_bu
             goto fail; /* invalid object */
         }
 
-        /* parse the value */
+        /* parse the value_t */
         input_buffer->offset++;
         buffer_skip_whitespace(input_buffer);
         if (!parse_value(current_item, input_buffer))
         {
-            goto fail; /* failed to parse value */
+            goto fail; /* failed to parse value_t */
         }
         buffer_skip_whitespace(input_buffer);
     }
@@ -1751,7 +1751,7 @@ static cJSON_bool print_object(const cJSON * const item, printbuffer * const out
             output_buffer->offset += output_buffer->depth;
         }
 
-        /* print key */
+        /* print key_t */
         if (!print_string_ptr((unsigned char*)current_item->string, output_buffer))
         {
             return false;
@@ -1771,7 +1771,7 @@ static cJSON_bool print_object(const cJSON * const item, printbuffer * const out
         }
         output_buffer->offset += length;
 
-        /* print value */
+        /* print value_t */
         if (!print_value(current_item, output_buffer))
         {
             return false;
@@ -2046,7 +2046,7 @@ CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObject(cJSON *object, const char *string
     return add_item_to_object(object, string, item, &global_hooks, false);
 }
 
-/* Add an item to an object with constant string as key */
+/* Add an item to an object with constant string as key_t */
 CJSON_PUBLIC(cJSON_bool) cJSON_AddItemToObjectCS(cJSON *object, const char *string, cJSON *item)
 {
     return add_item_to_object(object, string, item, &global_hooks, true);

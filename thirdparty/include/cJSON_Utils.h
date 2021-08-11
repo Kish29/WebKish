@@ -35,7 +35,7 @@ CJSON_PUBLIC(cJSON *) cJSONUtils_GetPointer(cJSON * const object, const char *po
 CJSON_PUBLIC(cJSON *) cJSONUtils_GetPointerCaseSensitive(cJSON * const object, const char *pointer);
 
 /* Implement RFC6902 (https://tools.ietf.org/html/rfc6902) JSON Patch spec. */
-/* NOTE: This modifies objects in 'from' and 'to' by sorting the elements by their key */
+/* NOTE: This modifies objects in 'from' and 'to' by sorting the elements by their key_t */
 CJSON_PUBLIC(cJSON *) cJSONUtils_GeneratePatches(cJSON * const from, cJSON * const to);
 CJSON_PUBLIC(cJSON *) cJSONUtils_GeneratePatchesCaseSensitive(cJSON * const from, cJSON * const to);
 /* Utility for generating patch array entries. */
@@ -66,11 +66,11 @@ CJSON_PUBLIC(int) cJSONUtils_ApplyPatchesCaseSensitive(cJSON * const object, con
 */
 
 /* Implement RFC7386 (https://tools.ietf.org/html/rfc7396) JSON Merge Patch spec. */
-/* target will be modified by patch. return value is new ptr for target. */
+/* target will be modified by patch. return value_t is new ptr for target. */
 CJSON_PUBLIC(cJSON *) cJSONUtils_MergePatch(cJSON *target, const cJSON * const patch);
 CJSON_PUBLIC(cJSON *) cJSONUtils_MergePatchCaseSensitive(cJSON *target, const cJSON * const patch);
 /* generates a patch to move from -> to */
-/* NOTE: This modifies objects in 'from' and 'to' by sorting the elements by their key */
+/* NOTE: This modifies objects in 'from' and 'to' by sorting the elements by their key_t */
 CJSON_PUBLIC(cJSON *) cJSONUtils_GenerateMergePatch(cJSON * const from, cJSON * const to);
 CJSON_PUBLIC(cJSON *) cJSONUtils_GenerateMergePatchCaseSensitive(cJSON * const from, cJSON * const to);
 

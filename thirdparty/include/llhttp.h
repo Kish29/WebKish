@@ -357,7 +357,7 @@ struct llhttp_settings_s {
   llhttp_cb      on_chunk_header;
   llhttp_cb      on_chunk_complete;
 
-  /* Information-only callbacks, return value is ignored */
+  /* Information-only callbacks, return value_t is ignored */
   llhttp_cb      on_url_complete;
   llhttp_cb      on_status_complete;
   llhttp_cb      on_header_field_complete;
@@ -516,9 +516,9 @@ LLHTTP_EXPORT
 const char* llhttp_method_name(llhttp_method_t method);
 
 
-/* Enables/disables lenient header value parsing (disabled by default).
+/* Enables/disables lenient header value_t parsing (disabled by default).
  *
- * Lenient parsing disables header value token checks, extending llhttp's
+ * Lenient parsing disables header value_t token checks, extending llhttp's
  * protocol support to highly non-compliant clients/server. No
  * `HPE_INVALID_HEADER_TOKEN` will be raised for incorrect header values when
  * lenient parsing is "on".

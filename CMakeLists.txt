@@ -34,6 +34,7 @@ set(
         base/log/logger.cpp
         base/fdholder.cpp
         base/timer.cpp
+        base/list_map.cpp
         base/utils/kish_utils.cpp
         net/tcp/wakeup_handler.cpp
         net/tcp/accept_handler.cpp

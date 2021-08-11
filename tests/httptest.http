@@ -22,13 +22,13 @@ Content-Disposition: form-data; name="field-name"; file_path="file.txt"
 --WebAppBoundary--
 
 ###
-POST http://localhost:80/api/item
+POST http://10.211.55.3:5555/users/reg
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
 Content-Disposition: form-data; name="field-name"
 
-field-value
+field-value_t
 --WebAppBoundary--
 
 ###
