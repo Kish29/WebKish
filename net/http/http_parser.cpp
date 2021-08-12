@@ -8,8 +8,10 @@
 #include "logger.h"
 #include "sstream"
 
-const std::string kish::http_message::NO_CONTENT_TYPE = string("NOCNT");
-const std::string kish::http_message::NO_TRANSFER_ENCODE = string("NOENC");
+const std::string kish::http_message::NO_CONTENT_TYPE = "NOCNT";
+const std::string kish::http_message::NO_TRANSFER_ENCODE = "NOENC";
+const std::string kish::http_message::JSON_PARAM = "JSON_PARAM";
+const std::string kish::http_message::EMPTY_PARAM = "EMPTY_PARAM";
 
 size_t kish::http_message::content_length() const {
     size_t length = 0;
@@ -19,13 +21,20 @@ size_t kish::http_message::content_length() const {
     return length;
 }
 
-std::shared_ptr<kish::http_transform> kish::http_message::get_param(const std::string &key) const {
-    return params.find(key) != params.end() ? std::make_shared<kish::http_transform>(params.at(key)) : nullptr;
+const kish::http_transform &kish::http_message::get_param(const std::string &key) {
+    try {
+        return params.at(key);
+    } catch (const not_found_exception &e) {
+        if (params.find(EMPTY_PARAM) == params.end()) {
+            params.insert(std::make_pair(EMPTY_PARAM, http_transform()));
+        }
+    }
+    return params.at(EMPTY_PARAM);
 }
 
 void kish::http_message::parse_params_in_contents() {
     for (const string &c:contents) {
-        split_str2_in_map(c, ";", "=", params);
+        split_str2_in_map<http_transform>(c, ";", "=", params);
     }
 }
 
@@ -74,7 +83,7 @@ void kish::http_request::parse_params_in_uri() {
         uri = uri.substr(0, question_mark_pos);
     }
     if (!param_str.empty()) {
-        split_str2_in_map(param_str, "&", "=", params);
+        split_str2_in_map<http_transform>(param_str, "&", "=", params);
     }
 }
 
@@ -84,21 +93,25 @@ void kish::http_request::parse_params_in_contents() {
         // url数据
         if (headers.at(CONTENT_TYPE_KEY) == MIME_A_URL) {
             for (const string &c: contents) {
-                split_str2_in_map(c, "&", "=", params);
+                split_str2_in_map<http_transform>(c, "&", "=", params);
             }
             return;
         }
         // json数据
         if (headers.at(CONTENT_TYPE_KEY) == MIME_A_JSON) {
+            for (const string &c: contents) {
+                params.insert(std::make_pair(JSON_PARAM, http_transform(c.c_str())));
+            }
             return;
         }
         // 纯文本数据
         if (headers.at(CONTENT_TYPE_KEY) == MIME_T_TXT) {
+            // todo: 解析post纯文本数据参数
             return;
         }
         // 表单数据
         if (headers.at(CONTENT_TYPE_KEY) == MIME_F_FORM) {
-
+            // todo: 解析post表单参数
         }
     }
 }

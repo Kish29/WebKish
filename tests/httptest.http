@@ -36,13 +36,8 @@ POST http://10.211.55.3:5555/users/reg
 Content-Type: application/json
 
 {
-  "username": [
-    1,
-    2,
-    3,
-    4
-  ],
-  "password": 214214,
+  "username": "jiangaoran",
+  "password": "123456kishkish",
   "file_list": [
     {
       "file1": "xxx.txt",
@@ -59,7 +54,7 @@ Content-Type: application/json
 POST http://10.211.55.3:5555/users/reg
 Content-Type: application/x-www-form-urlencoded
 
-id=99&contents=new-element
+username=jiangaoran&password=123456
 
 ###
 GET http://10.211.55.3:5555/to_my_macmini.sh

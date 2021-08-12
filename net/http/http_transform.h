@@ -9,72 +9,53 @@
 
 #include "base.h"
 #include "vector"
-#include "cJSON.h"
+#include "CJsonObject.hpp"
+
+using namespace neb;
 
 namespace kish {
 
-#define cJSON_Number_Integer    (cJSON_Number | (1 << 8))
-#define cJSON_Number_Double     (cJSON_Number | (1 << 9))
-
-    class http_transform : copyable, public jsonable {
+    // transform类可以在多个类型中进行转换
+    class http_transform : copyable {
     public:
 
-        explicit operator const std::vector<http_transform> &() const;
+        explicit operator const CJsonObject &() const;
+
+        explicit operator CJsonObject();
 
         explicit operator int() const;
 
-        explicit operator const std::vector<int> &() const;
+        explicit operator uint32_t() const;
 
-        explicit operator char() const;
+        explicit operator int64_t() const;
 
-        explicit operator const char *() const;
+        explicit operator uint64_t() const;
 
         explicit operator double() const;
-
-        explicit operator const std::vector<double> &() const;
 
         explicit operator bool() const;
 
         explicit operator const std::string &() const;
 
-        explicit operator const std::vector<std::string> &() const;
-
-        const std::string &name() const { return m_name; }
-
-        http_transform &set_name(const std::string &name) {
-            m_name = name;
-            return *this;
-        }
-
-        std::string tojson() const override;
+        explicit operator std::string();
 
     public:
-        typedef http_transform self;
 
         http_transform() = default;
 
-        explicit http_transform(const std::string &o) {
-            stringval = o;
-        }
-
-        explicit http_transform(char *o) {
-            stringval = std::string(o);
-        }
+        explicit http_transform(const char *o);
 
     protected:
-        std::string m_name;
-
-        int type{cJSON_Raw};
-
-        std::vector<http_transform> child;
         std::string stringval{};
-        std::vector<std::string> strings;
-        int intval{};
-        std::vector<int> integers;
-        // trick names here :-)
-        double doubleval{};
-        std::vector<double> doubles;
 
+        double doubleval{};
+        bool boolval{};
+
+        bool number_cast{false};
+        bool bool_cast{false};
+
+        CJsonObject jsonval{};
+        bool jsonval_cast{false};
     };
 
 }

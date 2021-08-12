@@ -54,8 +54,8 @@ void split_str1_in_array(const std::string &src, const std::string &join_1, std:
     delete[] ss;
 }
 
-template<class T>
-void split_str1_in_map(const std::string &src, const std::string &join_1, std::map<std::string, T> &container) {
+template<class T, class Container = std::map<string, T>>
+void split_str1_in_map(const std::string &src, const std::string &join_1, Container &container) {
     if (src.empty()) return;
     size_t len = src.length();
     char *ss = new char[len + 1];
@@ -65,20 +65,26 @@ void split_str1_in_map(const std::string &src, const std::string &join_1, std::m
     char *token1 = strtok(ss, delim);
     if (token1) {
         char *token2 = strtok(nullptr, delim);
-        container.insert(std::make_pair(token1, token2 ? T(token2) : T()));
+        container.insert(std::make_pair(token1, token2 ? T(string(token2).c_str()) : T()));
     }
     delete[] ss;
 }
 
-template<class T>
-void split_str2_in_map(const std::string &src, const std::string &join_1, const std::string &join_2, std::map<std::string, T> &container) {
+template<class T, class Container = std::map<string, T>>
+void split_str2_in_map(const std::string &src, const std::string &join_1, const std::string &join_2, Container &container) {
     std::vector<string> temp;
     temp.reserve(100);  // assume number
 
     split_str1_in_array(src, join_1, temp);
     for (const string &s: temp) {
-        split_str1_in_map(s, join_2, container);
+        split_str1_in_map<T, Container>(s, join_2, container);
     }
 }
+
+bool kish_atoi(const char *, int *);
+
+bool kish_atof(const char *, double *);
+
+bool kish_atoll(const char *, int64_t *);
 
 #endif

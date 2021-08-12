@@ -13,6 +13,7 @@
 #include "kish_utils.h"
 #include "vector"
 #include "http_transform.h"
+#include "list_map.h"
 
 const static std::map<int, std::string> RESP_STAT_CODE_MAP = {
 // see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
@@ -112,7 +113,7 @@ namespace kish {
         SET_TIMEOUT // set timeout
     };
 
-    typedef std::map<string, http_transform> param_container;
+    typedef list_map<string, http_transform> param_container;
 
     struct http_message : copyable, public message_type {
         typedef std::map<std::string, std::string> header_item;
@@ -128,7 +129,7 @@ namespace kish {
 
         param_container params{};
 
-        std::shared_ptr<http_transform> get_param(const string &key) const;
+        const http_transform &get_param(const string &key);
 
         virtual void parse_params_in_contents();
 
@@ -148,6 +149,8 @@ namespace kish {
 
         static const std::string NO_CONTENT_TYPE;
         static const std::string NO_TRANSFER_ENCODE;
+        static const std::string JSON_PARAM;
+        static const std::string EMPTY_PARAM;
     };
 
     struct http_request : public http_message {

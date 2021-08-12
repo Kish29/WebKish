@@ -88,7 +88,7 @@ set(
         thirdparty/src/http.c
         thirdparty/src/llhttp.c
         thirdparty/src/cJSON.c
-        thirdparty/src/cJSON_Utils.c
+        thirdparty/src/CJsonObject.cpp
 )
 
 include_directories(thirdparty/include)

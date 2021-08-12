@@ -5,65 +5,73 @@
 //
 
 #include "http_transform.h"
-
-kish::http_transform::operator const std::vector<http_transform> &() const {
-    if (child.empty()) throw std::bad_cast();
-    return child;
-}
+#include "kish_utils.h"
 
 kish::http_transform::operator int() const {
-    if (!(type & cJSON_Number)) throw std::bad_cast();
-    if (type == cJSON_Number_Integer) {
-        return intval;
-    } else {
-        return static_cast<int>(doubleval);
-    }
-}
-
-kish::http_transform::operator const std::vector<int> &() const {
-    if (type != cJSON_Array) throw std::bad_cast();
-    return integers;
-}
-
-kish::http_transform::operator char() const {
-    return static_cast<char>(intval);
-}
-
-kish::http_transform::operator const char *() const {
-    return ((const std::string &) *this).c_str();
+    if (number_cast)
+        return static_cast<int >(doubleval);
+    else throw std::bad_cast();
 }
 
 kish::http_transform::operator double() const {
-    if (!(type & cJSON_Number)) throw std::bad_cast();
-    if (type == cJSON_Number_Integer) {
-        return static_cast<double>(intval);
-    } else {
-        return doubleval;
-    }
-}
-
-kish::http_transform::operator const std::vector<double> &() const {
-    if (type != cJSON_Array) throw std::bad_cast();
-    return doubles;
+    if (number_cast) return doubleval;
+    else throw std::bad_cast();
 }
 
 kish::http_transform::operator bool() const {
-    if (type == cJSON_True) return true;
-    else if (type == cJSON_False) return false;
+    if (bool_cast) return boolval;
     else throw std::bad_cast();
 }
 
 kish::http_transform::operator const std::string &() const {
-    if (type != cJSON_String) throw std::bad_cast();
     return stringval;
 }
 
-kish::http_transform::operator const std::vector<std::string> &() const {
-    if (type != cJSON_Array) throw std::bad_cast();
-    return strings;
+kish::http_transform::http_transform(const char *o) {
+    if (o) {
+        stringval = o;
+        if (kish_atof(stringval.c_str(), &doubleval)) {
+            number_cast = true;
+        }
+        if (strcmp(stringval.c_str(), "true") == 0) {
+            bool_cast = true;
+            boolval = true;
+        } else if (strcmp(stringval.c_str(), "false") == 0) {
+            bool_cast = true;
+            boolval = false;
+        }
+        if (jsonval.Parse(stringval)) {
+            jsonval_cast = true;
+        }
+    } else throw null_pointer_exception("o");
 }
 
-std::string kish::http_transform::tojson() const {
-    return std::string();
+kish::http_transform::operator std::string() {
+    return stringval;
 }
 
+kish::http_transform::operator const CJsonObject &() const {
+    if (jsonval_cast) return jsonval;
+    else throw std::bad_cast();
+}
+
+kish::http_transform::operator CJsonObject() {
+    if (jsonval_cast) return jsonval;
+    else throw std::bad_cast();
+}
+
+kish::http_transform::operator uint32_t() const {
+    if (number_cast)
+        return static_cast<uint32_t>(doubleval);
+    else throw std::bad_cast();
+}
+
+kish::http_transform::operator int64_t() const {
+    if (number_cast) return static_cast<int64_t>(doubleval);
+    else throw std::bad_cast();
+}
+
+kish::http_transform::operator uint64_t() const {
+    if (number_cast) return static_cast<uint64_t>(doubleval);
+    else throw std::bad_cast();
+}

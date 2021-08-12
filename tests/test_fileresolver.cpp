@@ -106,12 +106,41 @@ public:
     }
 
     void user_regis(const http_request_ptr &request, http_response &response) {
-        response.update_stat(200);
-        cJSON *json = cJSON_Parse(request->contents.at(0).c_str());
-        if (json) {
-            char *str = cJSON_Print(json);
-            printf("%s\n", str);
-            cJSON_Delete(json);
+        const string &type = request->get_content_type();
+        if (type == MIME_A_JSON) {
+            try {
+                auto param_json = (CJsonObject) request->get_param(http_message::JSON_PARAM);
+                string password;
+                param_json.Get("password", password);
+                std::cout << password << std::endl;
+                string username;
+                param_json.Get("username", username);
+                std::cout << username << std::endl;
+                int index = 0;
+                string key;
+                string been;
+                for (int i = 0; i < param_json["file_list"].GetArraySize(); ++i) {
+                    key = "file" + std::to_string(++index);
+                    param_json["file_list"][i].Get(key, been);
+                    std::cout << been << std::endl;
+                    key = "file" + std::to_string(++index);
+                    param_json["file_list"][i].Get(key, been);
+                    std::cout << been << std::endl;
+                }
+                response.update_stat(200);
+            } catch (const std::bad_cast &e) {
+                response.update_stat(400);
+            }
+        } else {
+            try {
+                string username = (string) request->get_param("username");
+                string password = (string) request->get_param("password");
+                std::cout << "username: " << username << '\n';
+                std::cout << "password: " << password << '\n';
+                response.update_stat(200);
+            } catch (const std::bad_cast &e) {
+                response.update_stat(400);
+            }
         }
     }
 
