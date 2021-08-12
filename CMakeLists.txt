@@ -34,6 +34,7 @@ set(
         base/log/logger.cpp
         base/fdholder.cpp
         base/timer.cpp
+        base/list_map.cpp
         base/utils/kish_utils.cpp
         net/tcp/wakeup_handler.cpp
         net/tcp/accept_handler.cpp
@@ -46,6 +47,7 @@ set(
         net/http/http_interface.cpp
         net/http/http_parser.cpp
         net/http/http_heart_check.h
+        net/http/http_transform.cpp
 )
 
 
@@ -85,6 +87,8 @@ set(
         thirdparty/src/api.c
         thirdparty/src/http.c
         thirdparty/src/llhttp.c
+        thirdparty/src/cJSON.c
+        thirdparty/src/CJsonObject.cpp
 )
 
 include_directories(thirdparty/include)

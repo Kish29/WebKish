@@ -21,7 +21,7 @@ namespace kish {
 
         sql_result_ptr sql_query(const char *sql_query) override;
 
-        bool sql_add(const char *sql_add) override;
+        bool sql_insert(const char *sql_insert) override;
 
         bool sql_delete(const char *sql_delete) override;
 

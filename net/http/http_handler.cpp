@@ -7,7 +7,9 @@
 #include "http_handler.h"
 #include "socket.h"
 
-std::vector<shared_ptr<kish::http_interface>> kish::http_handler::GLO_RESOLR_MAPPERS;
+std::vector<shared_ptr<kish::http_resolver>> kish::http_handler::GLO_RESOLR_MAPPERS;
+
+http_interface_holder kish::http_handler::GLO_INTFC_HOLDER;
 
 http_handler::http_handler(int fd) : tcp_handler(fd) {
     req_parser.set_on_parse_error(std::bind(&http_handler::on_req_parse_error, this));
@@ -78,15 +80,31 @@ void http_handler::on_req_parse_error() {
 // 请求的uri解析成功
 void http_handler::on_req_parse_uri_complete(const http_request_ptr &request) {
     // 可以在这里查找resolver是否存在
-    // 查找resolver
+
+    // 查找，首先置为false
     has_resolver = false;
+    has_hi_func = false;
+    bad_request = false;
+
+    // 1. 首先从接口中查找
+    if (GLO_INTFC_HOLDER.hi_fcs.find(request->uri) != GLO_INTFC_HOLDER.hi_fcs.end()) {
+        if (GLO_INTFC_HOLDER.hi_fcs.at(request->uri).method == request->method) {
+            has_hi_func = true;
+            curr_hi_func = GLO_INTFC_HOLDER.hi_fcs.at(request->uri).infc;
+            return;
+        } else {
+            bad_request = true;
+            return;
+        }
+    }
+    // 2. 然后从resolver中查找
     if (!GLO_RESOLR_MAPPERS.empty()) {
         auto it = GLO_RESOLR_MAPPERS.begin();
         while (it != GLO_RESOLR_MAPPERS.end()) {
             if (it->get()->can_resolve(request->uri)) {
                 has_resolver = true;
                 // 记录resolver位置
-                resolver = it;
+                curr_resolver = it;
             }
             it++;
         }
@@ -107,11 +125,15 @@ void http_handler::on_message_parse_complete(const http_request_ptr &request) {
             .header("Server", KISH_CONFIG.KISH_SERVER_NAME())
             .build();
 
-    // 检测resolver
-    if (has_resolver) {
-        resolver->get()->on_request(request->uri, request->params, resp);
-    } else {
-        resp.update_stat(404);
+    // 先检测interface
+    if (has_hi_func) {
+        curr_hi_func(request, resp);
+    } else if (has_resolver) {  // 在检测resolver
+        curr_resolver->get()->on_request(request, resp);
+    } else if (bad_request) {   // 在判断是不是请求类型错误
+        default_400_content(resp);
+    } else {    // 最后查无此方法对应的接口
+        default_404_content(resp);
     }
 
     // 发送响应
@@ -141,4 +163,16 @@ bool http_handler::has_set_timeout() const {
 
 void http_handler::set_dead() {
     i_am_dead = true;
+}
+
+void http_handler::default_404_content(http_response &response) {
+    response.update_stat(404);
+    response.headers.insert(std::make_pair(CONTENT_TYPE_KEY, MIME_T_HTML"; charset=UTF-8"));
+    response.contents.emplace_back("<html><title>未找到相应接口</title><body bgcolor=\"ffffff\">404 Not Found!<hr><em> Powered by WebKish</em>\n</body></html>");
+}
+
+void http_handler::default_400_content(http_response &response) {
+    response.update_stat(400);
+    response.headers.insert(std::make_pair(CONTENT_TYPE_KEY, MIME_T_HTML"; charset=UTF-8"));
+    response.contents.emplace_back("<html><title>错误的请求</title><body bgcolor=\"ffffff\">400 Bad Request!<hr><em> Powered by WebKish</em>\n</body></html>");
 }

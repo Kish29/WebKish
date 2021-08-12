@@ -14,10 +14,10 @@ http服务器有一个同步的loop timer，每隔一定的时间会检查连接
 
 http报文的解析采用了开源库[llhttp](https://github.com/nodejs/llhttp), 并对该库做了一个较为完善的封装，该部分花了我不少的精力。
 
-WebKish的http接入很简单，只需要包含 "http_server.h"用于创建http服务器，然后包含"http_interface.h"这个头文件，用于实现请求接口：
+WebKish的http接入很简单，只需要包含 "http_server.h"用于创建http服务器，然后包含"http_resolver.h"这个头文件，用于实现请求接口：
 
 ```c++
-class index_resolver : public http_interface {
+class index_resolver : public http_resolver {
   public:
   	// 在构造方法中
   	index_resolver() {
@@ -49,7 +49,7 @@ class index_resolver : public http_interface {
 int main() {
   KISH_CONFIG.setKishServerName("kishkish");	// example：更改服务器名称
   
-  reg_http_interfc(http_infc_ptr(new index_resolver));	// 注册resolver
+  reg_http_interface(http_resol_ptr(new index_resolver));	// 注册resolver
   
   // 开启8个looper（即8个epoll fd）
   kish::http_server hs(5555, 8);	// 创建服务器，工作在端口5555，默认地址0.0.0.0

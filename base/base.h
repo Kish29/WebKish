@@ -52,11 +52,6 @@ namespace kish {
         virtual std::string tostring() const = 0;
     };
 
-    class jsonable {
-    public:
-        virtual std::string tojson() const = 0;
-    };
-
     // 返回报文结构
     class message_type {
     public:
@@ -107,6 +102,25 @@ namespace kish {
     pthread_once_t singleton<T>::p_once = PTHREAD_ONCE_INIT;
     template<class T>
     T *singleton<T>::inst = nullptr;
+
+    struct null_pointer_exception : public std::exception {
+
+        explicit null_pointer_exception(const char *pname) : ptr_name(pname) {
+            emsg = new char[128];
+        }
+
+        ~null_pointer_exception() override {
+            delete[] emsg;
+        }
+
+        const char *what() const noexcept override {
+            snprintf(emsg, sizeof emsg, "pointer[%s] is null pointer", ptr_name);
+            return emsg;
+        }
+
+        const char *ptr_name;
+        char *emsg{nullptr};
+    };
 
     // 因为log日志中会调用tid，为减少频繁的系统调用造成的上下文切换开销
     // tid会取保存的tid

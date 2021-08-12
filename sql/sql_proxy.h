@@ -22,6 +22,7 @@ namespace kish {
     typedef std::shared_ptr<sql_result_store> sql_result_ptr;
 
     enum proxy_error_t {
+        SUCCESS,
         CONN_FAIL,
         INVALID_PARAM,
         OPERATOR_FAIL,  // 操作数据库出错
@@ -34,7 +35,7 @@ namespace kish {
 
         virtual sql_result_ptr sql_query(const char *sql_query) = 0;
 
-        virtual bool sql_add(const char *sql_add) = 0;
+        virtual bool sql_insert(const char *sql_add) = 0;
 
         virtual bool sql_delete(const char *sql_delete) = 0;
 

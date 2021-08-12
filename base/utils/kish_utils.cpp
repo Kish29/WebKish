@@ -1,62 +1,76 @@
-//
-// Created by 蒋澳然 on 2021/8/7.
-// email: 875691208@qq.com
-// $desc
-//
-
 #include "kish_utils.h"
-#include "cstring"
 
-using std::string;
+#define IS_DIGIT(c) ((c) >= '0' && (c) <= '9')
+#define IS_CTRL(c)  ((c) > 0 && (c) <= 32)
 
-// 用c++标准库实现的版本，不过略微耗时，慢25%左右
-void split_str1_slow(const std::string &src, const std::string &join_1, std::vector<std::string> &container) {
-    string::size_type last_pos = src.find_first_not_of(join_1, 0);
-    string::size_type pos = src.find_first_of(join_1, last_pos);
-
-    while (pos != string::npos || last_pos != string::npos) {
-        container.emplace_back(src.substr(last_pos, pos));
-        last_pos = src.find_first_not_of(join_1, pos);
-        pos = src.find_first_of(join_1, last_pos);
-    }
+bool kish_atoi(const char *source, int *integer) {
+    if (!source || !integer || *source == 0) return false;
+    int64_t temp{};
+    int64_t *p = &temp;
+    if (kish_atoll(source, p)) {
+        *integer = static_cast<int>(temp);
+        return true;
+    } else return false;
 }
 
-void split_str1(const std::string &src, const std::string &join_1, std::vector<std::string> &container) {
-    if (src.empty()) return;
-    size_t len = src.length();
-    char *ss = new char[len + 1];
-    memcpy(ss, src.c_str(), len);
-    *(ss + len) = '\0';
-    const char *delim = join_1.c_str();
-    char *token = strtok(ss, delim);
-    while (token) {
-        container.emplace_back(token);
-        token = strtok(nullptr, delim);
+bool kish_atof(const char *source, double *double_num) {
+    if (!source || !double_num || *source == 0) return false;
+    const char *pstr = source;
+    while (IS_CTRL(*pstr)) {   // 移除控制字符，'\0'除外
+        pstr++;
     }
-    delete[] ss;
+    bool signed_flag = true;
+    if (*pstr == '-') {
+        signed_flag = false;
+        pstr++;
+    }
+    // 整数部分
+    double num{0};
+    bool converted = false;
+    while (IS_DIGIT(*pstr)) {
+        num = *pstr - '0' + num * 10.0;
+        pstr++;
+        converted = true;
+    }
+    // 小数部分
+    if (converted && *pstr == '.') {
+        pstr++;
+        // 次方
+        int n{10};
+        while (IS_DIGIT(*pstr)) {
+            num = (*pstr - '0') * (1.0 / n) + num;
+            n *= 10;
+            pstr++;
+        }
+    }
+    if (converted) {
+        *double_num = signed_flag ? num : -num;
+        return true;
+    }
+    return false;
 }
 
-void split_str1_in_map(const std::string &src, const std::string &join_1, std::map<string, string> &container) {
-    if (src.empty()) return;
-    size_t len = src.length();
-    char *ss = new char[len + 1];
-    memcpy(ss, src.c_str(), len);
-    *(ss + len) = '\0';
-    const char *delim = join_1.c_str();
-    char *token1 = strtok(ss, delim);
-    if (token1) {
-        char *token2 = strtok(nullptr, delim);
-        container.insert(std::make_pair(token1, token2 ? token2 : ""));
+bool kish_atoll(const char *source, int64_t *i64_t) {
+    if (!source || !i64_t || *source == 0) return false;
+    const char *pstr = source;
+    while (IS_CTRL(*pstr)) {   // 移除控制字符
+        pstr++;
     }
-    delete[] ss;
-}
-
-void split_str2(const std::string &src, const std::string &join_1, const std::string &join_2, std::map<std::string, std::string> &container) {
-    std::vector<string> temp;
-    temp.reserve(100);  // assume number
-
-    split_str1(src, join_1, temp);
-    for (const string &s: temp) {
-        split_str1_in_map(s, join_2, container);
+    bool signed_flag = true;     // true -> + / false -> -
+    if (*pstr == '-') {
+        signed_flag = false;
+        pstr++;
     }
+    int64_t num{0};
+    bool converted = false;
+    while (IS_DIGIT(*pstr)) {
+        num = *pstr - '0' + num * 10;
+        pstr++;
+        converted = true;
+    }
+    if (converted) {
+        *i64_t = signed_flag ? num : -num;
+        return true;
+    }
+    return false;
 }

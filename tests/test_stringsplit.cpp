@@ -12,7 +12,7 @@ void normal_test1() {
     std::string names = "jar asdf safas sad sa safjisoaf sadfjdiosafj";
     std::vector<std::string> tokens;
 
-    split_str1(names, " ", tokens);
+    split_str1_in_array(names, " ", tokens);
 
     for (auto const &s: tokens) {
         printf("%s\n", s.c_str());
@@ -26,7 +26,7 @@ void normal_test2() {
                         " jar asdf safas sad sa safjisoaf sadfjdiosafj";
     std::vector<std::string> tokens;
 
-    split_str1(names, " ", tokens);
+    split_str1_in_array(names, " ", tokens);
 
     for (auto const &s: tokens) {
         printf("%s\n", s.c_str());
@@ -37,7 +37,7 @@ void normal_test3() {
     std::string names = "jar=1;asdf=3;safas=4;sad=5;sa=7;safjisoaf=99;sadfjdiosafj";
     std::map<std::string, std::string> tokens;
 
-    split_str2(names, ";", "=", tokens);
+    split_str2_in_map(names, ";", "=", tokens);
 
     for (auto const &s: tokens) {
         printf("{%s,%s}\n", s.first.c_str(), s.second.c_str());
@@ -52,7 +52,7 @@ void stress_test() {
     std::vector<std::string> tokens;
     for (int i = 0; i < 1000000; ++i) {
         tokens.clear();
-        split_str1(names, ";", tokens);
+        split_str1_in_array(names, ";", tokens);
     }
     gettimeofday(&end, nullptr);
     size_t d = (end.tv_sec - start.tv_sec) * 1000 + (end.tv_usec - start.tv_usec) / 1000;

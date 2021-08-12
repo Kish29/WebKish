@@ -8,10 +8,12 @@
 #include "http_server.h"
 #include "http_interface.h"
 #include "algorithm"
+#include "mysql_conn_pool.h"
+#include "cJSON.h"
 
 constexpr int file_size = 8 * 1024 * 1024;  // 8MB
 
-class file_resolver : public kish::http_interface {
+class file_resolver : public kish::http_resolver {
 public:
     file_resolver() {
         fbuf = new char[file_size];
@@ -23,31 +25,24 @@ public:
     }
 
     bool can_resolve(const string &uri) override {
-        if (uri == "/") return true;
+        if (uri == "/") return (curr_fptr = ::fopen("index.html", "rb")) != nullptr;
         // 首先判断本路径下该文件是否存在
         string target_file(file_dir);
         target_file.append("/").append(uri);
-        curr_fptr = fopen(target_file.c_str(), "rb");
+        curr_fptr = ::fopen(target_file.c_str(), "rb");
         return curr_fptr != nullptr;
     }
 
-    void on_request(const string &uri, const param_container &params, http_response &response) override {
-        if (uri == "/") {
-            curr_fptr = fopen((file_dir + "/" + "index.html").c_str(), "rb");
-        }
-        if (curr_fptr) {
-            assert(curr_fptr);
-            response.update_stat(200);
-            setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
-            size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
-            response.contents.emplace_back(string(fbuf, flen));
-            response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
-            response.headers.insert(std::make_pair("Content-Type", MIME_TXT"; charset=UTF-8"));
-            ::fclose(curr_fptr);
-            curr_fptr = nullptr;
-        } else {
-            response.update_stat(500);
-        }
+    void on_request(const http_request_ptr &request, http_response &response) override {
+        assert(curr_fptr);
+        response.update_stat(200);
+        setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
+        size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
+        response.contents.emplace_back(string(fbuf, flen));
+        response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
+        response.headers.insert(std::make_pair("Content-Type", MIME_T_TXT"; charset=UTF-8"));
+        ::fclose(curr_fptr);
+        curr_fptr = nullptr;
     }
 
 private:
@@ -92,6 +87,67 @@ void saver_test() {
     }
 }
 
+#include "iostream"
+
+class user_interface : public http_interface {
+public:
+
+    void on_reg_in(http_interface_holder &holder) override {
+        holder.regin("/users/login", infc_type_t{
+                .infc = std::bind(&user_interface::user_login, this, std::placeholders::_1, std::placeholders::_2),
+                .method = HTTP_POST});
+        holder.regin("/users/reg", infc_type_t{
+                .infc = std::bind(&user_interface::user_regis, this, std::placeholders::_1, std::placeholders::_2),
+                .method = HTTP_POST});
+    }
+
+    void user_login(const http_request_ptr &request, http_response &response) {
+        response.update_stat(200);
+    }
+
+    void user_regis(const http_request_ptr &request, http_response &response) {
+        const string &type = request->get_content_type();
+        if (type == MIME_A_JSON) {
+            try {
+                auto param_json = (CJsonObject) request->get_param(http_message::JSON_PARAM);
+                string password;
+                param_json.Get("password", password);
+                std::cout << password << std::endl;
+                string username;
+                param_json.Get("username", username);
+                std::cout << username << std::endl;
+                int index = 0;
+                string key;
+                string been;
+                for (int i = 0; i < param_json["file_list"].GetArraySize(); ++i) {
+                    key = "file" + std::to_string(++index);
+                    param_json["file_list"][i].Get(key, been);
+                    std::cout << been << std::endl;
+                    key = "file" + std::to_string(++index);
+                    param_json["file_list"][i].Get(key, been);
+                    std::cout << been << std::endl;
+                }
+                response.update_stat(200);
+            } catch (const std::bad_cast &e) {
+                response.update_stat(400);
+            }
+        } else {
+            try {
+                string username = (string) request->get_param("username");
+                string password = (string) request->get_param("password");
+                std::cout << "username: " << username << '\n';
+                std::cout << "password: " << password << '\n';
+                response.update_stat(200);
+            } catch (const std::bad_cast &e) {
+                response.update_stat(400);
+            }
+        }
+    }
+
+private:
+
+};
+
 int main(int argc, char *argv[]) {
 //    map_test();
 //    saver_test();
@@ -101,7 +157,15 @@ int main(int argc, char *argv[]) {
 //    } else {
 //        printf("failed");
 //    }
-    reg_http_interfc(http_infc_ptr(new file_resolver));
+
+    /*MYSQL_POOL.init(
+            "localhost",
+            "jiangaoran",
+            "jiangaoran",
+            "webkish",
+            3306);*/
+    reg_http_resolver(http_resol_ptr(new file_resolver));
+    reg_http_interface(http_intc_ptr(new user_interface));
     http_server hs(5555, 2);
     hs.startup();
     return 0;

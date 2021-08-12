@@ -13659,7 +13659,7 @@ static llparse_state_t llhttp__internal__run(
   }
   s_n_llhttp__internal__n_error_14: {
     state->error = 0x3;
-    state->reason = "Missing expected LF after header value";
+    state->reason = "Missing expected LF after header value_t";
     state->error_pos = (const char*) p;
     state->_current = (void*) (intptr_t) s_error;
     return s_error;
@@ -13721,7 +13721,7 @@ static llparse_state_t llhttp__internal__run(
   }
   s_n_llhttp__internal__n_error_15: {
     state->error = 0xa;
-    state->reason = "Invalid header value char";
+    state->reason = "Invalid header value_t char";
     state->error_pos = (const char*) p;
     state->_current = (void*) (intptr_t) s_error;
     return s_error;

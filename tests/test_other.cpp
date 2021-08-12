@@ -111,24 +111,15 @@ using namespace kish;
 
 #include "unordered_set"
 
-class test_mapper : public kish::http_interface {
+class test_mapper : public kish::http_resolver {
 public:
 
     test_mapper() {
-        resolver_list.insert("index.html");
-    }
-
-    void on_request(const string &uri, const param_container &params, http_response &response) override {
-        printf("test_mapper received response!\n");
     }
 
 };
 
 void test() {
-    if (!reg_http_interfc(std::shared_ptr<http_interface>(new test_mapper))) {
-        printf("reg false");
-        exit(EXIT_FAILURE);
-    }
 }
 
 class holer {
@@ -213,8 +204,16 @@ public:
 std::weak_ptr<atomic_clock> wac;
 
 int main() {
-
-    shared_ptr<atomic_clock> ac(new atomic_clock);
+    std::multimap<string, string> maps;
+    maps.insert(std::make_pair("fruit", "apple"));
+    maps.insert(std::make_pair("fruit", "apple"));
+    maps.insert(std::make_pair("fruit", "apple"));
+    for (auto const &pair: maps) {
+        std::cout << pair.first << ": " << pair.second << '\n';
+    }
+    exit(EXIT_SUCCESS);
+}
+/*shared_ptr<atomic_clock> ac(new atomic_clock);
     wac = std::weak_ptr<atomic_clock>(ac);
     pthread_t t;
     pthread_create(&t, nullptr, [](void *) -> void * {
@@ -226,9 +225,7 @@ int main() {
     }, nullptr);
     sleep(3);
     ac.reset();
-    sleep(3);
-    exit(EXIT_SUCCESS);
-}
+    sleep(3);*/
 
 /*tt3 t3;
 t3.aplusplus();
@@ -265,7 +262,7 @@ callable task = std::move(vc.at(0));
 task();
 
 printf("vs size is %ld\n", vc.size());*/
-/*reg_http_interfc(std::make_shared<test_mapper>());
+/*reg_http_interface(std::make_shared<test_mapper>());
 http_handler::test_mappers();*/
 
 /*char *str{nullptr};
