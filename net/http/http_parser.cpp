@@ -124,7 +124,11 @@ void kish::http_request::parse_params_in_contents() {
             }
             request_multipart_parser parser(boundary);
             for (const string &c: contents) {
-                params.swap(parser.parse_multipart(c));
+                auto res = parser.parse_multipart(c);
+                while (!res.empty()) {
+                    params.insert(res.back());
+                    res.pop();
+                }
             }
             return;
         }
