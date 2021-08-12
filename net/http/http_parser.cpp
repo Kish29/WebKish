@@ -33,9 +33,7 @@ const kish::http_transform &kish::http_message::get_param(const std::string &key
 }
 
 void kish::http_message::parse_params_in_contents() {
-    for (const string &c:contents) {
-        split_str2_in_map<http_transform>(c, ";", "=", params);
-    }
+    // do nothing
 }
 
 void kish::http_message::set_content_length(size_t len) {
@@ -110,8 +108,33 @@ void kish::http_request::parse_params_in_contents() {
             return;
         }
         // 表单数据
-        if (headers.at(CONTENT_TYPE_KEY) == MIME_F_FORM) {
-            // todo: 解析post表单参数
+        if (headers.at(CONTENT_TYPE_KEY).find(MIME_F_FORM) != string::npos && !contents.empty()) {
+            int minor_mark_len{0};  // 获取前缀符号'-'的长度
+            const char *pstr = contents.at(0).c_str();
+            while (*pstr == '-') {
+                minor_mark_len++;
+                pstr++;
+            }
+            // 构建boundary
+            string boundary(minor_mark_len, '-');
+            const string &mime = headers.at(CONTENT_TYPE_KEY);
+            string::size_type b_pos = mime.find("boundary");
+            if (b_pos != string::npos) {
+                boundary.append(mime.substr(b_pos + 9));  /* 9 = strlen("boundary=")(0开头，末尾8) + 1*/
+            }
+            request_multipart_parser parser(boundary);
+            for (const string &c: contents) {
+                auto res = parser.parse_multipart(c);
+                while (!res.empty()) {
+                    params.insert(res.back());
+                    res.pop();
+                }
+            }
+            return;
+        }
+        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_XML || headers.at(CONTENT_TYPE_KEY) == MIME_T_XML) {
+            // todo: xml标记语言本文参数
+            return;
         }
     }
 }
@@ -380,11 +403,67 @@ int kish::http_response_parser::on_message_complete(llhttp_t *parser) {
 
 void kish::http_request_parser::reset() {
     base::reset();
-    request.reset(new http_request);
+    request = std::make_shared<http_request>();
 }
 
 void kish::http_response_parser::reset() {
     base::reset();
-    response.reset(new http_response);
+    response = std::make_shared<http_response>();
 }
 
+kish::param_container &kish::request_multipart_parser::parse_multipart(const char *body, size_t bodylen) {
+    params.clear();
+    multipart_parser_execute(m_parser, body, bodylen);
+    return params;
+}
+
+int kish::request_multipart_parser::on_read_header_value(multipart_parser *parser, const char *at, size_t len) {
+    char *buf = new char[len + 1];
+    memcpy(buf, at, len);
+    *(buf + len) = '\0';
+    char *fld = strrchr(buf, '=');
+    switch (last_s) {
+        case LAST_VALUE:
+        case IDLE: {
+            if (fld) {
+                fld++;
+                fld = trim_quote(fld);
+                field = fld;
+            }
+            break;
+        }
+        case LAST_FIELD:
+            /*if (fld) {
+                fld++;
+                fld = trim_quote(fld);
+                field.append(fld);
+            }*/
+            // fixme: 这儿只取第一个key
+            break;
+    }
+    delete[] buf;
+    last_s = LAST_FIELD;
+    return 0;
+}
+
+int kish::request_multipart_parser::on_part_data(multipart_parser *parser, const char *at, size_t len) {
+    char *buf = new char[len + 1];
+    memcpy(buf, at, len);
+    *(buf + len) = '\0';
+    switch (last_s) {
+        case IDLE:
+            LOG_INFO << "something must be wrong with this request message\n";
+            break;
+        case LAST_FIELD: {
+            value = buf;
+            params.insert(std::make_pair(field, http_transform(value.c_str())));
+            break;
+        }
+        case LAST_VALUE:
+            value.append(buf);
+            break;
+    }
+    delete[] buf;
+    last_s = LAST_VALUE;
+    return 0;
+}

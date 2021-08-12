@@ -27,6 +27,7 @@ namespace kish {
         using const_iter = typename container_t::const_iterator;
         using reference = value_t &;
         using const_reference = const value_t &;
+        using element_ref = std::pair<key_t, value_t> &;
 
         list_map() = default;
 
@@ -133,6 +134,22 @@ namespace kish {
                 it++;
             }
             return container.insert(it, ele);
+        }
+
+        void clear() {
+            container.clear();
+        }
+
+        bool empty() const {
+            return container.empty();
+        }
+
+        void pop() {
+            container.pop_back();
+        }
+
+        element_ref back() {
+            return container.back();
         }
 
     private:

@@ -87,4 +87,7 @@ bool kish_atof(const char *, double *);
 
 bool kish_atoll(const char *, int64_t *);
 
+
+char *trim_quote(char *str);
+
 #endif
