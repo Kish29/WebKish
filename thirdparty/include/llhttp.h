@@ -351,7 +351,7 @@ struct llhttp_settings_s {
   llhttp_cb      on_message_complete;
 
   /* When on_chunk_header is called, the current chunk length is stored
-   * in psr->content_length.
+   * in m_parser->content_length.
    * Possible return values 0, -1, `HPE_PAUSED`
    */
   llhttp_cb      on_chunk_header;
@@ -364,10 +364,10 @@ struct llhttp_settings_s {
   llhttp_cb      on_header_value_complete;
 };
 
-/* Initialize the psr with specific psr_type and user settings.
+/* Initialize the m_parser with specific psr_type and user settings.
  *
  * NOTE: lifetime of `settings` has to be at least the same as the lifetime of
- * the `psr` here. In practice, `settings` has to be either a static
+ * the `m_parser` here. In practice, `settings` has to be either a static
  * variable or be allocated with `malloc`, `new`, etc.
  */
 LLHTTP_EXPORT
@@ -380,30 +380,30 @@ LLHTTP_EXPORT
 llhttp_t* llhttp_alloc(llhttp_type_t psr_type);
 
 LLHTTP_EXPORT
-void llhttp_free(llhttp_t* psr);
+void llhttp_free(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-uint8_t llhttp_get_type(llhttp_t* psr);
+uint8_t llhttp_get_type(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-uint8_t llhttp_get_http_major(llhttp_t* psr);
+uint8_t llhttp_get_http_major(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-uint8_t llhttp_get_http_minor(llhttp_t* psr);
+uint8_t llhttp_get_http_minor(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-uint8_t llhttp_get_method(llhttp_t* psr);
+uint8_t llhttp_get_method(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-int llhttp_get_status_code(llhttp_t* psr);
+int llhttp_get_status_code(llhttp_t* m_parser);
 
 LLHTTP_EXPORT
-uint8_t llhttp_get_upgrade(llhttp_t* psr);
+uint8_t llhttp_get_upgrade(llhttp_t* m_parser);
 
 #endif  // defined(__wasm__)
 
-/* Reset an already initialized psr back to the start state, preserving the
- * existing psr psr_type, callback settings, user data, and lenient flags.
+/* Reset an already initialized m_parser back to the start state, preserving the
+ * existing m_parser psr_type, callback settings, user data, and lenient flags.
  */
 LLHTTP_EXPORT
 void llhttp_reset(llhttp_t* parser);

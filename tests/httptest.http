@@ -18,7 +18,6 @@ Content-Type: multipart/form-data; boundary=WebAppBoundary
 --WebAppBoundary
 Content-Disposition: form-data; name="field-name"; file_path="file.txt"
 
-< ./relative/path/to/local_file.txt
 --WebAppBoundary--
 
 ###
@@ -26,9 +25,14 @@ POST http://10.211.55.3:5555/users/reg
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="field-name"
+Content-Disposition: form-data; name="username"
 
-field-value_t
+jiangaoran
+
+--WebAppBoundary
+Content-Disposition: form-data; name="password"
+
+123456123456
 --WebAppBoundary--
 
 ###

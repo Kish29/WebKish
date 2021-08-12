@@ -135,6 +135,10 @@ namespace kish {
             return container.insert(it, ele);
         }
 
+        void clear() {
+            container.clear();
+        }
+
     private:
         container_t container{};
 

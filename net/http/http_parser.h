@@ -9,7 +9,16 @@
 
 #include "base.h"
 #include "map"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "llhttp.h"
+#include "multipart_parser.h"
+#ifdef __cplusplus
+}
+#endif
+
 #include "kish_utils.h"
 #include "vector"
 #include "http_transform.h"
@@ -206,6 +215,60 @@ namespace kish {
         GO_ON,      // 表示调用者检测通过，继续解析
         SKIP,       // 表示调用者跳过此报文的解析    --->  调用message_complete
         ERROR       // 表示调用者检测失败，parser内部会重置所有的状态和资源
+    };
+
+
+    class request_multipart_parser : noncopyable {
+        enum last_part_state_t {
+            IDLE,
+            LAST_FIELD,
+            LAST_VALUE
+        };
+    public:
+        explicit request_multipart_parser(const std::string &boundary) : request_multipart_parser(boundary.c_str()) {}
+
+        explicit request_multipart_parser(const char *boundary) {
+            bzero(&settings, sizeof settings);
+            settings.on_header_value = mp_on_read_header_value;
+            settings.on_part_data = mp_on_part_data;
+            m_parser = multipart_parser_init(boundary, &settings);
+            multipart_parser_set_data(m_parser, this);
+        }
+
+        ~request_multipart_parser() override {
+            multipart_parser_free(m_parser);
+        }
+
+        param_container &parse_multipart(const char *body, size_t bodylen);
+
+        param_container &parse_multipart(const std::string &body) {
+            return parse_multipart(body.c_str(), body.size());
+        }
+
+    protected:
+#define MP reinterpret_cast<request_multipart_parser *>(multipart_parser_get_data(parser))
+
+        static int mp_on_read_header_value(multipart_parser *parser, const char *at, size_t len) { return MP->on_read_header_value(parser, at, len); }
+
+        static int mp_on_part_data(multipart_parser *parser, const char *at, size_t len) { return MP->on_part_data(parser, at, len); }
+
+#undef MP
+
+        int on_read_header_value(multipart_parser *parser, const char *at, size_t len);
+
+        int on_part_data(multipart_parser *parser, const char *at, size_t len);
+
+    protected:
+        multipart_parser *m_parser;
+        multipart_parser_settings settings{};
+
+        last_part_state_t last_s{IDLE};
+
+        std::string field{};
+        std::string value{};
+
+        param_container params;
+
     };
 
     class http_parser : noncopyable {

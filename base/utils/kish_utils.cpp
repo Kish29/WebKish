@@ -74,3 +74,11 @@ bool kish_atoll(const char *source, int64_t *i64_t) {
     }
     return false;
 }
+
+char *trim_quote(char *str) {
+    while (*str == '"' || *str == '\\') str++;
+    size_t len = strlen(str);
+    while (*(str + len - 1) == '"' || *str == '\\') len--;
+    *(str + len) = '\0';
+    return str;
+}

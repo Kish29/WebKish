@@ -71,39 +71,39 @@ const llhttp_settings_t wasm_settings = {
 
 
 llhttp_t* llhttp_alloc(llhttp_type_t psr_type) {
-  llhttp_t* psr = malloc(sizeof(llhttp_t));
-  llhttp_init(psr, psr_type, &wasm_settings);
-  return psr;
+  llhttp_t* m_parser = malloc(sizeof(llhttp_t));
+  llhttp_init(m_parser, psr_type, &wasm_settings);
+  return m_parser;
 }
 
-void llhttp_free(llhttp_t* psr) {
-  free(psr);
+void llhttp_free(llhttp_t* m_parser) {
+  free(m_parser);
 }
 
-/* Some getters required to get stuff from the psr */
+/* Some getters required to get stuff from the m_parser */
 
-uint8_t llhttp_get_type(llhttp_t* psr) {
-  return psr->psr_type;
+uint8_t llhttp_get_type(llhttp_t* m_parser) {
+  return m_parser->psr_type;
 }
 
-uint8_t llhttp_get_http_major(llhttp_t* psr) {
-  return psr->http_major;
+uint8_t llhttp_get_http_major(llhttp_t* m_parser) {
+  return m_parser->http_major;
 }
 
-uint8_t llhttp_get_http_minor(llhttp_t* psr) {
-  return psr->http_minor;
+uint8_t llhttp_get_http_minor(llhttp_t* m_parser) {
+  return m_parser->http_minor;
 }
 
-uint8_t llhttp_get_method(llhttp_t* psr) {
-  return psr->method;
+uint8_t llhttp_get_method(llhttp_t* m_parser) {
+  return m_parser->method;
 }
 
-int llhttp_get_status_code(llhttp_t* psr) {
-  return psr->status_code;
+int llhttp_get_status_code(llhttp_t* m_parser) {
+  return m_parser->status_code;
 }
 
-uint8_t llhttp_get_upgrade(llhttp_t* psr) {
-  return psr->upgrade;
+uint8_t llhttp_get_upgrade(llhttp_t* m_parser) {
+  return m_parser->upgrade;
 }
 
 #endif  // defined(__wasm__)
