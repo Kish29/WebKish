@@ -13,8 +13,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "multipart_parser.h"
-#include "llhttp.h"
+#include "../../thirdparty/multipart_parser.h"
+#include "../../thirdparty/llhttp.h"
 #ifdef __cplusplus
 }
 #endif

@@ -88,15 +88,15 @@ set(THIRD_PARTY_LIBNAME third_pt)
 
 set(
         THIRD_PARTY_SRC
-        thirdparty/src/api.c
-        thirdparty/src/http.c
-        thirdparty/src/llhttp.c
-        thirdparty/src/cJSON.c
-        thirdparty/src/CJsonObject.cpp
-        thirdparty/src/multipart_parser.c
+        thirdparty/api.c
+        thirdparty/http.c
+        thirdparty/llhttp.c
+        thirdparty/cJSON.c
+        thirdparty/CJsonObject.cpp
+        thirdparty/multipart_parser.c
 )
 
-include_directories(thirdparty/include)
+include_directories(thirdparty)
 
 add_library(${THIRD_PARTY_LIBNAME} SHARED ${THIRD_PARTY_SRC})
 
