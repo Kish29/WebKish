@@ -1,0 +1,9 @@
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/install/local.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/install/strip.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/install.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/list_install_components.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/rebuild_cache.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/third_pt.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/kish.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/ksql.dir
+/Users/jiangaoran/WorkSapce/C++/WebKish/install_temp/CMakeFiles/edit_cache.dir

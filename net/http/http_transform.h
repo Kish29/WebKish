@@ -9,7 +9,7 @@
 
 #include "base.h"
 #include "vector"
-#include "CJsonObject.hpp"
+#include "../../thirdparty/CJsonObject.hpp"
 
 using namespace neb;
 

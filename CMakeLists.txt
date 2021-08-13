@@ -4,7 +4,6 @@ project(WebKish)
 set(CMAKE_CXX_STANDARD 11)
 
 set(${CMAKE_CXX_FLAGS_RELEASE} "${CMAKE_CXX_FLAGS} -Wall -O3")
-set(${CMAKE_CXX_FLAGS_DEBUG} "${CMAKE_CXX_FLAGS_DEBUG} -g -Wall -O3")
 
 ############# libkish ################
 set(LIBKISH_NAME kish)
@@ -65,11 +64,10 @@ include_directories(net)
 include_directories(net/tcp)
 include_directories(net/http)
 
-add_definitions(-D__DEBUG__)
-
 add_library(${LIBKISH_NAME} SHARED ${SOURCES})
 
 ############ lib mysql #################
+set(KSQL_NAME ksql)
 set(
         SQL_SRCS
         sql/mysequal/mysql_proxy.cpp
@@ -77,8 +75,9 @@ set(
         sql/mysequal/mysql_conn_pool.cpp
 )
 
-add_library(ksql ${SQL_SRCS})
-target_link_libraries(ksql ${LIBKISH_NAME} mariadb)
+add_library(${KSQL_NAME} SHARED ${SQL_SRCS})
+
+target_link_libraries(${KSQL_NAME} ${LIBKISH_NAME} mariadb)
 
 include_directories(sql)
 include_directories(sql/mysequal)
@@ -88,42 +87,38 @@ set(THIRD_PARTY_LIBNAME third_pt)
 
 set(
         THIRD_PARTY_SRC
-        thirdparty/src/api.c
-        thirdparty/src/http.c
-        thirdparty/src/llhttp.c
-        thirdparty/src/cJSON.c
-        thirdparty/src/CJsonObject.cpp
-        thirdparty/src/multipart_parser.c
+        thirdparty/api.c
+        thirdparty/http.c
+        thirdparty/llhttp.c
+        thirdparty/cJSON.c
+        thirdparty/CJsonObject.cpp
+        thirdparty/multipart_parser.c
 )
 
 include_directories(thirdparty/include)
 
 add_library(${THIRD_PARTY_LIBNAME} SHARED ${THIRD_PARTY_SRC})
 
-macro(add_example_target TARGET)
-    add_executable(example_${TARGET} example_${TARGET}.cpp)
-    target_link_libraries(example_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} pthread)
-endmacro()
+install(TARGETS
+        ${LIBKISH_NAME} ${KSQL_NAME} ${THIRD_PARTY_LIBNAME}
+        LIBRARY
+        DESTINATION
+        ${PROJECT_SOURCE_DIR}/kish/lib
+        )
 
-macro(add_test_target TARGET)
-    add_executable(test_${TARGET} tests/test_${TARGET}.cpp)
-    target_link_libraries(test_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} pthread)
-endmacro()
+install(DIRECTORY
+        ${PROJECT_SOURCE_DIR}/base
+        ${PROJECT_SOURCE_DIR}/net
+        ${PROJECT_SOURCE_DIR}/sql
+        ${PROJECT_SOURCE_DIR}/thirdparty
+        DESTINATION
+        ${PROJECT_SOURCE_DIR}/kish/include
+        FILES_MATCHING PATTERN "*.h"
+        )
 
-macro(add_sql_test_target TARGET)
-    add_executable(test_${TARGET} tests/test_${TARGET}.cpp)
-    target_link_libraries(test_${TARGET} ${LIBKISH_NAME} ${THIRD_PARTY_LIBNAME} ksql pthread)
-endmacro()
-
-add_test_target(other)
-add_test_target(tcpserver)
-add_test_target(httpserver)
-add_test_target(threadpool)
-add_test_target(logger)
-add_test_target(timer)
-add_test_target(thread)
-add_test_target(thirdparty)
-add_test_target(httpparse)
-add_test_target(stringsplit)
-add_test_target(fileresolver)
-add_sql_test_target(sqltest)
+install(
+        FILES
+        thirdparty/LICENSE-MIT
+        DESTINATION
+        ${PROJECT_SOURCE_DIR}/kish
+)
