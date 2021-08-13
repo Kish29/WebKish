@@ -8,10 +8,10 @@
 #include "http_interface.h"
 #include "cstring"
 
-constexpr int file_size = 8 * 1024 * 1024;  // 8MB
+constexpr int fbuf_size = 8 * 1024 * 1024;  // 8MB
 
 // __thread 是线程独有的局部存储变量，不能分配8MB那么大的空间
-//__thread char buf[file_size];
+//__thread char buf[fbuf_size];
 
 class index_resolver : public http_resolver {
 public:
@@ -20,7 +20,7 @@ public:
         resolver_list.emplace("/");
         resolver_list.emplace("/index.html");
         resolver_list.emplace("/favicon.icon");
-        fbuf = new char[file_size];
+        fbuf = new char[fbuf_size];
     }
 
     ~index_resolver() override {
@@ -36,7 +36,7 @@ public:
             FILE *fptr = fopen("index.html", "r");
             if (fptr) {
                 response.update_stat(200);
-                size_t flen = ::fread_unlocked(fbuf, 1, file_size, fptr);
+                size_t flen = ::fread_unlocked(fbuf, 1, fbuf_size, fptr);
                 response.contents.emplace_back(string(fbuf, flen));
                 response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
                 response.headers.insert(std::make_pair("Content-Type", MIME_T_HTML"; charset=UTF-8"));

@@ -38,9 +38,9 @@ namespace kish {
             }
         }
 
-        size_t read_unlock(char *fbuf) const;
+        size_t read_unlock(char *fbuf, size_t buf_size) const;
 
-        size_t read(char *fbuf) const;
+        size_t read(char *fbuf, size_t buf_size) const;
 
         size_t write_unlock(const char *fbuf, size_t len) const;
 

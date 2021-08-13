@@ -11,12 +11,14 @@
 #include "mysql_conn_pool.h"
 #include "file_wrapper.h"
 
-constexpr int file_size = 8 * 1024 * 1024;  // 8MB
+constexpr int fbuf_size = 8 * 1024 * 1024;  // 8MB
 
+// todo: 如何传输大文件
 class file_resolver : public kish::http_resolver {
 public:
-    file_resolver() {
-        fbuf = new char[file_size];
+
+    explicit file_resolver(const char *src_dir) : file_src_dir(src_dir) {
+        fbuf = new char[fbuf_size];
     }
 
     ~file_resolver() override {
@@ -25,7 +27,7 @@ public:
 
     bool can_resolve(const string &uri) override {
         // 首先判断本路径下该文件是否存在
-        string target_file(file_dir);
+        string target_file(file_src_dir);
         target_file.append("/");
         if (uri == "/") {
             target_file.append("index.html");
@@ -42,8 +44,15 @@ public:
 
     void on_request(const http_request_ptr &request, http_response &response) override {
         file.assert_opened();
-        response.update_stat(200);
-        size_t flen = file.read_unlock(fbuf);
+        size_t file_size = file.get_file_size();
+        size_t flen{};
+        if (file_size < fbuf_size) {
+            response.update_stat(200);
+            flen = file.read_unlock(fbuf, file_size);
+        } else {
+            response.update_stat(206);
+            flen = file.read_unlock(fbuf, fbuf_size);
+        }
         response.contents.emplace_back(string(fbuf, flen));
         response.set_content_type(curr_file_mime_type);
         response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
@@ -52,7 +61,7 @@ public:
 
 private:
     file_wrapper file{};
-    const string file_dir{"/home/parallels/webserver/static_docs"};
+    const string file_src_dir;
 
     char *fbuf{nullptr};
     string curr_file_mime_type{MIME_T_TXT};
@@ -170,7 +179,7 @@ int main(int argc, char *argv[]) {
             "jiangaoran",
             "webkish",
             3306);*/
-    reg_http_resolver(http_resol_ptr(new file_resolver));
+    reg_http_resolver(http_resol_ptr(new file_resolver("/home/parallels/webserver/static_docs")));
     reg_http_interface(http_intc_ptr(new user_interface));
     http_server hs(5555, 2);
     hs.startup();
