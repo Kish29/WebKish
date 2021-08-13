@@ -1,0 +1,4 @@
+.idea
+.gitignore
+cmake-build-debug-fedora
+cmake-build-debug
