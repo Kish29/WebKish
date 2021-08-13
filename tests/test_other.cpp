@@ -206,14 +206,17 @@ std::weak_ptr<atomic_clock> wac;
 #include "kish_utils.h"
 
 int main() {
-    int n;
+    /*int n;
     scanf("%d", &n);
     std::string input{};
     for (int i = 0; i < n; ++i) {
         std::cin >> input;
         std::cout << kish_toupper(input) << std::endl;
         std::cout << kish_tolower(input) << std::endl;
-    }
+    }*/
+    /*auto *p = new atomic_clock;
+    delete p;
+    delete p;*/
     exit(EXIT_SUCCESS);
 }
 /*shared_ptr<atomic_clock> ac(new atomic_clock);
