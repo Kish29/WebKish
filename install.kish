@@ -16,18 +16,10 @@ hash mysql_config 2>/dev/null ||
 
 set -v
 
-install_dir=kish
 temp_dir=install_temp
-
-inc_dir=include
-lib_dir=lib
 
 if [ ! -d "$temp_dir" ]; then
   mkdir "$temp_dir"
-fi
-
-if [ ! -d "$install_dir" ]; then
-  mkdir -p $install_dir/{$inc_dir,$lib_dir}
 fi
 
 cd "$temp_dir" || return
