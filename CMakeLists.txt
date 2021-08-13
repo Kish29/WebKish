@@ -36,6 +36,7 @@ set(
         base/timer.cpp
         base/list_map.cpp
         base/utils/kish_utils.cpp
+        base/file_wrapper.cpp
         net/tcp/wakeup_handler.cpp
         net/tcp/accept_handler.cpp
         net/server_config.cpp
@@ -47,6 +48,9 @@ set(
         net/http/http_interface.cpp
         net/http/http_parser.cpp
         net/http/http_heart_check.h
+        net/http/http_message.cpp
+        net/http/http_request.cpp
+        net/http/http_response.cpp
         net/http/http_transform.cpp
 )
 

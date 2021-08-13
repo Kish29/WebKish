@@ -203,13 +203,16 @@ public:
 
 std::weak_ptr<atomic_clock> wac;
 
+#include "kish_utils.h"
+
 int main() {
-    std::multimap<string, string> maps;
-    maps.insert(std::make_pair("fruit", "apple"));
-    maps.insert(std::make_pair("fruit", "apple"));
-    maps.insert(std::make_pair("fruit", "apple"));
-    for (auto const &pair: maps) {
-        std::cout << pair.first << ": " << pair.second << '\n';
+    int n;
+    scanf("%d", &n);
+    std::string input{};
+    for (int i = 0; i < n; ++i) {
+        std::cin >> input;
+        std::cout << kish_toupper(input) << std::endl;
+        std::cout << kish_tolower(input) << std::endl;
     }
     exit(EXIT_SUCCESS);
 }

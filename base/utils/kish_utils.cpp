@@ -82,3 +82,37 @@ char *trim_quote(char *str) {
     *(str + len) = '\0';
     return str;
 }
+
+#define IS_ALPHA(c)     (((c) >= 65 && (c) <= 90) || ((c) >=97 && (c) <= 122))
+
+std::string kish_toupper(const string &str) {
+    if (!str.empty()) {
+        char *res = new char[str.size() + 1];
+        for (int i = 0; i < str.size(); i++) {
+            if (IS_ALPHA(str.at(i))) {
+                res[i] = (str.at(i) & 0xdf);
+            } else res[i] = str.at(i);
+        }
+        *(res + str.size()) = '\0';
+        std::string r(res);
+        delete[] res;
+        return r;
+    }
+    return str;
+}
+
+std::string kish_tolower(const string &str) {
+    if (!str.empty()) {
+        char *res = new char[str.size() + 1];
+        for (int i = 0; i < str.size(); i++) {
+            if (IS_ALPHA(str.at(i))) {
+                res[i] = (str.at(i) | 0x20);
+            } else res[i] = str.at(i);
+        }
+        *(res + str.size()) = '\0';
+        std::string r(res);
+        delete[] res;
+        return r;
+    }
+    return str;
+}

@@ -9,7 +9,7 @@
 #include "http_interface.h"
 #include "algorithm"
 #include "mysql_conn_pool.h"
-#include "cJSON.h"
+#include "file_wrapper.h"
 
 constexpr int file_size = 8 * 1024 * 1024;  // 8MB
 
@@ -21,35 +21,41 @@ public:
 
     ~file_resolver() override {
         delete[] fbuf;
-        fclose(curr_fptr);
     }
 
     bool can_resolve(const string &uri) override {
-        if (uri == "/") return (curr_fptr = ::fopen("index.html", "rb")) != nullptr;
         // 首先判断本路径下该文件是否存在
         string target_file(file_dir);
-        target_file.append("/").append(uri);
-        curr_fptr = ::fopen(target_file.c_str(), "rb");
-        return curr_fptr != nullptr;
+        target_file.append("/");
+        if (uri == "/") {
+            target_file.append("index.html");
+        } else {
+            target_file.append(uri);
+        }
+        if (file.open(target_file.c_str(), READONLY)) {
+            curr_file_mime_type = get_file_mime_type(target_file.c_str());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     void on_request(const http_request_ptr &request, http_response &response) override {
-        assert(curr_fptr);
+        file.assert_opened();
         response.update_stat(200);
-        setvbuf(curr_fptr, nullptr, _IOFBF, file_size);
-        size_t flen = ::fread_unlocked(fbuf, 1, file_size, curr_fptr);
+        size_t flen = file.read_unlock(fbuf);
         response.contents.emplace_back(string(fbuf, flen));
+        response.set_content_type(curr_file_mime_type);
         response.headers.insert(std::make_pair("Content-Length", std::to_string(flen)));
-        response.headers.insert(std::make_pair("Content-Type", MIME_T_TXT"; charset=UTF-8"));
-        ::fclose(curr_fptr);
-        curr_fptr = nullptr;
+        file.close();
     }
 
 private:
-    FILE *curr_fptr{nullptr};
+    file_wrapper file{};
     const string file_dir{"/home/parallels/webserver/static_docs"};
 
     char *fbuf{nullptr};
+    string curr_file_mime_type{MIME_T_TXT};
 };
 
 void map_test() {

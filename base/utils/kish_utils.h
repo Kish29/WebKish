@@ -90,4 +90,7 @@ bool kish_atoll(const char *, int64_t *);
 
 char *trim_quote(char *str);
 
+std::string kish_toupper(const std::string &str);
+std::string kish_tolower(const std::string &str);
+
 #endif
