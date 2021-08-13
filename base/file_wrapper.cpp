@@ -20,18 +20,16 @@ kish::file_wrapper::file_wrapper(const char *filename, kish::fopen_type_t t, boo
     init_stat();
 }
 
-size_t kish::file_wrapper::read_unlock(char *fbuf) const {
+size_t kish::file_wrapper::read_unlock(char *fbuf, size_t buf_size) const {
     if (!fbuf) return 0;
     if (ft == WRITE_ONLY_TRUNCATE || ft == APPEND) return 0;
-    ::setvbuf(fptr, nullptr, _IOFBF, st_buf.st_size + 1);
-    return ::fread_unlocked(fbuf, 1, st_buf.st_size + 1, fptr);
+    return ::fread_unlocked(fbuf, 1, buf_size, fptr);
 }
 
-size_t kish::file_wrapper::read(char *fbuf) const {
+size_t kish::file_wrapper::read(char *fbuf, size_t buf_size) const {
     if (!fbuf) return 0;
     if (ft == WRITE_ONLY_TRUNCATE || ft == APPEND) return 0;
-    ::setvbuf(fptr, nullptr, _IOFBF, st_buf.st_size + 1);
-    return ::fread(fbuf, 1, st_buf.st_size + 1, fptr);
+    return ::fread(fbuf, 1, buf_size, fptr);
 }
 
 void kish::file_wrapper::close() {
@@ -53,6 +51,7 @@ bool kish::file_wrapper::open(const char *filename, kish::fopen_type_t type) {
     fptr = ::fopen(m_filename, get_fopen_mode(type));
     if (!fptr) return false;
     init_stat();
+    ::setvbuf(fptr, nullptr, _IOFBF, st_buf.st_size + 1);
     return true;
 }
 
