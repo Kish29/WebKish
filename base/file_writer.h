@@ -8,21 +8,15 @@
 #define WEBKISH_FILE_WRITER_H
 
 #include "base.h"
+#include "file_wrapper.h"
 
 namespace kish {
 
-    class file_writer : noncopyable {
+    class file_writer : public file_wrapper {
     public:
-        explicit file_writer(const char *filename);
-
-        ~file_writer() override;
+        explicit file_writer(const char *filename) : file_wrapper(filename, APPEND_CLOEXE, true) {}
 
         size_t append(const char *line, size_t len);
-
-        void flush();
-
-    private:
-        FILE *fptr;
 
     };
 }

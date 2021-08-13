@@ -6,162 +6,6 @@
 
 #include "http_parser.h"
 #include "logger.h"
-#include "sstream"
-
-const std::string kish::http_message::NO_CONTENT_TYPE = "NOCNT";
-const std::string kish::http_message::NO_TRANSFER_ENCODE = "NOENC";
-const std::string kish::http_message::JSON_PARAM = "JSON_PARAM";
-const std::string kish::http_message::EMPTY_PARAM = "EMPTY_PARAM";
-
-size_t kish::http_message::content_length() const {
-    size_t length = 0;
-    for (auto &c: contents) {
-        length += c.size();
-    }
-    return length;
-}
-
-const kish::http_transform &kish::http_message::get_param(const std::string &key) {
-    try {
-        return params.at(key);
-    } catch (const not_found_exception &e) {
-        if (params.find(EMPTY_PARAM) == params.end()) {
-            params.insert(std::make_pair(EMPTY_PARAM, http_transform()));
-        }
-    }
-    return params.at(EMPTY_PARAM);
-}
-
-void kish::http_message::parse_params_in_contents() {
-    // do nothing
-}
-
-void kish::http_message::set_content_length(size_t len) {
-    headers.insert(std::make_pair(CONTENT_LENGTH_KEY, std::to_string(len)));
-}
-
-void kish::http_message::set_content_type(const std::string &type) {
-    headers.insert(std::make_pair(CONTENT_TYPE_KEY, type));
-}
-
-const std::string &kish::http_message::get_content_type() const {
-    return headers.find(CONTENT_TYPE_KEY) != headers.end() ? headers.at(CONTENT_TYPE_KEY) : NO_CONTENT_TYPE;
-}
-
-void kish::http_message::set_transfer_encoding(const std::string &enc) {
-    headers.insert(std::make_pair(TRANSFER_TYPE_KEY, enc));
-}
-
-const std::string &kish::http_message::get_transfer_encoding() const {
-    return headers.find(TRANSFER_TYPE_KEY) != headers.end() ? headers.at(TRANSFER_TYPE_KEY) : NO_TRANSFER_ENCODE;
-}
-
-std::string kish::http_request::tomessage() {
-    std::ostringstream os;
-    // version uint8_t must convert to int
-    os << llhttp_method_name(method) << SPACE << uri << SPACE << "HTTP/" << (int) ver_major << '.' << (int) ver_minor << CRLF;
-    for (const auto &h: headers) {
-        os << h.first << COLON << SPACE << h.second << CRLF;
-    }
-    os << CRLF;
-    for (const auto &c : contents) {
-        os << c << CRLF;
-    }
-    if (!contents.empty()) {
-        os << CRLF;
-    }
-    return os.str();
-}
-
-void kish::http_request::parse_params_in_uri() {
-    size_t question_mark_pos = uri.find_first_of('?');
-    string param_str{};
-    if (question_mark_pos != string::npos) {
-        param_str = uri.substr(question_mark_pos + 1);
-        uri = uri.substr(0, question_mark_pos);
-    }
-    if (!param_str.empty()) {
-        split_str2_in_map<http_transform>(param_str, "&", "=", params);
-    }
-}
-
-void kish::http_request::parse_params_in_contents() {
-    // todo: 检查是否合理？
-    if (method == HTTP_POST && headers.find(CONTENT_TYPE_KEY) != headers.end()) {
-        // url数据
-        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_URL) {
-            for (const string &c: contents) {
-                split_str2_in_map<http_transform>(c, "&", "=", params);
-            }
-            return;
-        }
-        // json数据
-        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_JSON) {
-            for (const string &c: contents) {
-                params.insert(std::make_pair(JSON_PARAM, http_transform(c.c_str())));
-            }
-            return;
-        }
-        // 纯文本数据
-        if (headers.at(CONTENT_TYPE_KEY) == MIME_T_TXT) {
-            // todo: 解析post纯文本数据参数
-            return;
-        }
-        // 表单数据
-        if (headers.at(CONTENT_TYPE_KEY).find(MIME_F_FORM) != string::npos && !contents.empty()) {
-            int minor_mark_len{0};  // 获取前缀符号'-'的长度
-            const char *pstr = contents.at(0).c_str();
-            while (*pstr == '-') {
-                minor_mark_len++;
-                pstr++;
-            }
-            // 构建boundary
-            string boundary(minor_mark_len, '-');
-            const string &mime = headers.at(CONTENT_TYPE_KEY);
-            string::size_type b_pos = mime.find("boundary");
-            if (b_pos != string::npos) {
-                boundary.append(mime.substr(b_pos + 9));  /* 9 = strlen("boundary=")(0开头，末尾8) + 1*/
-            }
-            request_multipart_parser parser(boundary);
-            for (const string &c: contents) {
-                auto res = parser.parse_multipart(c);
-                while (!res.empty()) {
-                    params.insert(res.back());
-                    res.pop();
-                }
-            }
-            return;
-        }
-        if (headers.at(CONTENT_TYPE_KEY) == MIME_A_XML || headers.at(CONTENT_TYPE_KEY) == MIME_T_XML) {
-            // todo: xml标记语言本文参数
-            return;
-        }
-    }
-}
-
-std::string kish::http_response::tomessage() {
-    std::ostringstream os;
-    os << "HTTP/" << (int) ver_major << '.' << (int) ver_minor << SPACE << status_code << SPACE << short_msg << CRLF;  // request line
-    /*⚠️检查是否缺失必要的字段⚠️*/
-    if (headers.find(CONTENT_TYPE_KEY) == headers.end()) {
-        headers.insert(std::make_pair(CONTENT_TYPE_KEY, MIME_T_TXT"; charset=UTF-8"));
-    }
-    // ⚠️Content-Length是必须的，否则客户端没有收到此字段会认为仍然有数据，然后一直等待
-    if (headers.find(CONTENT_LENGTH_KEY) == headers.end()) {
-        headers.insert(std::make_pair(CONTENT_LENGTH_KEY, std::to_string(content_length())));
-    }
-    for (const auto &h: headers) {
-        os << h.first << COLON << SPACE << h.second << CRLF;
-    }
-    os << CRLF;
-    for (const auto &c : contents) {
-        os << c;
-    }
-    if (!contents.empty()) {
-        os << CRLF;
-    }
-    return os.str();
-}
 
 kish::http_parser::http_parser(kish::http_parser::parse_type type) : psr_type(type) {
     llhttp_settings_init(&settings);
@@ -286,7 +130,9 @@ int kish::http_parser::on_headers_complete(llhttp_t *parser) {
     } else if (timeout_pos != string::npos) {
         alive = SET_TIMEOUT;
         string to = cnn.substr(timeout_pos + 8);    /* 8 = strlen(timeout=) + 1 */
-        timeout = atoi(to.c_str());
+        if (!kish_atoi(to.c_str(), &timeout)) {
+            LOG_INFO << "timeout atoi convert failed";
+        }
     } else {
         alive = CLOSE_IMM;
     }
@@ -466,4 +312,31 @@ int kish::request_multipart_parser::on_part_data(multipart_parser *parser, const
     delete[] buf;
     last_s = LAST_VALUE;
     return 0;
+}
+
+std::unordered_map<string, string> mime_types = {
+        {".html",      MIME_T_HTML},
+        {".htm",       MIME_T_HTM},
+        {".txt",       MIME_T_TXT},
+        {".c",         MIME_T_C},
+        {".bmp",       MIME_M_BMP},
+        {".ico",       MIME_M_ICO},
+        {".jpg",       MIME_M_JPG},
+        {".png",       MIME_M_PNG},
+        {".gif",       MIME_M_GIF},
+        {".gz",        MIME_A_GZ},
+        {".xml",       MIME_T_XML},
+        {".avi",       MIME_M_AVI},
+        {".mp3",       MIME_M_MP3},
+        {".doc",       MIME_A_DOC},
+        {MIME_DEFAULT, MIME_T_TXT}
+};
+
+const char *get_file_mime_type(const char *filename) {
+    if (!filename) return mime_types.at(MIME_DEFAULT).c_str();
+    const char *sfx = strrchr(filename, '.');
+    if (sfx && mime_types.find(sfx) != mime_types.end()) {
+        return mime_types.at(sfx).c_str();
+    }
+    return mime_types.at(MIME_DEFAULT).c_str();
 }

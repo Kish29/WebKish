@@ -9,20 +9,20 @@
 // 14 lines
 void type_test() {
     LOG_INFO << "------- psr_type convert test -------";
-    LOG_INFO << true;
-    LOG_INFO << false;
-    LOG_INFO << (short) 100;
-    LOG_INFO << (unsigned short) 200;
-    LOG_INFO << 12414;
-    LOG_INFO << (unsigned int) 12414;
-    LOG_INFO << (long) 1001234;
-    LOG_INFO << (unsigned long) 1001234;
-    LOG_INFO << (long long) 10012434;
-    LOG_INFO << (unsigned long long) 141431001234;
-    LOG_INFO << (float) 12.12412521;
-    LOG_INFO << (double) 12.12412521;
-    LOG_INFO << 'c';
-    LOG_INFO << std::string("safsadf");
+    LOG_RECOR << true;
+    LOG_RECOR << false;
+    LOG_RECOR << (short) 100;
+    LOG_RECOR << (unsigned short) 200;
+    LOG_RECOR << 12414;
+    LOG_RECOR << (unsigned int) 12414;
+    LOG_RECOR << (long) 1001234;
+    LOG_RECOR << (unsigned long) 1001234;
+    LOG_RECOR << (long long) 10012434;
+    LOG_RECOR << (unsigned long long) 141431001234;
+    LOG_RECOR << (float) 12.12412521;
+    LOG_RECOR << (double) 12.12412521;
+    LOG_RECOR << 'c';
+    LOG_RECOR << std::string("safsadf");
 }
 
 // 10W lines
@@ -55,14 +55,14 @@ void stress_test2() {
     }
 }
 
-// 一共58W15行 线程日志那儿有2行 thread.cpp:38 thread.cpp:41，但日志线程已经结束了，所以无法打印
+// 一共394W15行 线程日志那儿有2行 thread.cpp:38 thread.cpp:41，但日志线程已经结束了，所以无法打印
 int main() {
-//    type_test();
-//    sleep(5);
-//    stress_test1();
-//    sleep(5);
-//    stress_test2();
-//    sleep(5);
+    type_test();
+    sleep(5);
+    stress_test1();
+    sleep(5);
+    stress_test2();
+    sleep(5);
 //    SLEEP_ADAY;
 //    int i = 1 / 0;
     /*char fbuf[50];
@@ -76,6 +76,6 @@ int main() {
         char *out = strerror_r(se, fbuf, sizeof fbuf);
         printf("%s\n", out);
     }*/
-    LOG_TRACE << "read fd:-1 for errno test";
-    sleep(1);
+//    LOG_TRACE << "read fd:-1 for errno test";
+//    sleep(1);
 }
