@@ -1,0 +1,1341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="WebKish"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_sqltest">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_sqltest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_sqltest"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_sqltest/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_sqltest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_sqltest/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_fileresolver">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_fileresolver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_fileresolver"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_fileresolver/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_fileresolver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_fileresolver/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_stringsplit">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_stringsplit" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_stringsplit"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_stringsplit/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_stringsplit" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_stringsplit/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_httpparse">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_httpparse" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_httpparse"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_httpparse/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_httpparse" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_httpparse/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_timer">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_timer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_timer"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_timer/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_timer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_timer/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_logger">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_logger" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_logger"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_logger/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_logger" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_logger/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_threadpool">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_threadpool" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_threadpool"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_threadpool/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_threadpool" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_threadpool/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_thread">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_thread" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_thread"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_thread/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_thread" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_thread/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ksql">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libksql.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 ksql"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ksql/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libksql.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 ksql/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_thirdparty">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_thirdparty" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_thirdparty"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_thirdparty/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_thirdparty" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_thirdparty/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_httpserver">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_httpserver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_httpserver"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_httpserver/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_httpserver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_httpserver/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="kish">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libkish.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 kish"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="kish/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libkish.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 kish/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_tcpserver">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_tcpserver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_tcpserver"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_tcpserver/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_tcpserver" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_tcpserver/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_other">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_other" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_other"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test_other/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/test_other" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 test_other/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="third_pt">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libthird_pt.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 third_pt"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="third_pt/fast">
+				<Option output="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/libthird_pt.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-D__DEBUG__"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal"/>
+					<Add directory="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 third_pt/fast"/>
+					<CompileFile command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/opt/homebrew/bin/gmake -j8 -f &quot;/Users/jiangaoran/WorkSapce/C++/WebKish/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/base.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr/sync.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr/thread.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr/thread.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr/thread_pool.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/concurr/thread_pool.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/event_looper.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/event_looper.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/fdholder.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/fdholder.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/file_wrapper.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/file_wrapper.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/file_writer.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/file_writer.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/list_map.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/list_map.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log/log_stream.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log/log_stream.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log/logger.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/log/logger.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/looper_pool.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/looper_pool.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/netio_utils.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/netio_utils.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/epoll_handler.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/epoll_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/epoll_poller.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/epoll_poller.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/event_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/poll_poller.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/poll_poller.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/poller.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/select_poller.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/nio/select_poller.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/sized_buffer.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket/inet_address.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket/inet_address.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket/socket.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/socket/socket.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/sysio_utils.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/sysio_utils.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/time_stamp.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/time_stamp.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/timer.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/timer.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils/kish_utils.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/base/utils/kish_utils.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_handler.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_heart_check.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_interface.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_interface.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_message.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_message.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_parser.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_parser.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_request.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_request.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_response.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_response.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_server.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_server.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_transform.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/http/http_transform.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/server.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/server_config.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/server_config.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/accept_handler.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/accept_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/tcp_handler.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/tcp_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/tcp_server.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/tcp_server.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/wakeup_handler.cpp">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/net/tcp/wakeup_handler.h">
+			<Option target="kish"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal/mysql_conn_pool.cpp">
+			<Option target="ksql"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal/mysql_conn_pool.h">
+			<Option target="ksql"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal/mysql_proxy.cpp">
+			<Option target="ksql"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/mysequal/mysql_proxy.h">
+			<Option target="ksql"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/sql/sql_proxy.h">
+			<Option target="ksql"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_fileresolver.cpp">
+			<Option target="test_fileresolver"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_httpparse.cpp">
+			<Option target="test_httpparse"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_httpserver.cpp">
+			<Option target="test_httpserver"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_logger.cpp">
+			<Option target="test_logger"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_other.cpp">
+			<Option target="test_other"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_sqltest.cpp">
+			<Option target="test_sqltest"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_stringsplit.cpp">
+			<Option target="test_stringsplit"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_tcpserver.cpp">
+			<Option target="test_tcpserver"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_thirdparty.cpp">
+			<Option target="test_thirdparty"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_thread.cpp">
+			<Option target="test_thread"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_threadpool.cpp">
+			<Option target="test_threadpool"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/tests/test_timer.cpp">
+			<Option target="test_timer"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/CJsonObject.cpp">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/CJsonObject.hpp">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/api.c">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/cJSON.c">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/cJSON.h">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/http.c">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/llhttp.c">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/llhttp.h">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/multipart_parser.c">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/thirdparty/multipart_parser.h">
+			<Option target="third_pt"/>
+		</Unit>
+		<Unit filename="/Users/jiangaoran/WorkSapce/C++/WebKish/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

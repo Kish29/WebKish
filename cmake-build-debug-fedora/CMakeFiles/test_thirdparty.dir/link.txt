@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_thirdparty.dir/tests/test_thirdparty.cpp.o -o test_thirdparty  -Wl,-rpath,/tmp/tmp.zGWSYtdWMz/cmake-build-debug-fedora libkish.so libthird_pt.so -lpthread 

@@ -14,6 +14,7 @@
 constexpr int fbuf_size = 8 * 1024 * 1024;  // 8MB
 
 // todo: 如何传输大文件
+// fixme: 这个类线程不安全
 class file_resolver : public kish::http_resolver {
 public:
 

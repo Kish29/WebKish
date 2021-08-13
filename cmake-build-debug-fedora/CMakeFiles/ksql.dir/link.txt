@@ -1,0 +1,2 @@
+/usr/bin/ar qc libksql.a CMakeFiles/ksql.dir/sql/mysequal/mysql_proxy.cpp.o CMakeFiles/ksql.dir/sql/mysequal/mysql_conn_pool.cpp.o
+/usr/bin/ranlib libksql.a

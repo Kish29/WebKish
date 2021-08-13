@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_sqltest.dir/tests/test_sqltest.cpp.o -o test_sqltest  -Wl,-rpath,/tmp/tmp.zGWSYtdWMz/cmake-build-debug-fedora libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 
