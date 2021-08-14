@@ -261,6 +261,8 @@ int main() {
 3. 请求接口
 ![bad-request](readme-images/bad-request.png)
    因为users/login注册的是POST请求，所以上层封装好了，返回bad request，并且不会走到你的接口中去
+   
+> 目前还没有实现大文件的传输
 
 用clion的模拟POST请求：
 ![post-login](readme-images/post-login.png)
