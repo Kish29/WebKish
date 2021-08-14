@@ -26,7 +26,7 @@ namespace kish {
 
     typedef std::function<void(const http_request_ptr &, http_response &)> hi_func;
 
-    // http接口，表示能处理某一个uri请求
+    // http接口，表示该类注册的方法能处理某一个uri请求
     class http_interface : copyable {
     public:
         virtual void on_reg_in(http_interface_holder &holder) = 0;
