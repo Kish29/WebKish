@@ -2,7 +2,7 @@ POST http://10.211.55.3:7777/users/login
 Content-Type: application/json
 
 {
-  "username": "jiangaoran",
+  "username": "zhangsan",
   "password": "webkishwebkish"
 }
 
@@ -49,7 +49,7 @@ POST http://10.211.55.3:5555/users/reg
 Content-Type: application/json
 
 {
-  "username": "jiangaoran",
+  "username": "zhangsan",
   "password": "123456kishkish",
   "file_list": [
     {
