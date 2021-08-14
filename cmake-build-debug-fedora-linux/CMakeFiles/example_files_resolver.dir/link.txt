@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/example_files_resolver.dir/example/example_files_resolver.cpp.o -o example_files_resolver  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

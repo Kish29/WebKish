@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/test_stringsplit.dir/tests/test_stringsplit.cpp.o -o test_stringsplit  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

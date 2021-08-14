@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/example_users_interface.dir/example/example_users_interface.cpp.o -o example_users_interface  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

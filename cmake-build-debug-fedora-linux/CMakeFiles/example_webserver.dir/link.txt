@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/example_webserver.dir/example/example_webserver.cpp.o CMakeFiles/example_webserver.dir/example/example_files_resolver.cpp.o CMakeFiles/example_webserver.dir/example/example_users_interface.cpp.o -o example_webserver  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 
