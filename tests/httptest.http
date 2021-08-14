@@ -1,8 +1,17 @@
+POST http://10.211.55.3:7777/users/login
+Content-Type: application/json
+
+{
+  "username": "jiangaoran",
+  "password": "webkishwebkish"
+}
+
+###
 POST http://localhost:80/api/item
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="field-name"; filename="file.txt"
+Content-Disposition: form-data; name="field-name"; filename="file_reader.txt"
 
 < ./relative/path/to/local_file.txt
 --WebAppBoundary--
@@ -16,7 +25,7 @@ POST http://10.211.55.3:5555/users/reg
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="field-name"; file_path="file.txt"
+Content-Disposition: form-data; name="field-name"; file_path="file_reader.txt"
 
 --WebAppBoundary--
 

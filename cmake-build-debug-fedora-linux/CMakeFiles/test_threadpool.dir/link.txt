@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_threadpool.dir/tests/test_threadpool.cpp.o -o test_threadpool  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

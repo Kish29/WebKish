@@ -51,6 +51,7 @@ bool kish::file_wrapper::open(const char *filename, kish::fopen_type_t type) {
     fptr = ::fopen(m_filename, get_fopen_mode(type));
     if (!fptr) return false;
     init_stat();
+    // fixme: 显然直接使用全buffering不合适，万一文件特别大呢
     ::setvbuf(fptr, nullptr, _IOFBF, st_buf.st_size + 1);
     return true;
 }

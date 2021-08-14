@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_thread.dir/tests/test_thread.cpp.o -o test_thread  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

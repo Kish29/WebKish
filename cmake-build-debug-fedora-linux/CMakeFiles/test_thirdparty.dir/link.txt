@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_thirdparty.dir/tests/test_thirdparty.cpp.o -o test_thirdparty  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 

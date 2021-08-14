@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/test_httpserver.dir/tests/test_httpserver.cpp.o -o test_httpserver  -Wl,-rpath,/tmp/tmp.5WNAt2d4vv/cmake-build-debug-fedora-linux libthird_pt.so libksql.a -lpthread libkish.so -lmariadb 
