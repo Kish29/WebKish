@@ -262,6 +262,12 @@ int main() {
 ![bad-request](readme-images/bad-request.png)
    因为users/login注册的是POST请求，所以上层封装好了，返回bad request，并且不会走到你的接口中去
 
+用clion的模拟POST请求：
+![post-login](readme-images/post-login.png)
+用reg打印一下参数
+![post-reg](readme-images/post-reg.png)
+![print-param](readme-images/print-param.png)
+
 ## 压力测试
 
 对服务器进行http的请求压力测试，结果在这里[压力测试](pressure_test/压力测试.md)
