@@ -72,9 +72,15 @@ Webkish-0.0.1-release版本已经基本实现了http常见的功能，所以安�
 
    ![install-kish](readme-images/install-kish.png)
 
-可以看到lib库在64位机子上安装到了/usr/local/lib64/kish，32位应该是usr/local/lib/kish，而头文件默认是/usr/local/include/kish
+可以看到lib库在64位机子上安装到了/usr/local/lib64/kish，32位应该是/usr/local/lib/kish，而头文件默认是/usr/local/include/kish
+install成功后，/usr/local/lib64/kish路径(32位应该是：usr/local/lib/kish，)下会有三个动态连接库
+```bash
+libkish.so  libksql.so libthird_pt.so
+```
 
 ## 接入开发
+如果你是cmake工程，使用target_link_libraries链接这三个动态库即可：
+![need-so](readme-images/need-so.png)
 
 WebKish的http接入很简单，只需要包含 "kish/http_server.h"用于创建http服务器，然后包含"kish/http_interface.h"这个头文件，用于实现请求接口，http_interface.h文件中定义了两个接口：
 
