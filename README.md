@@ -248,6 +248,20 @@ int main() {
 
 > 本例子在[example](example)文件夹里有完整代码
 
+### 运行结果
+比如我的/home/parallels/webserver/static_docs路径下有这些文件
+![static-dir](readme-images/static-dir.png)
+
+1. 请求png图片
+![png-file](readme-images/png-file.png)
+   
+2. 请求文本文件
+![text-file](readme-images/text-file.png)
+   
+3. 请求接口
+![bad-request](readme-images/bad-request.png)
+   因为users/login注册的是POST请求，所以上层封装好了，返回bad request，并且不会走到你的接口中去
+
 ## 压力测试
 
 对服务器进行http的请求压力测试，结果在这里[压力测试](pressure_test/压力测试.md)
